@@ -8,8 +8,8 @@
 
 ## Commit messages
 We will follow conventional commits for this repository
-[Official documentation](https://www.conventionalcommits.org/en/v1.0.0/)
-[Quick Summary](https://www.conventionalcommits.org/en/v1.0.0/#summary)
+- [Official documentation](https://www.conventionalcommits.org/en/v1.0.0/)
+- [Quick Summary](https://www.conventionalcommits.org/en/v1.0.0/#summary)
 
 ## Extended reading to learn how git works
 [Learn Git](https://www.atlassian.com/git)
