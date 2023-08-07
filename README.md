@@ -1,4 +1,4 @@
-# IoT-Fuzzing
+# Final Year Project
 
 ## Workflow
 - Open the git bash and switch to the main branch, uisng `git checkout main`
