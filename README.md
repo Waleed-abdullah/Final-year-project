@@ -1,34 +1,19 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Fitness platform
 
-## Getting Started
+## Workflow
 
-First, run the development server:
+- Open the git bash and switch to the main branch, uisng `git checkout main`
+- Use `git pull` to get the latest changes from the main branch
+- Create a new branch using `git checkout -b <branch-name>` (Make sure the branch name is descriptive and concise for a new feature the branch can be names feat:feature-name for a fix it can be named fix:task-fixed)
+- Make your changes and create a pull request.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Commit messages
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+We will follow conventional commits for this repository
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [Official documentation](https://www.conventionalcommits.org/en/v1.0.0/)
+- [Quick Summary](https://www.conventionalcommits.org/en/v1.0.0/#summary)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Extended reading to learn how git works
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[Learn Git](https://www.atlassian.com/git)
