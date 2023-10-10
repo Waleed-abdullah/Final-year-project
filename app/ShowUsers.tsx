@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from 'react';
 import { User } from '@/lib/types';
 
@@ -7,10 +8,12 @@ export default function ShowUsers() {
   useEffect(() => {
     fetch('/api/getUsers')
       .then((res) => {
-        console.log(res);
         return res.json();
       })
-      .then((data) => setUsers(data));
+      .then((data) => {
+        console.log(data);
+        setUsers(data);
+      });
   }, []);
 
   return (
