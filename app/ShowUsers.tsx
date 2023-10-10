@@ -1,17 +1,11 @@
-"use client";
-import { useEffect, useState } from "react";
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-};
+import { useEffect, useState } from 'react';
+import { User } from '@/lib/types';
 
 export default function ShowUsers() {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    fetch("/api/getUsers")
+    fetch('/api/getUsers')
       .then((res) => {
         console.log(res);
         return res.json();
