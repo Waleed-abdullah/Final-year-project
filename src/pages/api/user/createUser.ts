@@ -1,17 +1,42 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
+import { sendErrorResponse } from "../../../utils/errorHandler";
+import {
+  isValidEmail,
+  isValidPassword,
+} from "../../../utils/validationHelpers";
+
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "10"); // Using environment variable for salt rounds
+
+type CreateUser = {
+  user_id: string;
+  username: string;
+  email: string;
+  password: string;
+  user_type: string;
+  profile_pic?: string;
+  date_joined: Date;
+  last_login: Date;
+  created_at: Date;
+  updated_at: Date;
+};
+
+// User types as an Enum
+enum UserType {
+  WazaWarrior = "Waza Warrior",
+  WazaMaster = "Waza Master",
+}
 
 export default async function createUser(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Validate request body
-  if (!req.body) {
-    return res
-      .status(400)
-      .json({ error: "Bad Request", message: "Request body is missing" });
+  const reqBody: Partial<CreateUser> = req.body;
+
+  if (!reqBody) {
+    return sendErrorResponse(res, 400, "Missing request body");
   }
 
   const date = new Date();
@@ -26,66 +51,49 @@ export default async function createUser(
     last_login = date,
     created_at = date,
     updated_at = date,
-  } = req.body;
+  } = reqBody;
 
-  // Check for required fields
   if (!username || !email || !password || !user_type) {
-    return res
-      .status(400)
-      .json({ error: "Bad Request", message: "Required fields are missing" });
+    return sendErrorResponse(res, 400, "Missing required fields");
   }
 
-  // Validate email format
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(email)) {
-    return res
-      .status(400)
-      .json({ error: "Bad Request", message: "Invalid email format" });
+  if (!isValidEmail(email)) {
+    return sendErrorResponse(res, 400, "Invalid email format");
   }
 
-  // Validate user_type
-  if (user_type !== "Waza Warrior" && user_type !== "Waza Master") {
-    return res
-      .status(400)
-      .json({ error: "Bad Request", message: "Invalid user_type" });
+  if (!(Object.values(UserType) as string[]).includes(user_type)) {
+    return sendErrorResponse(
+      res,
+      400,
+      "Invalid user_type. User type must be Waza Warrior or Waza Master"
+    );
   }
 
-  // Validate password complexity
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  if (!passwordRegex.test(password)) {
-    return res.status(400).json({
-      error: "Bad Request",
-      message:
-        "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character",
-    });
+  if (!isValidPassword(password)) {
+    return sendErrorResponse(
+      res,
+      400,
+      "Invalid password format. Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character"
+    );
   }
 
-  // Hash the password
-  const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-  // Check for unique username and email
-  const existingUsername = await prisma.users.findFirst({
-    where: { username },
-  });
-  const existingEmail = await prisma.users.findFirst({
-    where: { email },
-  });
-
-  if (existingUsername) {
-    return res
-      .status(409)
-      .json({ error: "Conflict", message: "Username already exists" });
-  }
-  if (existingEmail) {
-    return res
-      .status(409)
-      .json({ error: "Conflict", message: "Email already exists" });
-  }
-
-  // Create the user
   try {
+    const existingUsername = await prisma.users.findUnique({
+      where: { username },
+    });
+    const existingEmail = await prisma.users.findUnique({
+      where: { email },
+    });
+
+    if (existingUsername) {
+      return sendErrorResponse(res, 409, "Username already exists");
+    }
+    if (existingEmail) {
+      return sendErrorResponse(res, 409, "Email already exists");
+    }
+
     const newUser = await prisma.users.create({
       data: {
         user_id,
@@ -101,15 +109,13 @@ export default async function createUser(
       },
     });
 
-    return res.status(201).json(newUser);
+    const { password, ...safeUser } = newUser;
+    return res.status(201).json(safeUser);
   } catch (error: any) {
+    console.error("Error while creating user:", error);
     if (error.code === "P2002") {
-      return res
-        .status(409)
-        .json({ error: "Conflict", message: "Duplicate user_id" });
+      return sendErrorResponse(res, 409, "Duplicate user_id");
     }
-    return res
-      .status(500)
-      .json({ error: "Internal Server Error", message: error.message });
+    return sendErrorResponse(res, 500, "Internal server error", error);
   }
 }
