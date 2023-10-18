@@ -119,9 +119,9 @@ model specializations {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model users {
   user_id                      String          @id @db.Uuid
-  username                     String          @db.VarChar(255)
+  username                     String          @unique(map: "unique_username") @db.VarChar(255)
   password                     String          @db.VarChar(255)
-  email                        String          @db.VarChar(255)
+  email                        String          @unique(map: "unique_email") @db.VarChar(255)
   user_type                    String?         @db.VarChar(50)
   profile_pic                  String?
   date_joined                  DateTime        @default(now()) @db.Timestamp(6)
