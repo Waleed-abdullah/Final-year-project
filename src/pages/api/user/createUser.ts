@@ -1,14 +1,14 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../lib/prisma";
-import bcrypt from "bcrypt";
-import { v4 as uuidv4 } from "uuid";
-import { sendErrorResponse } from "../../../utils/errorHandler";
+import { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '../../../lib/prisma';
+import bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
+import { sendErrorResponse } from '../../../utils/errorHandler';
 import {
   isValidEmail,
   isValidPassword,
-} from "../../../utils/validationHelpers";
+} from '../../../utils/validationHelpers';
 
-const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "10"); // Using environment variable for salt rounds
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10'); // Using environment variable for salt rounds
 
 type CreateUser = {
   user_id: string;
@@ -25,8 +25,8 @@ type CreateUser = {
 
 // User types as an Enum
 enum UserType {
-  WazaWarrior = "Waza Warrior",
-  WazaMaster = "Waza Master",
+  WazaWarrior = 'Waza Warrior',
+  WazaMaster = 'Waza Master',
 }
 
 export default async function createUser(
@@ -36,7 +36,7 @@ export default async function createUser(
   const reqBody: Partial<CreateUser> = req.body;
 
   if (!reqBody) {
-    return sendErrorResponse(res, 400, "Missing request body");
+    return sendErrorResponse(res, 400, 'Missing request body');
   }
 
   const date = new Date();
@@ -54,18 +54,18 @@ export default async function createUser(
   } = reqBody;
 
   if (!username || !email || !password || !user_type) {
-    return sendErrorResponse(res, 400, "Missing required fields");
+    return sendErrorResponse(res, 400, 'Missing required fields');
   }
 
   if (!isValidEmail(email)) {
-    return sendErrorResponse(res, 400, "Invalid email format");
+    return sendErrorResponse(res, 400, 'Invalid email format');
   }
 
   if (!(Object.values(UserType) as string[]).includes(user_type)) {
     return sendErrorResponse(
       res,
       400,
-      "Invalid user_type. User type must be Waza Warrior or Waza Master"
+      'Invalid user_type. User type must be Waza Warrior or Waza Master'
     );
   }
 
@@ -73,25 +73,25 @@ export default async function createUser(
     return sendErrorResponse(
       res,
       400,
-      "Invalid password format. Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character"
+      'Invalid password format. Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character'
     );
   }
 
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
   try {
-    const existingUsername = await prisma.users.findUnique({
+    const existingUsername = await prisma.users.findMany({
       where: { username },
     });
-    const existingEmail = await prisma.users.findUnique({
+    const existingEmail = await prisma.users.findMany({
       where: { email },
     });
 
-    if (existingUsername) {
-      return sendErrorResponse(res, 409, "Username already exists");
+    if (existingUsername.length) {
+      return sendErrorResponse(res, 409, 'Username already exists');
     }
-    if (existingEmail) {
-      return sendErrorResponse(res, 409, "Email already exists");
+    if (existingEmail.length) {
+      return sendErrorResponse(res, 409, 'Email already exists');
     }
 
     const newUser = await prisma.users.create({
@@ -112,10 +112,10 @@ export default async function createUser(
     const { password, ...safeUser } = newUser;
     return res.status(201).json(safeUser);
   } catch (error: any) {
-    console.error("Error while creating user:", error);
-    if (error.code === "P2002") {
-      return sendErrorResponse(res, 409, "Duplicate user_id");
+    console.error('Error while creating user:', error);
+    if (error.code === 'P2002') {
+      return sendErrorResponse(res, 409, 'Duplicate user_id');
     }
-    return sendErrorResponse(res, 500, "Internal server error", error);
+    return sendErrorResponse(res, 500, 'Internal server error', error);
   }
 }
