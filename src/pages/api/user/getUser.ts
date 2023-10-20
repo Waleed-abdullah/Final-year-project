@@ -1,16 +1,16 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../lib/prisma";
-import { sendErrorResponse } from "../../../utils/errorHandler";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '../../../lib/prisma';
+import { sendErrorResponse } from '../../../utils/errorHandler';
 
 export default async function getUser(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const id = req.query.id;
 
   // Type Safety: Validate 'id' query parameter
   if (!id || Array.isArray(id)) {
-    return sendErrorResponse(res, 400, "Invalid id parameter");
+    return sendErrorResponse(res, 400, 'Invalid id parameter');
   }
 
   try {
@@ -30,17 +30,17 @@ export default async function getUser(
     });
 
     if (!user) {
-      return sendErrorResponse(res, 404, "User not found");
+      return sendErrorResponse(res, 404, 'User not found');
     }
 
     res.status(200).json(user);
   } catch (error: any) {
-    console.error("Error while fetching user:", error);
+    console.error('Error while fetching user:', error);
     return sendErrorResponse(
       res,
       500,
-      "An error occurred while fetching the user",
-      error
+      'An error occurred while fetching the user',
+      error,
     );
   }
 }
