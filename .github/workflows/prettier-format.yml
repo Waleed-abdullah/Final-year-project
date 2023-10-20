@@ -14,10 +14,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14  # Adjust to your Node.js version
+          node-version: 20  
 
       - name: Install dependencies
-        run: npm install  # Adjust if you're using a different package manager
+        run: npm install  
 
       - name: Apply Prettier Formatting
         run: npm run format
