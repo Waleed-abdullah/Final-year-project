@@ -1,13 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../lib/prisma";
-import bcrypt from "bcrypt";
-import { sendErrorResponse } from "../../../utils/errorHandler";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '../../../lib/prisma';
+import bcrypt from 'bcrypt';
+import { sendErrorResponse } from '../../../utils/errorHandler';
 import {
   isValidEmail,
   isValidPassword,
-} from "../../../utils/validationHelpers";
+} from '../../../utils/validationHelpers';
 
-const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "10");
+const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10');
 
 type UpdateData = {
   updated_at: Date;
@@ -18,14 +18,14 @@ type UpdateData = {
 
 export default async function updateUser(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const id = String(req.query.id);
 
   const reqBody: Partial<UpdateData> = req.body;
 
   if (!id) {
-    return sendErrorResponse(res, 400, "id is required for updating");
+    return sendErrorResponse(res, 400, 'id is required for updating');
   }
 
   const updateData: UpdateData = {
@@ -37,7 +37,7 @@ export default async function updateUser(
   }
 
   if (reqBody.email && !isValidEmail(reqBody.email)) {
-    return sendErrorResponse(res, 400, "Invalid email format");
+    return sendErrorResponse(res, 400, 'Invalid email format');
   }
 
   if (reqBody.email) {
@@ -45,7 +45,7 @@ export default async function updateUser(
   }
 
   if (reqBody.password && !isValidPassword(reqBody.password)) {
-    return sendErrorResponse(res, 400, "Invalid password format");
+    return sendErrorResponse(res, 400, 'Invalid password format');
   }
 
   if (reqBody.password) {
@@ -57,7 +57,7 @@ export default async function updateUser(
     return sendErrorResponse(
       res,
       400,
-      "At least one field is required for updating"
+      'At least one field is required for updating',
     );
   }
 
@@ -80,10 +80,10 @@ export default async function updateUser(
 
     return res.status(200).json(updatedUser);
   } catch (error: any) {
-    console.error("Error while updating user:", error);
-    if (error.code === "P2002") {
-      return sendErrorResponse(res, 409, "Conflict, duplicate data");
+    console.error('Error while updating user:', error);
+    if (error.code === 'P2002') {
+      return sendErrorResponse(res, 409, 'Conflict, duplicate data');
     }
-    return sendErrorResponse(res, 500, "Internal server error", error);
+    return sendErrorResponse(res, 500, 'Internal server error', error);
   }
 }
