@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-import type { NextApiRequest, NextApiResponse } from "next";
-import getUser from "./getUser";
-import createUser from "./createUser";
-import updateUser from "./updateUser";
-import deleteUser from "./deleteUser";
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  switch (req.method) {
-    case "GET":
-      return getUser(req, res);
-    case "POST":
-      return createUser(req, res);
-    case "PATCH":
-      return updateUser(req, res);
-    case "DELETE":
-=======
 import type { NextApiRequest, NextApiResponse } from 'next';
 import getUser from './getUser';
 import createUser from './createUser';
@@ -36,7 +16,6 @@ export default async function handler(
     case 'PATCH':
       return updateUser(req, res);
     case 'DELETE':
->>>>>>> 89785d4a7be99902214a44d441545388b1c31235
       return deleteUser(req, res);
 
     default:
