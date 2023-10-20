@@ -31,7 +31,11 @@ enum UserType {
 
 export default async function createUser(
   req: NextApiRequest,
+<<<<<<< HEAD
   res: NextApiResponse
+=======
+  res: NextApiResponse,
+>>>>>>> 89785d4a7be99902214a44d441545388b1c31235
 ) {
   const reqBody: Partial<CreateUser> = req.body;
 
@@ -65,7 +69,11 @@ export default async function createUser(
     return sendErrorResponse(
       res,
       400,
+<<<<<<< HEAD
       'Invalid user_type. User type must be Waza Warrior or Waza Master'
+=======
+      'Invalid user_type. User type must be Waza Warrior or Waza Master',
+>>>>>>> 89785d4a7be99902214a44d441545388b1c31235
     );
   }
 
@@ -73,7 +81,11 @@ export default async function createUser(
     return sendErrorResponse(
       res,
       400,
+<<<<<<< HEAD
       'Invalid password format. Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character'
+=======
+      'Invalid password format. Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character',
+>>>>>>> 89785d4a7be99902214a44d441545388b1c31235
     );
   }
 
