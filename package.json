@@ -10,7 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@prisma/client": "^5.4.2",
+    "@prisma/client": "^5.5.0",
     "@types/node": "20.6.2",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
@@ -31,6 +31,6 @@
     "@types/bcrypt": "^5.0.0",
     "@types/uuid": "^9.0.5",
     "prettier": "^3.0.3",
-    "prisma": "^5.4.2"
+    "prisma": "^5.5.0"
   }
 }

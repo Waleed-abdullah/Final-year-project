@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 import bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import {
   isValidEmail,
@@ -11,7 +10,6 @@ import {
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10'); // Using environment variable for salt rounds
 
 type CreateUser = {
-  user_id: string;
   username: string;
   email: string;
   password: string;
@@ -41,7 +39,6 @@ export default async function createUser(
 
   const date = new Date();
   const {
-    user_id = uuidv4(),
     username,
     email,
     password,
@@ -96,7 +93,6 @@ export default async function createUser(
 
     const newUser = await prisma.users.create({
       data: {
-        user_id,
         username,
         email,
         password: hashedPassword,
@@ -113,9 +109,7 @@ export default async function createUser(
     return res.status(201).json(safeUser);
   } catch (error: any) {
     console.error('Error while creating user:', error);
-    if (error.code === 'P2002') {
-      return sendErrorResponse(res, 409, 'Duplicate user_id');
-    }
+
     return sendErrorResponse(res, 500, 'Internal server error', error);
   }
 }
