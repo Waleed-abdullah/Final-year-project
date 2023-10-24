@@ -8,3 +8,8 @@ export const isValidPassword = (password: string): boolean => {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   return passwordRegex.test(password);
 };
+
+export const isValidUUID = (uuid: string): boolean => {
+  const uuidRegex = /^[0-9a-fA-F-]+$/;
+  return uuidRegex.test(uuid);
+};
