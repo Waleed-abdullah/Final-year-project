@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 import { sendErrorResponse } from '../../../utils/errorHandler';
+import { isValidID } from '@/src/utils/validationHelpers';
 
 export default async function deleteUser(
   req: NextApiRequest,
@@ -10,7 +11,7 @@ export default async function deleteUser(
   const id = String(req.query.id);
 
   // Check for required `id`
-  if (!id) {
+  if (!isValidID(id)) {
     return sendErrorResponse(res, 400, 'id is required for deleting');
   }
 
@@ -39,7 +40,7 @@ export default async function deleteUser(
     });
 
     return res.status(200).json(user); // 204 No Content
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('An error occurred while deleting the user:', error);
     return sendErrorResponse(res, 500, 'Internal server error', error);
   }

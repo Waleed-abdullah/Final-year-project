@@ -8,3 +8,9 @@ export const isValidPassword = (password: string): boolean => {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   return passwordRegex.test(password);
 };
+
+export const isValidID = (id: string): boolean => {
+  const idRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+  return idRegex.test(id);
+};

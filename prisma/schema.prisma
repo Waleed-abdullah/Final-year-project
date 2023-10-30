@@ -128,6 +128,8 @@ model users {
   last_login                   DateTime?      @db.Timestamp(6)
   created_at                   DateTime       @default(now()) @db.Timestamp(6)
   updated_at                   DateTime       @default(now()) @db.Timestamp(6)
+  is_verified                  Boolean?       @default(false)
+  provider                     String?        @db.VarChar(50)
   chat_chat_receiver_idTousers chat[]         @relation("chat_receiver_idTousers")
   chat_chat_sender_idTousers   chat[]         @relation("chat_sender_idTousers")
   waza_masters                 waza_masters?
@@ -177,7 +179,7 @@ model waza_warriors {
   warrior_specializations warrior_specializations[]
   warriorexercise         warriorexercise[]
   warriorgoals            warriorgoals[]
-  users                   users?                    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  users                   users?                    @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model warrior_specializations {
