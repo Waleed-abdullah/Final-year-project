@@ -3,23 +3,23 @@ import prisma from '../../../lib/prisma';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import { isValidID } from '@/src/utils/validationHelpers';
 
-type UpdateMasterData = {
+type UpdateTrainerData = {
   hourly_rate?: number;
   bio?: string;
   location?: string;
 };
 
-export default async function updateMaster(
+export default async function updateTrainer(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   const id = String(req.query.id);
-  const reqBody: Partial<UpdateMasterData> = req.body;
+  const reqBody: Partial<UpdateTrainerData> = req.body;
 
   if (!isValidID(id)) {
     return sendErrorResponse(res, 400, 'valid id is required for updating');
   }
-  const updateData: UpdateMasterData = {};
+  const updateData: UpdateTrainerData = {};
 
   if (reqBody.hourly_rate !== undefined) {
     if (typeof reqBody.hourly_rate !== 'number') {
@@ -50,27 +50,27 @@ export default async function updateMaster(
   }
 
   try {
-    const updatedMaster = await prisma.waza_masters.update({
-      where: { master_id: id },
+    const updatedTrainer = await prisma.waza_trainers.update({
+      where: { trainer_id: id },
       data: updateData,
       select: {
-        master_id: true,
+        trainer_id: true,
         user_id: true,
         hourly_rate: true,
         bio: true,
         location: true,
         availability: true,
         exercise: true,
-        mastercertifications: true,
-        masterspecializations: true,
+        trainer_certifications: true,
+        trainer_specializations: true,
         reviews: true,
         session: true,
       },
     });
 
-    return res.status(200).json(updatedMaster);
+    return res.status(200).json(updatedTrainer);
   } catch (error: unknown) {
-    console.error('Error while updating master:', error);
+    console.error('Error while updating Trainer:', error);
     return sendErrorResponse(res, 500, 'Internal server error', error);
   }
 }

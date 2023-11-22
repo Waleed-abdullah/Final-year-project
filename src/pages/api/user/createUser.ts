@@ -24,7 +24,7 @@ type CreateUser = {
 // User types as an Enum
 enum UserType {
   WazaWarrior = 'Waza Warrior',
-  WazaMaster = 'Waza Master',
+  WazaTrainer = 'Waza Trainer',
 }
 
 export default async function createUser(
@@ -62,7 +62,7 @@ export default async function createUser(
     return sendErrorResponse(
       res,
       400,
-      'Invalid user_type. User type must be Waza Warrior or Waza Master',
+      'Invalid user_type. User type must be Waza Warrior or Waza Trainer',
     );
   }
 

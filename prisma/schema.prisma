@@ -9,23 +9,23 @@ datasource db {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model availability {
-  availability_id String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  master_id       String?       @db.Uuid
-  weekday         String?       @db.VarChar(10)
-  start_time      DateTime?     @db.Time(6)
-  end_time        DateTime?     @db.Time(6)
-  waza_masters    waza_masters? @relation(fields: [master_id], references: [master_id], onDelete: NoAction, onUpdate: NoAction)
+  availability_id String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  trainer_id      String?        @db.Uuid
+  weekday         String?        @db.VarChar(10)
+  start_time      DateTime?      @db.Time(6)
+  end_time        DateTime?      @db.Time(6)
+  waza_trainers   waza_trainers? @relation(fields: [trainer_id], references: [trainer_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model certifications {
-  certification_id     String                 @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  certification_name   String                 @db.VarChar(255)
-  issuing_body         String?                @db.VarChar(255)
-  date_issued          DateTime?              @db.Date
-  valid_until          DateTime?              @db.Date
-  created_at           DateTime               @default(now()) @db.Timestamp(6)
-  updated_at           DateTime?              @db.Timestamp(6)
-  mastercertifications mastercertifications[]
+  certification_id       String                   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  certification_name     String                   @db.VarChar(255)
+  issuing_body           String?                  @db.VarChar(255)
+  date_issued            DateTime?                @db.Date
+  valid_until            DateTime?                @db.Date
+  created_at             DateTime                 @default(now()) @db.Timestamp(6)
+  updated_at             DateTime?                @db.Timestamp(6)
+  trainer_certifications trainer_certifications[]
 }
 
 model chat {
@@ -48,8 +48,8 @@ model exercise {
   duration        Unsupported("interval")?
   created_at      DateTime                 @default(now()) @db.Timestamp(6)
   updated_at      DateTime?                @db.Timestamp(6)
-  master_id       String?                  @db.Uuid
-  waza_masters    waza_masters?            @relation(fields: [master_id], references: [master_id], onDelete: NoAction, onUpdate: NoAction)
+  trainer_id      String?                  @db.Uuid
+  waza_trainers   waza_trainers?           @relation(fields: [trainer_id], references: [trainer_id], onDelete: NoAction, onUpdate: NoAction)
   session         session[]
   warriorexercise warriorexercise[]
 }
@@ -60,33 +60,15 @@ model goals {
   warriorgoals warriorgoals[]
 }
 
-model mastercertifications {
-  master_id        String         @db.Uuid
-  certification_id String         @db.Uuid
-  certifications   certifications @relation(fields: [certification_id], references: [certification_id], onDelete: NoAction, onUpdate: NoAction)
-  waza_masters     waza_masters   @relation(fields: [master_id], references: [master_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([master_id, certification_id])
-}
-
-model masterspecializations {
-  master_id         String          @db.Uuid
-  specialization_id String          @db.Uuid
-  waza_masters      waza_masters    @relation(fields: [master_id], references: [master_id], onDelete: NoAction, onUpdate: NoAction)
-  specializations   specializations @relation(fields: [specialization_id], references: [specialization_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([master_id, specialization_id])
-}
-
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model reviews {
   review_id     String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   warrior_id    String?        @db.Uuid
-  master_id     String?        @db.Uuid
+  trainer_id    String?        @db.Uuid
   rating        Int?
   comment       String?
   created_at    DateTime       @default(now()) @db.Timestamp(6)
-  waza_masters  waza_masters?  @relation(fields: [master_id], references: [master_id], onDelete: NoAction, onUpdate: NoAction)
+  waza_trainers waza_trainers? @relation(fields: [trainer_id], references: [trainer_id], onDelete: NoAction, onUpdate: NoAction)
   waza_warriors waza_warriors? @relation(fields: [warrior_id], references: [warrior_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -94,14 +76,14 @@ model reviews {
 model session {
   session_id     String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   warrior_id     String?        @db.Uuid
-  master_id      String?        @db.Uuid
+  trainer_id     String?        @db.Uuid
   exercise_id    String?        @db.Uuid
   scheduled_date DateTime?      @db.Timestamp(6)
   status         String?        @db.VarChar(50)
   created_at     DateTime       @default(now()) @db.Timestamp(6)
   updated_at     DateTime?      @db.Timestamp(6)
   exercise       exercise?      @relation(fields: [exercise_id], references: [exercise_id], onDelete: NoAction, onUpdate: NoAction)
-  waza_masters   waza_masters?  @relation(fields: [master_id], references: [master_id], onDelete: NoAction, onUpdate: NoAction)
+  waza_trainers  waza_trainers? @relation(fields: [trainer_id], references: [trainer_id], onDelete: NoAction, onUpdate: NoAction)
   waza_warriors  waza_warriors? @relation(fields: [warrior_id], references: [warrior_id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([status], map: "idx_session_status")
@@ -112,7 +94,7 @@ model specializations {
   specialization_name     String                    @db.VarChar(255)
   created_at              DateTime                  @default(now()) @db.Timestamp(6)
   updated_at              DateTime?                 @db.Timestamp(6)
-  masterspecializations   masterspecializations[]
+  trainer_specializations trainer_specializations[]
   warrior_specializations warrior_specializations[]
 }
 
@@ -132,7 +114,7 @@ model users {
   provider                     String?        @db.VarChar(50)
   chat_chat_receiver_idTousers chat[]         @relation("chat_receiver_idTousers")
   chat_chat_sender_idTousers   chat[]         @relation("chat_sender_idTousers")
-  waza_masters                 waza_masters?
+  waza_trainers                waza_trainers?
   waza_warriors                waza_warriors?
 
   @@index([email], map: "idx_users_email")
@@ -156,21 +138,6 @@ model warriorgoals {
   @@id([warrior_id, goal_id])
 }
 
-model waza_masters {
-  master_id             String                  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user_id               String?                 @unique(map: "unique_master_user_id") @db.Uuid
-  hourly_rate           Decimal?                @db.Decimal
-  bio                   String?
-  location              String?                 @db.VarChar(255)
-  availability          availability[]
-  exercise              exercise[]
-  mastercertifications  mastercertifications[]
-  masterspecializations masterspecializations[]
-  reviews               reviews[]
-  session               session[]
-  users                 users?                  @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id")
-}
-
 model waza_warriors {
   warrior_id              String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   user_id                 String?                   @unique(map: "unique_user_id") @db.Uuid
@@ -189,4 +156,37 @@ model warrior_specializations {
   waza_warriors     waza_warriors   @relation(fields: [warrior_id], references: [warrior_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([warrior_id, specialization_id])
+}
+
+model waza_trainers {
+  trainer_id              String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id                 String?                   @unique(map: "unique_trainer_user_id") @db.Uuid
+  hourly_rate             Decimal?                  @db.Decimal
+  bio                     String?
+  location                String?                   @db.VarChar(255)
+  availability            availability[]
+  exercise                exercise[]
+  reviews                 reviews[]
+  session                 session[]
+  trainer_certifications  trainer_certifications[]
+  trainer_specializations trainer_specializations[]
+  users                   users?                    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "waza_trainers_user_id_fkey")
+}
+
+model trainer_certifications {
+  trainer_id       String         @db.Uuid
+  certification_id String         @db.Uuid
+  certifications   certifications @relation(fields: [certification_id], references: [certification_id], onDelete: NoAction, onUpdate: NoAction)
+  waza_trainers    waza_trainers  @relation(fields: [trainer_id], references: [trainer_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([trainer_id, certification_id])
+}
+
+model trainer_specializations {
+  trainer_id        String          @db.Uuid
+  specialization_id String          @db.Uuid
+  specializations   specializations @relation(fields: [specialization_id], references: [specialization_id], onDelete: NoAction, onUpdate: NoAction)
+  waza_trainers     waza_trainers   @relation(fields: [trainer_id], references: [trainer_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([trainer_id, specialization_id])
 }

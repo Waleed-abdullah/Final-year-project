@@ -4,19 +4,19 @@ import { sendErrorResponse } from '../../../utils/errorHandler';
 import { PrismaClientValidationError } from '@prisma/client/runtime/library';
 import { isValidID } from '@/src/utils/validationHelpers';
 
-type CreateMasterRequestBody = {
+type CreateTrainerRequestBody = {
   user_id: string;
   hourly_rate?: number;
   bio?: string;
   location?: string;
 };
 
-export default async function createMaster(
+export default async function createTrainer(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   try {
-    const { user_id, hourly_rate, bio, location }: CreateMasterRequestBody =
+    const { user_id, hourly_rate, bio, location }: CreateTrainerRequestBody =
       req.body;
 
     if (!isValidID(user_id)) {
@@ -43,22 +43,22 @@ export default async function createMaster(
     if (!existingUser) {
       return sendErrorResponse(res, 404, 'User not found');
     }
-    if (existingUser.user_type !== 'Waza Master') {
-      return sendErrorResponse(res, 403, `User type must be "Waza Master"`);
+    if (existingUser.user_type !== 'Waza Trainer') {
+      return sendErrorResponse(res, 403, `User type must be "Waza Trainer"`);
     }
 
-    const existingMaster = await prisma.waza_masters.findMany({
+    const existingTrainer = await prisma.waza_trainers.findMany({
       where: { user_id },
       select: {
-        master_id: true,
+        trainer_id: true,
       },
     });
 
-    if (existingMaster.length) {
-      return sendErrorResponse(res, 409, 'Master already exists');
+    if (existingTrainer.length) {
+      return sendErrorResponse(res, 409, 'Trainer already exists');
     }
 
-    const newMaster = await prisma.waza_masters.create({
+    const newTrainer = await prisma.waza_trainers.create({
       data: {
         user_id,
         hourly_rate,
@@ -67,9 +67,9 @@ export default async function createMaster(
       },
     });
 
-    return res.status(201).json(newMaster);
+    return res.status(201).json(newTrainer);
   } catch (e: unknown) {
-    console.error('Error in createMaster:', e);
+    console.error('Error in createTrainer:', e);
     sendErrorResponse(res, 500, 'Internal Server Error', e);
   }
 }

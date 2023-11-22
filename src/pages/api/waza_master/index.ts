@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import getMaster from './GetMaster';
-import createMaster from './CreateMaster';
-import updateMaster from './UpdateMaster';
+import getTrainer from './GetTrainer';
+import createTrainer from './CreateTrainer';
+import updateTrainer from './UpdateTrainer';
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,11 +9,11 @@ export default async function handler(
 ) {
   switch (req.method) {
     case 'GET':
-      return getMaster(req, res);
+      return getTrainer(req, res);
     case 'POST':
-      return createMaster(req, res);
+      return createTrainer(req, res);
     case 'PATCH':
-      return updateMaster(req, res);
+      return updateTrainer(req, res);
     // case 'DELETE':
     //   return deleteUser(req, res);
 
