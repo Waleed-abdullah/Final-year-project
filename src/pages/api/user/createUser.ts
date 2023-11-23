@@ -24,7 +24,7 @@ type CreateUser = {
 // User types as an Enum
 enum UserType {
   WazaWarrior = 'Waza Warrior',
-  WazaMaster = 'Waza Master',
+  WazaTrainer = 'Waza Trainer',
 }
 
 export default async function createUser(
@@ -62,7 +62,7 @@ export default async function createUser(
     return sendErrorResponse(
       res,
       400,
-      'Invalid user_type. User type must be Waza Warrior or Waza Master',
+      'Invalid user_type. User type must be Waza Warrior or Waza Trainer',
     );
   }
 
@@ -107,9 +107,8 @@ export default async function createUser(
 
     const { password, ...safeUser } = newUser;
     return res.status(201).json(safeUser);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error while creating user:', error);
-
     return sendErrorResponse(res, 500, 'Internal server error', error);
   }
 }

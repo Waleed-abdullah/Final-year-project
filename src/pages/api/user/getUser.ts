@@ -1,15 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 import { sendErrorResponse } from '../../../utils/errorHandler';
+import { isValidID } from '@/src/utils/validationHelpers';
 
 export default async function getUser(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const id = req.query.id;
+  const id = String(req.query.id);
 
   // Type Safety: Validate 'id' query parameter
-  if (!id || Array.isArray(id)) {
+  if (!isValidID(id)) {
     return sendErrorResponse(res, 400, 'Invalid id parameter');
   }
 
@@ -34,7 +35,7 @@ export default async function getUser(
     }
 
     res.status(200).json(user);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error while fetching user:', error);
     return sendErrorResponse(
       res,
