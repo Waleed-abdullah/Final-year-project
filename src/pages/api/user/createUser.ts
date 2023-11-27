@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 import bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import {
   isValidEmail,
@@ -11,7 +10,6 @@ import {
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10'); // Using environment variable for salt rounds
 
 type CreateUser = {
-  user_id: string;
   username: string;
   email: string;
   password: string;
@@ -26,7 +24,7 @@ type CreateUser = {
 // User types as an Enum
 enum UserType {
   WazaWarrior = 'Waza Warrior',
-  WazaMaster = 'Waza Master',
+  WazaTrainer = 'Waza Trainer',
 }
 
 export default async function createUser(
@@ -41,7 +39,6 @@ export default async function createUser(
 
   const date = new Date();
   const {
-    user_id = uuidv4(),
     username,
     email,
     password,
@@ -65,7 +62,7 @@ export default async function createUser(
     return sendErrorResponse(
       res,
       400,
-      'Invalid user_type. User type must be Waza Warrior or Waza Master',
+      'Invalid user_type. User type must be Waza Warrior or Waza Trainer',
     );
   }
 
@@ -96,7 +93,6 @@ export default async function createUser(
 
     const newUser = await prisma.users.create({
       data: {
-        user_id,
         username,
         email,
         password: hashedPassword,
@@ -111,11 +107,8 @@ export default async function createUser(
 
     const { password, ...safeUser } = newUser;
     return res.status(201).json(safeUser);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error while creating user:', error);
-    if (error.code === 'P2002') {
-      return sendErrorResponse(res, 409, 'Duplicate user_id');
-    }
     return sendErrorResponse(res, 500, 'Internal server error', error);
   }
 }

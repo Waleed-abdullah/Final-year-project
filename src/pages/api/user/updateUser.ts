@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import {
   isValidEmail,
+  isValidID,
   isValidPassword,
 } from '../../../utils/validationHelpers';
 
@@ -24,7 +25,7 @@ export default async function updateUser(
 
   const reqBody: Partial<UpdateData> = req.body;
 
-  if (!id) {
+  if (!isValidID(id)) {
     return sendErrorResponse(res, 400, 'id is required for updating');
   }
 
@@ -79,11 +80,8 @@ export default async function updateUser(
     });
 
     return res.status(200).json(updatedUser);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error while updating user:', error);
-    if (error.code === 'P2002') {
-      return sendErrorResponse(res, 409, 'Conflict, duplicate data');
-    }
     return sendErrorResponse(res, 500, 'Internal server error', error);
   }
 }
