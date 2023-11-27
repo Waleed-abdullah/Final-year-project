@@ -1,0 +1,59 @@
+/* pages/signup.module.css */
+.googleButton {
+  background-color: #db4437;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.googleButton:hover {
+  background-color: #c1351d;
+}
+
+.divider {
+  margin: 20px 0;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  line-height: 0.1em;
+}
+
+.divider:before {
+  content: '';
+  background: white;
+  position: relative;
+  top: 0.5em;
+  padding: 0 10px;
+}
+/* pages/signup.module.css */
+.signupContainer {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.signupForm input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.signupForm button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0070f3;
+  color: white;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.signupForm button:hover {
+  background-color: #0056b3;
+}
