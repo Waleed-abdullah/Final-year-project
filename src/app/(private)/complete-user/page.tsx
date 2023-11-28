@@ -45,7 +45,9 @@ export default function CompleteUserPage() {
         const data = await res.json();
         console.log('User found:', data);
         if (data.user_type === 'Waza Trainer') {
-          router.push(`/complete-user/trainer/${data.user_id}`);
+          router.push(`/complete-user/waza_trainer/${data.user_id}`);
+        } else if (data.user_type === 'Waza Warrior') {
+          router.push(`/complete-user/waza_warrior/${data.user_id}`);
         }
       }
     })();
@@ -81,7 +83,10 @@ export default function CompleteUserPage() {
         throw new Error(data.message || 'Something went wrong!');
       }
       console.log('User created:', data);
-      router.push(`complete-user/trainer/${data.user_id}`);
+      if (data.user_type === 'Waza Warrior')
+        router.push(`complete-user/waza_warrior/${data.user_id}`);
+      else if (data.user_type === 'Waza Trainer')
+        router.push(`complete-user/waza_trainer/${data.user_id}`);
     } catch (err: any) {
       console.error('Error creating user:', err);
       setError(err.message);

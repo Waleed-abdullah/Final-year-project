@@ -30,7 +30,9 @@ export function Dashboard() {
       if (!res.ok) {
         const data = await res.json();
         console.log('User not found:', data);
-        router.push(`/complete-user/trainer/${session.data.user.user_id}`);
+        router.push(
+          `/complete-user/${route_type}/${session.data.user.user_id}`,
+        );
       }
     })();
   }, [session]);
