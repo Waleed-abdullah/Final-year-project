@@ -104,7 +104,7 @@ model users {
   username                     String         @unique(map: "unique_username") @db.VarChar(255)
   password                     String?        @db.VarChar(255)
   email                        String         @unique(map: "unique_email") @db.VarChar(255)
-  user_type                    String?        @db.VarChar(50)
+  user_type                    String         @db.VarChar(50)
   profile_pic                  String?
   date_joined                  DateTime       @default(now()) @db.Timestamp(6)
   last_login                   DateTime?      @db.Timestamp(6)

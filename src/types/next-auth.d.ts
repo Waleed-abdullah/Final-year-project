@@ -5,9 +5,11 @@ declare module 'next-auth' {
    * Extends the built-in session.user object from next-auth
    */
   interface User {
+    user_id: string;
     isNewUser: boolean;
     provider: string;
     is_verified: boolean;
+    user_type: string;
   }
 
   /**
@@ -15,11 +17,13 @@ declare module 'next-auth' {
    */
   interface Session {
     user: {
+      user_id: string;
       isNewUser: boolean;
-      email: string;
-      image: string;
       provider: string;
       is_verified: boolean;
+      user_type: string;
+      email: string;
+      image: string;
     };
   }
 }
