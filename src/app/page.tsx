@@ -1,5 +1,8 @@
+'use client';
+import LandingPage from '@/components/LandingPage/LandingPage';
+
 function MyApp() {
-  return <div>Hello World</div>;
+  return <LandingPage />;
 }
 
 export default MyApp;
