@@ -22,6 +22,7 @@ export default async function createTrainer(
     if (!isValidID(user_id)) {
       return sendErrorResponse(res, 400, 'invalid user_id');
     }
+
     if (hourly_rate && typeof hourly_rate !== 'number') {
       return sendErrorResponse(res, 400, 'hourly_rate must be a number');
     }
