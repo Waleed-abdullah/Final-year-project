@@ -12,15 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body
-        style={{
-          height: '100%',
-          margin: 0,
-          padding: 0,
-        }}
-      >
-        {children}
-      </body>
+      <body className='h-screen w-screen'>{children}</body>
     </html>
   );
 }
