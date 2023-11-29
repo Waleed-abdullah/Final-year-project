@@ -1,3 +1,6 @@
-export default async function Page() {
-  return <pre>Landing Page</pre>;
+'use client';
+import LandingPage from '@/components/LandingPage/LandingPage';
+
+function MyApp() {
+  return <LandingPage />;
 }
