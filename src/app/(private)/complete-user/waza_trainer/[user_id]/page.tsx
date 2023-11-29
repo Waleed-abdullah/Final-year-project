@@ -39,7 +39,7 @@ export default function Trainer() {
         router.push(`/dashboard`);
       }
     })();
-  }, [user_id]);
+  }, [user_id, router]);
 
   useEffect(() => {
     (async () => {
@@ -54,7 +54,7 @@ export default function Trainer() {
         router.push(`/complete-user`);
       }
     })();
-  }, [user_id]);
+  }, [user_id, router]);
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;

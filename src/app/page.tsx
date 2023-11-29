@@ -1,6 +1,6 @@
 'use client';
 import LandingPage from '@/components/LandingPage/LandingPage';
 
-function MyApp() {
+export default function MyApp() {
   return <LandingPage />;
 }

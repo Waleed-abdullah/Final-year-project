@@ -51,7 +51,7 @@ export default function CompleteUserPage() {
         }
       }
     })();
-  }, [sessionData]);
+  }, [sessionData, router]);
 
   // Handle input changes for each field
   const handleInputChange = (e: any) => {

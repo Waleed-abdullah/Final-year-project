@@ -35,7 +35,7 @@ export function Dashboard() {
         );
       }
     })();
-  }, [session]);
+  }, [session, router]);
 
   return <div>{JSON.stringify(session)}</div>;
 }

@@ -36,7 +36,7 @@ export default function Trainer() {
         router.push(`/dashboard`);
       }
     })();
-  }, [user_id]);
+  }, [user_id, router]);
 
   useEffect(() => {
     (async () => {
@@ -51,7 +51,7 @@ export default function Trainer() {
         router.push(`/complete-user`);
       }
     })();
-  }, [user_id]);
+  }, [user_id, router]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();

@@ -70,7 +70,9 @@ export const authOptions: NextAuthOptions = {
       console.log(profile);
 
       if (account.provider === 'google') {
-        user.is_verified = profile.email_verified;
+        user.is_verified = (
+          profile as { email_verified: boolean }
+        ).email_verified;
         const userInDb = await prisma.users.findUnique({
           where: { email: user.email || '' },
         });
