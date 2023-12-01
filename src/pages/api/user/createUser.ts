@@ -12,7 +12,7 @@ const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10'); // Using environm
 type CreateUser = {
   username: string;
   email: string;
-  password?: string;
+  password?: string | null;
   user_type: string;
   provider: string;
   is_verified: boolean;
