@@ -37,13 +37,13 @@ export const authOptions: NextAuthOptions = {
         ) {
           console.log('user found password matched');
           return {
-            id: user.user_id,
+            id: user.user_id!,
             user_id: user.user_id,
             email: user.email,
             isNewUser: false,
-            provider: user.provider,
+            provider: user.provider!,
             is_verified: false,
-            user_type: user.user_type,
+            user_type: user.user_type!,
           };
         } else {
           return null;
