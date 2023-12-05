@@ -1,7 +1,7 @@
 export type User = {
   username: string;
   email: string;
-  password?: string | null;
+  password?: string;
   user_type: string;
   provider: string;
   is_verified: boolean;
