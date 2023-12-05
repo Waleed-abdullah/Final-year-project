@@ -6,34 +6,15 @@ import {
   isValidEmail,
   isValidPassword,
 } from '../../../utils/validationHelpers';
+import { User, UserType } from '@/src/types/auth/user';
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10'); // Using environment variable for salt rounds
-
-type CreateUser = {
-  username: string;
-  email: string;
-  password?: string | null;
-  user_type: string;
-  provider: string;
-  is_verified: boolean;
-  profile_pic?: string;
-  date_joined?: Date;
-  last_login?: Date;
-  created_at?: Date;
-  updated_at?: Date;
-};
-
-// User types as an Enum
-enum UserType {
-  WazaWarrior = 'Waza Warrior',
-  WazaTrainer = 'Waza Trainer',
-}
 
 export default async function createUser(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const reqBody: Partial<CreateUser> = req.body;
+  const reqBody: Partial<User> = req.body;
 
   if (!reqBody) {
     return sendErrorResponse(res, 400, 'Missing request body');

@@ -160,17 +160,17 @@ model warrior_specializations {
 
 model waza_trainers {
   trainer_id              String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user_id                 String?                   @unique(map: "unique_trainer_user_id") @db.Uuid
-  hourly_rate             Decimal?                  @db.Decimal
-  bio                     String?
-  location                String?                   @db.VarChar(255)
+  user_id                 String                    @unique(map: "unique_trainer_user_id") @db.Uuid
+  hourly_rate             Decimal                   @db.Decimal
+  bio                     String
+  location                String                    @db.VarChar(255)
   availability            availability[]
   exercise                exercise[]
   reviews                 reviews[]
   session                 session[]
   trainer_certifications  trainer_certifications[]
   trainer_specializations trainer_specializations[]
-  users                   users?                    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "waza_trainers_user_id_fkey")
+  users                   users                     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "waza_trainers_user_id_fkey")
 }
 
 model trainer_certifications {
