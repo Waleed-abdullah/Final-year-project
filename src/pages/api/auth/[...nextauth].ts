@@ -60,12 +60,6 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account, profile }) {
       if (!account) return false;
       user.provider = account.provider;
-      console.log('================user=====================');
-      console.log(user);
-      console.log('================account=====================');
-      console.log(account);
-      console.log('================profile=====================');
-      console.log(profile);
 
       if (account.provider === 'google') {
         user.is_verified = (
