@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
           user.password &&
           bcrypt.compareSync(credentials.password, user.password)
         ) {
-          console.log('user found password matched');
+ 
           return {
             id: user.user_id,
             user_id: user.user_id,
