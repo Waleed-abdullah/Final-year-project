@@ -75,8 +75,6 @@ export const authOptions: NextAuthOptions = {
           where: { email: user.email || '' },
         });
 
-        console.log('================userInDb=====================');
-        console.log(userInDb);
 
         if (!userInDb) {
           user.isNewUser = true;
