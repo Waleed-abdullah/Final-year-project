@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import wazaLogo from '@/assets/Waza_logo.svg';
 
-function LandingPage() {
+export default function LandingPage() {
   return (
     <div className='w-screen h-screen bg-black flex justify-center items-center'>
       <div className='text-white'>
@@ -23,5 +23,3 @@ function LandingPage() {
     </div>
   );
 }
-
-export default LandingPage;

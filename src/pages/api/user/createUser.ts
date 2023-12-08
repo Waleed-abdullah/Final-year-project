@@ -6,32 +6,15 @@ import {
   isValidEmail,
   isValidPassword,
 } from '../../../utils/validationHelpers';
+import { User, UserType } from '@/src/types/auth/user';
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10'); // Using environment variable for salt rounds
-
-type CreateUser = {
-  username: string;
-  email: string;
-  password: string;
-  user_type: string;
-  profile_pic?: string;
-  date_joined: Date;
-  last_login: Date;
-  created_at: Date;
-  updated_at: Date;
-};
-
-// User types as an Enum
-enum UserType {
-  WazaWarrior = 'Waza Warrior',
-  WazaTrainer = 'Waza Trainer',
-}
 
 export default async function createUser(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const reqBody: Partial<CreateUser> = req.body;
+  const reqBody: Partial<User> = req.body;
 
   if (!reqBody) {
     return sendErrorResponse(res, 400, 'Missing request body');
@@ -43,6 +26,8 @@ export default async function createUser(
     email,
     password,
     user_type,
+    provider,
+    is_verified = false,
     profile_pic,
     date_joined = date,
     last_login = date,
@@ -50,7 +35,7 @@ export default async function createUser(
     updated_at = date,
   } = reqBody;
 
-  if (!username || !email || !password || !user_type) {
+  if (!username || !email || !user_type) {
     return sendErrorResponse(res, 400, 'Missing required fields');
   }
 
@@ -66,7 +51,40 @@ export default async function createUser(
     );
   }
 
-  if (!isValidPassword(password)) {
+  if (!provider) {
+    return sendErrorResponse(
+      res,
+      400,
+      'Provider is required and cannot be null',
+    );
+  }
+
+  if (typeof is_verified !== 'boolean') {
+    return sendErrorResponse(
+      res,
+      400,
+      'is_verified is required and cannot be null',
+    );
+  }
+
+  // Check that password can only be null if provider is Google
+  if (provider !== 'google' && !password) {
+    return sendErrorResponse(
+      res,
+      400,
+      'Password is required unless provider is Google',
+    );
+  }
+
+  // If the provider is not Google, validate the password
+  if (provider !== 'google' && password && !isValidPassword(password)) {
+    return sendErrorResponse(
+      res,
+      400,
+      'Invalid password format. Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character',
+    );
+  }
+  if (password && !isValidPassword(password)) {
     return sendErrorResponse(
       res,
       400,
@@ -74,7 +92,9 @@ export default async function createUser(
     );
   }
 
-  const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+  const hashedPassword = password
+    ? await bcrypt.hash(password, SALT_ROUNDS)
+    : null;
 
   try {
     const existingUsername = await prisma.users.findMany({
@@ -97,6 +117,8 @@ export default async function createUser(
         email,
         password: hashedPassword,
         user_type,
+        provider,
+        is_verified,
         profile_pic,
         date_joined,
         last_login,
