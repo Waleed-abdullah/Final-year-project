@@ -41,7 +41,10 @@ export default async function listTrainers(
       };
     if (genderQuery)
       whereConditions.users = {
-        gender: genderQuery,
+        gender: {
+          equals: genderQuery,
+          mode: 'insensitive',
+        },
       };
     if (hourlyRateMin || hourlyRateMax) {
       whereConditions.hourly_rate = {};
@@ -56,14 +59,12 @@ export default async function listTrainers(
     }
     if (!isNaN(ageMin) || !isNaN(ageMax)) {
       whereConditions.users = whereConditions.users || {};
-
+      whereConditions.users.age = {};
       if (!isNaN(ageMin)) {
-        whereConditions.users.age = whereConditions.users.age || {};
         whereConditions.users.age.gte = ageMin;
       }
 
       if (!isNaN(ageMax)) {
-        whereConditions.users.age = whereConditions.users.age || {};
         whereConditions.users.age.lte = ageMax;
       }
     }

@@ -72,6 +72,7 @@ const Filter: React.FC = () => {
               className='border rounded p-2 mt-2 w-full'
               defaultValue=''
               onChange={(e) => setExperienceMin(e.target.value)}
+              value={experienceMin}
             >
               <option value='' disabled>
                 From
@@ -87,6 +88,7 @@ const Filter: React.FC = () => {
               className='border rounded p-2 mt-2 w-full'
               defaultValue=''
               onChange={(e) => setExperienceMax(e.target.value)}
+              value={experienceMax}
             >
               <option value='' disabled>
                 To
@@ -107,6 +109,7 @@ const Filter: React.FC = () => {
               className='border rounded p-2 mt-2 w-full'
               defaultValue=''
               onChange={(e) => setAgeMin(e.target.value)}
+              value={ageMin}
             >
               <option value='' disabled>
                 From
@@ -122,6 +125,7 @@ const Filter: React.FC = () => {
               className='border rounded p-2 mt-2 w-full'
               defaultValue=''
               onChange={(e) => setAgeMax(e.target.value)}
+              value={ageMax}
             >
               <option value='' disabled>
                 To
@@ -143,6 +147,7 @@ const Filter: React.FC = () => {
               className='border rounded p-2 mt-2 w-full'
               defaultValue=''
               onChange={(e) => setGender(e.target.value)}
+              value={gender}
             >
               <option value='' disabled>
                 Select Gender
@@ -167,6 +172,7 @@ const Filter: React.FC = () => {
               type='text'
               onChange={(e) => setLocation(e.target.value)}
               placeholder={`Select Trainer's Location`}
+              value={location}
             />
           </div>
         </div>
@@ -179,6 +185,7 @@ const Filter: React.FC = () => {
               onChange={(e) => setSpecialization(e.target.value)}
               type='text'
               placeholder={`Select Trainer's Skills`}
+              value={specialization}
             />
           </div>
         </div>
