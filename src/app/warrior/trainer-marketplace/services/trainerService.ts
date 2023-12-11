@@ -1,4 +1,4 @@
-import { TrainerFilters } from '@/src/types/trainer-marketplace/trainerList';
+import { TrainerFilters } from '@/src/app/warrior/trainer-marketplace/types';
 
 const fetchTrainers = async (
   page: number,
@@ -16,6 +16,7 @@ const fetchTrainers = async (
         queryParams.append(key, value.toString());
       }
     }
+    console.log('queryParams', queryParams.toString());
 
     const response = await fetch(`/api/waza_trainer?${queryParams.toString()}`);
     const data = await response.json();

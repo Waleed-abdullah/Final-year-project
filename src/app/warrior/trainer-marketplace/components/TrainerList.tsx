@@ -2,20 +2,16 @@
 import React, { useState, useEffect } from 'react';
 import TrainerCard from './TrainerCard';
 import { fetchTrainers } from '../services/trainerService';
-import {
-  Trainer,
-  TrainerFilters,
-} from '@/src/types/trainer-marketplace/trainerList';
+import { useTrainerFilter } from '../context/TrainerFilterContext';
+import { Trainer } from '../types';
 
-interface TrainerListProps {
-  filters: TrainerFilters;
-}
-
-const TrainerList: React.FC<TrainerListProps> = ({ filters }) => {
+const TrainerList: React.FC = () => {
   const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+
+  const { filters } = useTrainerFilter();
 
   useEffect(() => {
     setIsLoading(true);
@@ -29,7 +25,7 @@ const TrainerList: React.FC<TrainerListProps> = ({ filters }) => {
         setHasMore(false);
       })
       .finally(() => setIsLoading(false));
-  }, [page, filters]);
+  }, [page, filters]); // Add filters as a dependency
 
   const handlePrevPage = () => {
     setPage((prevPage) => Math.max(prevPage - 1, 1));

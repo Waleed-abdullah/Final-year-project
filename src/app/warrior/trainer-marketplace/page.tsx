@@ -1,22 +1,19 @@
+// src/app/warrior/trainer-marketplace/page.tsx
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import Filter from './components/Filter';
 import TrainerList from './components/TrainerList';
-import { TrainerFilters } from '@/src/types/trainer-marketplace/trainerList';
+import { TrainerFilterProvider } from './context/TrainerFilterContext'; // Import the context provider
 
 const TrainerMarketplace: React.FC = () => {
-  const [filters, setFilters] = useState<TrainerFilters>({});
-
-  const handleFilterChange = (newFilters: TrainerFilters) => {
-    console.log('New filters:', newFilters);
-    setFilters(newFilters);
-  };
-
   return (
-    <div className='container mx-auto'>
-      <Filter onFilterChange={handleFilterChange} />
-      <TrainerList filters={filters} />
-    </div>
+    <TrainerFilterProvider>
+      <div className='container mx-auto'>
+        <Filter />
+        <TrainerList />
+      </div>
+    </TrainerFilterProvider>
   );
 };
+
 export default TrainerMarketplace;

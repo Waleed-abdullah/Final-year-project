@@ -22,9 +22,9 @@ export type Trainer = {
 };
 
 export type TrainerFilters = {
-  specializationQuery?: string;
-  locationQuery?: string;
-  genderQuery?: string;
+  specialization?: string;
+  location?: string;
+  gender?: string;
   hourlyRateMin?: number;
   hourlyRateMax?: number;
   ageMin?: number;

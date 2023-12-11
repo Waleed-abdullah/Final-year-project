@@ -41,7 +41,7 @@ export default async function listTrainers(
       };
     if (genderQuery)
       whereConditions.users = {
-        gender: { contains: genderQuery, mode: 'insensitive' },
+        gender: genderQuery,
       };
     if (hourlyRateMin || hourlyRateMax) {
       whereConditions.hourly_rate = {};

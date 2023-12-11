@@ -2,7 +2,7 @@
 import {
   TrainerSpecialization,
   Trainer,
-} from '@/src/types/trainer-marketplace/trainerList';
+} from '@/src/app/warrior/trainer-marketplace/types';
 import React from 'react';
 import Image from 'next/image';
 
@@ -16,7 +16,7 @@ const TrainerCard: React.FC<Trainer> = ({
 }) => {
   return (
     <div className='border rounded p-4 shadow-md flex flex-col items-center'>
-      <Image
+      <img
         src={users.profile_pic}
         alt={users.name}
         className='w-24 h-24 rounded-full border-2 border-gray-300 -mt-12 mb-4'

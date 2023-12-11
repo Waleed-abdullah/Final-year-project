@@ -1,16 +1,14 @@
 'use client';
 
-import { TrainerFilters } from '@/src/types/trainer-marketplace/trainerList';
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
+import { useTrainerFilter } from '../context/TrainerFilterContext';
 
-interface FilterProps {
-  onFilterChange: (filters: TrainerFilters) => void;
-}
+const Filter: React.FC = () => {
+  const { setFilters } = useTrainerFilter();
 
-const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
-  const [specializationQuery, setSpecializationQuery] = useState('');
-  const [locationQuery, setLocationQuery] = useState('');
-  const [genderQuery, setGenderQuery] = useState('');
+  const [specialization, setSpecialization] = useState('');
+  const [location, setLocation] = useState('');
+  const [gender, setGender] = useState('');
   const [hourlyRateMin, setHourlyRateMin] = useState('');
   const [hourlyRateMax, setHourlyRateMax] = useState('');
   const [ageMin, setAgeMin] = useState('');
@@ -19,25 +17,47 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
   const [experienceMax, setExperienceMax] = useState('');
 
   const handleFilterChange = () => {
-    onFilterChange({
-      specializationQuery,
-      locationQuery,
-      genderQuery,
+    setFilters({
+      specialization,
+      location,
+      gender,
       hourlyRateMin: parseInt(hourlyRateMin),
       hourlyRateMax: parseInt(hourlyRateMax),
-      experienceMin: parseInt(experienceMin),
-      experienceMax: parseInt(experienceMax),
       ageMin: parseInt(ageMin),
       ageMax: parseInt(ageMax),
+      experienceMin: parseInt(experienceMin),
+      experienceMax: parseInt(experienceMax),
     });
+  };
+
+  const handleClearFilters = () => {
+    setSpecialization('');
+    setLocation('');
+    setGender('');
+    setHourlyRateMin('');
+    setHourlyRateMax('');
+    setAgeMin('');
+    setAgeMax('');
+    setExperienceMin('');
+    setExperienceMax('');
+    setFilters({});
   };
 
   return (
     <div className='p-4'>
       <div className='flex flex-row justify-between'>
         <p className='text-lg font-bold tracking-wide'>Filter</p>
-        <p className='text-lg text-red-500 tracking-wide cursor-pointer'>
+        <p
+          className='text-lg text-red-500 tracking-wide cursor-pointer'
+          onClick={handleClearFilters}
+        >
           Clear
+        </p>
+        <p
+          className='text-lg text-blue-500 tracking-wide cursor-pointer'
+          onClick={handleFilterChange}
+        >
+          Apply
         </p>
       </div>
       <div className='m-5' />
@@ -122,7 +142,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
             <select
               className='border rounded p-2 mt-2 w-full'
               defaultValue=''
-              onChange={(e) => setGenderQuery(e.target.value)}
+              onChange={(e) => setGender(e.target.value)}
             >
               <option value='' disabled>
                 Select Gender
@@ -145,7 +165,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
             <input
               className='border rounded p-2 mt-2 w-full'
               type='text'
-              onChange={(e) => setLocationQuery(e.target.value)}
+              onChange={(e) => setLocation(e.target.value)}
               placeholder={`Select Trainer's Location`}
             />
           </div>
@@ -156,7 +176,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
           <div className='flex flex-row gap-1 items-center'>
             <input
               className='border rounded p-2 mt-2 w-full'
-              onChange={(e) => setSpecializationQuery(e.target.value)}
+              onChange={(e) => setSpecialization(e.target.value)}
               type='text'
               placeholder={`Select Trainer's Skills`}
             />
