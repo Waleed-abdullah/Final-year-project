@@ -5,6 +5,7 @@ import {
 } from '@/src/app/warrior/trainer-marketplace/types';
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const TrainerCard: React.FC<Trainer> = ({
   hourly_rate,
@@ -14,8 +15,14 @@ const TrainerCard: React.FC<Trainer> = ({
   users,
   trainer_specializations,
 }) => {
+  const router = useRouter();
   return (
-    <div className='border rounded p-4 shadow-md flex flex-col items-center'>
+    <div
+      className='border rounded p-4 shadow-md flex flex-col items-center'
+      onClick={() =>
+        router.push(`/warrior/trainer-marketplace/${users.user_id}`)
+      }
+    >
       <img
         src={users.profile_pic}
         alt={users.name}

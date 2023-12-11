@@ -70,7 +70,6 @@ const Filter: React.FC = () => {
           <div className='flex flex-row gap-1 items-center'>
             <select
               className='border rounded p-2 mt-2 w-full'
-              defaultValue=''
               onChange={(e) => setExperienceMin(e.target.value)}
               value={experienceMin}
             >
@@ -86,7 +85,6 @@ const Filter: React.FC = () => {
             <span className='text-4xl font-light'>-</span>
             <select
               className='border rounded p-2 mt-2 w-full'
-              defaultValue=''
               onChange={(e) => setExperienceMax(e.target.value)}
               value={experienceMax}
             >
@@ -107,7 +105,6 @@ const Filter: React.FC = () => {
           <div className='flex flex-row gap-1 items-center'>
             <select
               className='border rounded p-2 mt-2 w-full'
-              defaultValue=''
               onChange={(e) => setAgeMin(e.target.value)}
               value={ageMin}
             >
@@ -123,7 +120,6 @@ const Filter: React.FC = () => {
             <span className='text-4xl font-light'>-</span>
             <select
               className='border rounded p-2 mt-2 w-full'
-              defaultValue=''
               onChange={(e) => setAgeMax(e.target.value)}
               value={ageMax}
             >
@@ -145,7 +141,6 @@ const Filter: React.FC = () => {
           <div className='flex flex-row gap-1 items-center'>
             <select
               className='border rounded p-2 mt-2 w-full'
-              defaultValue=''
               onChange={(e) => setGender(e.target.value)}
               value={gender}
             >

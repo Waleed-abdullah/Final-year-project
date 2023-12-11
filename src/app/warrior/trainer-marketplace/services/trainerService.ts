@@ -1,5 +1,20 @@
 import { TrainerFilters } from '@/src/app/warrior/trainer-marketplace/types';
 
+export const fetchTrainer = async (id: string) => {
+  try {
+    const response = await fetch(`/api/waza_trainer?user_id=${id}`);
+    console.log('response', response);
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || 'Something went wrong!');
+    }
+    return data;
+  } catch (error) {
+    console.error('Error fetching trainer:', error);
+    throw error;
+  }
+};
+
 const fetchTrainers = async (
   page: number,
   filters: TrainerFilters,

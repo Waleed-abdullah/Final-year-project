@@ -83,6 +83,7 @@ export default async function listTrainers(
         experience: true,
         users: {
           select: {
+            user_id: true,
             name: true,
             profile_pic: true,
             age: true,
