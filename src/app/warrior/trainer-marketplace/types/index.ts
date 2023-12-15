@@ -49,7 +49,7 @@ export type DetailedTrainer = {
   trainer_specializations: {
     specializations: {
       specialization_name: string;
-    }[];
+    };
   }[];
   trainer_certifications: {
     certifications: {
