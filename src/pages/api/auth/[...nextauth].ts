@@ -68,7 +68,6 @@ export const authOptions: NextAuthOptions = {
           where: { email: user.email || '' },
         });
 
-
         if (!userInDb) {
           user.isNewUser = true;
         } else {
