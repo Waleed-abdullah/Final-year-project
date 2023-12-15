@@ -28,14 +28,11 @@ export const authOptions: NextAuthOptions = {
         const user = await prisma.users.findUnique({
           where: { email: credentials.email },
         });
-        console.log('======================authorize=====================');
-        console.log(user);
         if (
           user &&
           user.password &&
           bcrypt.compareSync(credentials.password, user.password)
         ) {
-          console.log('user found password matched');
           return {
             id: user.user_id,
             user_id: user.user_id,
@@ -62,12 +59,6 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account, profile }) {
       if (!account) return false;
       user.provider = account.provider;
-      console.log('================user=====================');
-      console.log(user);
-      console.log('================account=====================');
-      console.log(account);
-      console.log('================profile=====================');
-      console.log(profile);
 
       if (account.provider === 'google') {
         user.is_verified = (
@@ -76,9 +67,6 @@ export const authOptions: NextAuthOptions = {
         const userInDb = await prisma.users.findUnique({
           where: { email: user.email || '' },
         });
-
-        console.log('================userInDb=====================');
-        console.log(userInDb);
 
         if (!userInDb) {
           user.isNewUser = true;
