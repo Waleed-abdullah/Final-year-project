@@ -3,6 +3,13 @@ import { useSession } from 'next-auth/react';
 import { redirect, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useScreenWidth } from '../../ScreenWidthProvider';
+import Logo from '@/assets/Dashboard/waza_logo.svg';
+import Home from '@/assets/Dashboard/home.svg';
+import Barbel from '@/assets/Dashboard/barbell.svg';
+import Apple from '@/assets/Dashboard/apple.svg';
+import Bicep from '@/assets/Dashboard/bicep.svg';
+import World from '@/assets/Dashboard/world.svg';
+import Image from 'next/image';
 
 export function Dashboard() {
   const router = useRouter();
@@ -64,7 +71,36 @@ export function Dashboard() {
             Toggle Left Drawer
           </button>
         )}
+        {/* Logo */}
+        <div className='mb-8'>
+          <Image src={Logo} alt='Waza Logo' />
+        </div>
+
         {/* Drawer content */}
+        <nav className='text-white'>
+          <ul>
+            <li className='flex items-center mb-4'>
+              <Image src={Home} alt='Dashboard Icon' width={20} height={20} />
+              <span className='ml-2'>Dashboard</span>
+            </li>
+            <li className='flex items-center mb-4'>
+              <Image src={Barbel} alt='Workouts Icon' width={20} height={20} />
+              <span className='ml-2'>My Workouts</span>
+            </li>
+            <li className='flex items-center mb-4'>
+              <Image src={Apple} alt='Diet Icon' width={20} height={20} />
+              <span className='ml-2'>My Diet</span>
+            </li>
+            <li className='flex items-center mb-4'>
+              <Image src={Bicep} alt='Diet Icon' width={20} height={20} />
+              <span className='ml-2'>Training</span>
+            </li>
+            <li className='flex items-center mb-4'>
+              <Image src={World} alt='Diet Icon' width={20} height={20} />
+              <span className='ml-2'>Community</span>
+            </li>
+          </ul>
+        </nav>
       </div>
 
       {/* Center Content */}
