@@ -3,6 +3,7 @@ import getTrainer from './getTrainer';
 import createTrainer from './createTrainer';
 import updateTrainer from './updateTrainer';
 import getTrainerByUserId from './getTrainerByUserId';
+import listTrainers from './listTrainers';
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,7 +16,7 @@ export default async function handler(
       if (user_id) {
         return getTrainerByUserId(req, res);
       }
-      return getTrainer(req, res);
+      return listTrainers(req, res);
     case 'POST':
       return createTrainer(req, res);
     case 'PATCH':

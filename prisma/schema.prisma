@@ -112,6 +112,10 @@ model users {
   updated_at                   DateTime       @default(now()) @db.Timestamp(6)
   is_verified                  Boolean        @default(false)
   provider                     String         @db.VarChar(50)
+
+  age                          Int?
+  name                         String?        @db.VarChar(255)
+  gender                       String?        @db.VarChar(6)
   chat_chat_receiver_idTousers chat[]         @relation("chat_receiver_idTousers")
   chat_chat_sender_idTousers   chat[]         @relation("chat_sender_idTousers")
   waza_trainers                waza_trainers?
@@ -164,6 +168,7 @@ model waza_trainers {
   hourly_rate             Decimal                   @db.Decimal
   bio                     String
   location                String                    @db.VarChar(255)
+  experience              Int?
   availability            availability[]
   exercise                exercise[]
   reviews                 reviews[]

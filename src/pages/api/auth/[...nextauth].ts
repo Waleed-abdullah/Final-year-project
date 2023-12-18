@@ -33,7 +33,6 @@ export const authOptions: NextAuthOptions = {
           user.password &&
           bcrypt.compareSync(credentials.password, user.password)
         ) {
- 
           return {
             id: user.user_id,
             user_id: user.user_id,
@@ -68,7 +67,6 @@ export const authOptions: NextAuthOptions = {
         const userInDb = await prisma.users.findUnique({
           where: { email: user.email || '' },
         });
-
 
         if (!userInDb) {
           user.isNewUser = true;
