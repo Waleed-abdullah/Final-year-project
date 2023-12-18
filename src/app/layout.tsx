@@ -13,13 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body
-        style={{
-          height: '100%',
-          margin: 0,
-          padding: 0,
-        }}
-      >
+      <body className='h-screen w-screen'>
         <ScreenWidthProvider>{children}</ScreenWidthProvider>
       </body>
     </html>
