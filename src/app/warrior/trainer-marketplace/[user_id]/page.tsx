@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchTrainer } from '../services/trainerService';
 import { useParams } from 'next/navigation';
 import { DetailedTrainer } from '../types/';
+import Image from 'next/image';
 
 const TrainerMarketplace: React.FC = () => {
   const [trainer, setTrainer] = useState<DetailedTrainer | null>(null);
@@ -32,8 +33,10 @@ const TrainerMarketplace: React.FC = () => {
 
       <div className='flex flex-row-reverse flex-wrap justify-between mt-14'>
         <div className='w-48 h-48 rounded-full overflow-hidden bg-black ml-6'>
-          <img
-            src={trainer?.users.profile_pic}
+          <Image
+            src={trainer?.users.profile_pic || ''}
+            width={200}
+            height={200}
             alt={`${trainer?.users.name} profile`}
           />
         </div>

@@ -23,9 +23,11 @@ const TrainerCard: React.FC<Trainer> = ({
         router.push(`/warrior/trainer-marketplace/${users.user_id}`)
       }
     >
-      <img
-        src={users.profile_pic}
+      <Image
+        src={users.profile_pic || ''}
         alt={users.name}
+        width={200}
+        height={200}
         className='w-24 h-24 rounded-full border-2 border-gray-300 -mt-12 mb-4'
       />
       <div className='font-bold'>{users.name}</div>
