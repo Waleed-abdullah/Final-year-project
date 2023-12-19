@@ -1,6 +1,6 @@
 'use client';
 import { useSession } from 'next-auth/react';
-import { redirect, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Logo from '@/assets/Dashboard/waza_logo.svg';
 import Home from '@/assets/Dashboard/home.svg';
@@ -22,6 +22,8 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
     setIsLeftDrawerOpen(isLargeScreen);
     setIsRightDrawerOpen(isLargeScreen);
   }, [isLargeScreen]);
+  const path = usePathname();
+  const isActive = (href: string) => path === href;
 
   return (
     <div className='flex h-screen'>
@@ -29,7 +31,7 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
       <div
         className={`fixed inset-y-0 left-0 z-30 w-64 bg-black p-4 transition-transform duration-300 ease-in-out ${
           isLeftDrawerOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        } `}
       >
         {!isLargeScreen && (
           <button
@@ -47,33 +49,55 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
         {/* Drawer content */}
         <nav className='text-white'>
           <ul>
-            <li className='flex items-center mb-4'>
+            <li
+              className={`flex items-center mb-4 ${
+                isActive('/dashboard') ? 'text-yellow-500' : 'text-white'
+              }`}
+            >
               <Image src={Home} alt='Dashboard Icon' width={20} height={20} />
-              <Link href={'dashboard'} className='ml-2'>
+              <Link href={'dashboard'} className={`ml-2 `}>
                 Dashboard
               </Link>
             </li>
-            <li className='flex items-center mb-4'>
+            <li
+              className={`flex items-center mb-4 ${
+                isActive('/workouts') ? 'text-yellow-500' : 'text-white'
+              }`}
+            >
               <Image src={Barbel} alt='Workouts Icon' width={20} height={20} />
-              <Link href={'workouts'} className='ml-2'>
+              <Link href={'workouts'} className={`ml-2 `}>
                 My Workouts
               </Link>
             </li>
-            <li className='flex items-center mb-4'>
+            <li
+              className={`flex items-center mb-4 ${
+                isActive('/diet') ? 'text-yellow-500' : 'text-white'
+              }`}
+            >
               <Image src={Apple} alt='Diet Icon' width={20} height={20} />
-              <Link href={'diet'} className='ml-2'>
+              <Link href={'diet'} className={`ml-2 `}>
                 My Diet
               </Link>
             </li>
-            <li className='flex items-center mb-4'>
+            <li
+              className={`flex items-center mb-4 ${
+                isActive('/training') ? 'text-yellow-500' : 'text-white'
+              }`}
+            >
               <Image src={Bicep} alt='Diet Icon' width={20} height={20} />
-              <Link href={'training'} className='ml-2'>
+              <Link href={'training'} className={`ml-2 `}>
                 Training
               </Link>
             </li>
-            <li className='flex items-center mb-4'>
+            <li
+              className={`flex items-center mb-4 ${
+                isActive('/community')
+                  ? 'text-yellow-500 fill-current'
+                  : 'text-white'
+              }`}
+            >
               <Image src={World} alt='Diet Icon' width={20} height={20} />
-              <Link href={'community'} className='ml-2'>
+              <Link href={'community'} className={`ml-2 `}>
                 Community
               </Link>
             </li>
