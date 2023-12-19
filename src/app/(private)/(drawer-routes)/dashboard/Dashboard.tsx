@@ -5,6 +5,10 @@ import { redirect, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Calender from '@/assets//Dashboard/calender.svg';
 import DoughnutChart from '@/components/DoughnutChart/DoughnutChart';
+import Fire from '@/assets/Dashboard/fire.svg';
+import Minus from '@/assets/Dashboard/minus.svg';
+import Tick from '@/assets/Dashboard/tick.svg';
+import Cross from '@/assets/Dashboard/cross.svg';
 
 export function Dashboard() {
   const router = useRouter();
@@ -64,18 +68,47 @@ export function Dashboard() {
 
       <main>
         <h2 className='text-lg font-semibold'>Welcome Back Waleed!</h2>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
-          <section
-            aria-label='Nutrition section'
-            className='md:col-span-2 lg:col-span-2'
-          >
-            <div className='bg-white p-4 rounded-lg shadow flex justify-between items-center'>
-              <div className='w-6/12 min-w-min'>
+        <div className='grid grid-cols-1 md:grid-cols-2  gap-4 mt-4'>
+          <section aria-label='Nutrition section'>
+            <div className='bg-white  p-4 rounded-lg shadow flex justify-between items-center'>
+              <div className='w-2/4 '>
                 <DoughnutChart data={chartData} />
               </div>
-              <div className='ml-4'>
-                <p className='text-lg font-semibold'>Nutrition</p>
-                <p className='text-sm text-gray-400'>Daily Macro Goals</p>
+              <div className='flex flex-col gap-2 justify-between'>
+                <div className='flex flex-row bg-black rounded-3xl p-2 gap-1'>
+                  <Image src={Fire} width={20} height={20} alt='fire' />
+                  <p className='text-sm font-semibold text-yellow-500'>
+                    Calories Burned
+                  </p>
+                  <p className='text-white text-sm font-semibold '>480kcal</p>
+                </div>
+                <div className='flex flex-row gap-1'>
+                  <div className='flex flex-row bg-green-500 rounded-3xl p-2 gap-1'>
+                    <Image src={Minus} width={20} height={20} alt='minus' />
+                    <p className='text-sm font-semibold text-white'>Protiens</p>
+                  </div>
+                  <p className='text-black text-sm font-semibold flex items-center'>
+                    200/1200kcal
+                  </p>
+                </div>
+                <div className='flex flex-row gap-1'>
+                  <div className='flex flex-row bg-gray-500 rounded-3xl p-2 gap-1'>
+                    <Image src={Tick} width={20} height={20} alt='tick' />
+                    <p className='text-sm font-semibold text-white'>Carbs</p>
+                  </div>
+                  <p className='text-black text-sm font-semibold flex items-center'>
+                    200/1200kcal
+                  </p>
+                </div>
+                <div className='flex flex-row gap-1'>
+                  <div className='flex flex-row bg-red-500 rounded-3xl p-2 gap-1'>
+                    <Image src={Cross} width={20} height={20} alt='cross' />
+                    <p className='text-sm font-semibold text-white'>Fats</p>
+                  </div>
+                  <p className='text-black text-sm font-semibold flex items-center'>
+                    200/1200kcal
+                  </p>
+                </div>
               </div>
             </div>
           </section>
