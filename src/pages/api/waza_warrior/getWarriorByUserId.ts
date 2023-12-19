@@ -19,8 +19,24 @@ export default async function getWarriorByUserId(
     const existingWarrior = await prisma.waza_warriors.findUnique({
       where: { user_id: user_id },
       select: {
-        warrior_id: true,
-        user_id: true,
+        users: {
+          select: {
+            user_id: true,
+            name: true,
+            profile_pic: true,
+            age: true,
+            gender: true,
+          },
+        },
+        warrior_specializations: {
+          select: {
+            specializations: {
+              select: {
+                specialization_name: true,
+              },
+            },
+          },
+        },
       },
     });
 
