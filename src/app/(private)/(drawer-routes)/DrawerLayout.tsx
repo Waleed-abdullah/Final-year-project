@@ -107,7 +107,7 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
 
       {/* Center Content */}
       <div
-        className={`flex-1 p-4 bg-gray-200 transition-all duration-300 ease-in-out ${
+        className={`flex-1 bg-gray-200 transition-all duration-300 ease-in-out ${
           isLeftDrawerOpen ? 'lg:ml-64' : 'lg:ml-0'
         } ${isRightDrawerOpen ? 'lg:mr-64' : 'lg:mr-0'}`}
       >
