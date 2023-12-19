@@ -26,7 +26,7 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
   const isActive = (href: string) => path === href;
 
   return (
-    <div className='flex h-screen'>
+    <div className='flex'>
       {/* Left Drawer */}
       <div
         className={`fixed inset-y-0 left-0 z-30 w-64 bg-black p-4 transition-transform duration-300 ease-in-out ${
@@ -107,7 +107,7 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
 
       {/* Center Content */}
       <div
-        className={`flex-1 bg-gray-200 transition-all duration-300 ease-in-out ${
+        className={`flex-1 bg-gray-200 transition-all duration-300 ease-in-out  ${
           isLeftDrawerOpen ? 'lg:ml-64' : 'lg:ml-0'
         } ${isRightDrawerOpen ? 'lg:mr-64' : 'lg:mr-0'}`}
       >
