@@ -71,7 +71,9 @@ export const authOptions: NextAuthOptions = {
         if (!userInDb) {
           user.isNewUser = true;
         } else {
-          user.isNewUser = false; // Not a new user
+          user.user_type = userInDb.user_type;
+          user.user_id = userInDb.user_id;
+          user.isNewUser = false;
         }
 
         return true;

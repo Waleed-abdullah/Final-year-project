@@ -11,6 +11,7 @@ export function Dashboard() {
   }
   useEffect(() => {
     (async () => {
+      console.log(session);
       let route_type = '';
       if (!session.data) return;
       else if (session.data.user.user_type === 'Waza Trainer')

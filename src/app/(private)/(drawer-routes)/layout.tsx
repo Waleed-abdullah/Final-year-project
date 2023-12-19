@@ -1,6 +1,3 @@
-// app/(private)/layout.tsx
-import { getServerSession } from 'next-auth';
-import { SessionProvider } from './SessionProvider';
 import type { ReactNode } from 'react';
 
 import { DrawerLayout } from './DrawerLayout';
