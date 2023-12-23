@@ -11,9 +11,9 @@ export default async function PrivateLayout({
   children: ReactNode;
 }) {
   const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
+  // if (!session) {
+  //   redirect('/api/auth/signin');
+  // }
 
   return <SessionProvider session={session}>{children}</SessionProvider>;
 }
