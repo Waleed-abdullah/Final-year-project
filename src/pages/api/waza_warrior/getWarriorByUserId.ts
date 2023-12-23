@@ -21,25 +21,36 @@ export default async function getWarriorByUserId(
       select: {
         users: {
           select: {
-            user_id: true,
+            email: true,
             name: true,
             profile_pic: true,
-            age: true,
-            gender: true,
+            username: true,
           },
         },
-        warrior_specializations: {
+        meals: {
           select: {
-            specializations: {
+            meal_date: true,
+            meal_food_items: {
               select: {
-                specialization_name: true,
+                food_item_identifier: true,
+                quantity: true,
+                unit: true,
               },
+            },
+            meal_types: {
+              select: {
+                name: true,
+              },
+            },
+          },
+          where: {
+            meal_date: {
+              gte: new Date(new Date().setDate(new Date().getDate())),
             },
           },
         },
       },
     });
-
     if (!existingWarrior) {
       return sendErrorResponse(res, 404, 'Warrior not found');
     }

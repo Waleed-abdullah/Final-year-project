@@ -2,7 +2,7 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { redirect, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Calender from '@/assets//Dashboard/calender.svg';
 import DoughnutChart from '@/components/DoughnutChart/DoughnutChart';
 import Fire from '@/assets/Dashboard/fire.svg';
@@ -11,37 +11,75 @@ import Tick from '@/assets/Dashboard/tick.svg';
 import Cross from '@/assets/Dashboard/cross.svg';
 import Barbell from '@/assets/Dashboard/barbell.svg';
 import Plate from '@/assets/Dashboard/plate.svg';
+import { Warrior } from './types';
 
 export function Dashboard() {
+  const [data, setData] = useState<Warrior | null>(null);
   const router = useRouter();
   const session = useSession();
   if (session.data && session.data.user.isNewUser) {
     redirect('/complete-user');
   }
-  // useEffect(() => {
-  //   (async () => {
-  //     if (!session.data) return;
-  //     else if (session.data.user.user_type === 'Waza Trainer')
-  //       router.push(`/api/auth/signin`);
-  //     // Create a proper work flow
+  useEffect(() => {
+    if (!session.data) return;
+    else if (session.data.user.user_type === 'Waza Trainer')
+      router.push(`/api/auth/signin`);
+    // Create a proper work flow
 
-  //     const res = await fetch(
-  //       `http://localhost:3000/api/waza_warrior/?user_id=${session.data.user.user_id}`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       },
-  //     );
-  //     const data = await res.json();
-  //     console.log(data);
-  //     if (!res.ok) {
-  //       console.log('User not found:', data);
-  //       router.push(`/complete-user/waza_warrior/${session.data.user.user_id}`);
-  //     }
-  //   })();
-  // }, [session, router]);
+    const fetchData = async () => {
+      // Replace with the actual API endpoint to fetch your data
+      const res = await fetch(
+        `http://localhost:3000/api/waza_warrior/?user_id=${session.data.user.user_id}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+      const fetchedData: Warrior = await res.json();
+      setData(fetchedData);
+      console.log(fetchedData);
+    };
+
+    fetchData();
+  }, [session, router]);
+
+  useEffect(() => {
+    if (data && data.meals?.length > 0) {
+      const fetchNutrients = async () => {
+        // Combine all food items from all meals
+        const allFoodItems = data.meals.flatMap((meal) => meal.meal_food_items);
+        const query = allFoodItems
+          .map(
+            (item) =>
+              `${item.quantity} ${item.unit} ${item.food_item_identifier}`,
+          )
+          .join(', ');
+
+        try {
+          const nutrientResponse = await fetch(
+            'https://trackapi.nutritionix.com/v2/natural/nutrients/',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-app-id': `${process.env.NUTRITIONIX_APP_ID}`,
+                'x-app-key': `${process.env.NUTRITIONIX_API_KEY}`,
+                'x-remote-user-id': '0',
+              },
+              body: JSON.stringify({ query }),
+            },
+          );
+
+          const nutrients = await nutrientResponse.json();
+          console.log(nutrients);
+        } catch (error) {
+          console.error('Error fetching nutrients:', error);
+        }
+      };
+
+      fetchNutrients();
+    }
+  }, [data]);
 
   const date = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
