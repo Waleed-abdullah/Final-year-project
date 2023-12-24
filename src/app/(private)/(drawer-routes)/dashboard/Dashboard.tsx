@@ -15,6 +15,22 @@ import { Warrior } from './types';
 
 export function Dashboard() {
   const [data, setData] = useState<Warrior | null>(null);
+  const [chartData, setChartData] = useState({
+    labels: ['Calories', 'Protein', 'Carbs', 'Fats'],
+    datasets: [
+      {
+        data: [0, 0, 0, 0], // Initialize with zero values
+        backgroundColor: ['#eab308', '#22c55e', '#6b7280', '#ef4444'],
+        borderWidth: 1,
+      },
+    ],
+  });
+  const [macros, setMacros] = useState({
+    protein: 0,
+    carbs: 0,
+    fats: 0,
+    calories: 0,
+  });
   const router = useRouter();
   const session = useSession();
   if (session.data && session.data.user.isNewUser) {
@@ -37,7 +53,6 @@ export function Dashboard() {
       );
       const fetchedData: Warrior = await res.json();
       setData(fetchedData);
-      console.log(fetchedData);
     };
 
     fetchData();
@@ -54,7 +69,7 @@ export function Dashboard() {
               `${item.quantity} ${item.unit} ${item.food_item_identifier}`,
           )
           .join(', ');
-
+        if (!query.length) return;
         try {
           const nutrientResponse = await fetch(
             'https://trackapi.nutritionix.com/v2/natural/nutrients/',
@@ -71,7 +86,38 @@ export function Dashboard() {
           );
 
           const nutrients = await nutrientResponse.json();
-          console.log(nutrients);
+          let totalCalories = 0;
+          let totalProtein = 0;
+          let totalCarbs = 0;
+          let totalFats = 0;
+
+          nutrients.foods.forEach((food: any) => {
+            totalCalories += food.nf_calories;
+            totalProtein += food.nf_protein;
+            totalCarbs += food.nf_total_carbohydrate;
+            totalFats += food.nf_total_fat;
+          });
+          setMacros({
+            protein: totalProtein,
+            carbs: totalCarbs,
+            fats: totalFats,
+            calories: totalCalories,
+          });
+
+          setChartData({
+            ...chartData,
+            datasets: [
+              {
+                ...chartData.datasets[0],
+                data: [
+                  macros.calories,
+                  macros.protein,
+                  macros.carbs,
+                  macros.fats,
+                ],
+              },
+            ],
+          });
         } catch (error) {
           console.error('Error fetching nutrients:', error);
         }
@@ -87,16 +133,6 @@ export function Dashboard() {
     month: 'long',
     day: 'numeric',
   });
-  const chartData = {
-    labels: ['Protein', 'Carbs', 'Fats'],
-    datasets: [
-      {
-        data: [200, 845, 1000], // Replace with your actual data
-        backgroundColor: ['#4ade80', '#facc15', '#f87171'],
-        borderWidth: 1,
-      },
-    ],
-  };
   return (
     <div className='p-4 min-h-screen'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
@@ -121,7 +157,9 @@ export function Dashboard() {
                 <p className='text-sm font-semibold text-yellow-500'>
                   Calories Burned
                 </p>
-                <p className='text-white text-sm font-semibold '>480kcal</p>
+                <p className='text-white text-sm font-semibold '>{`${macros.calories.toFixed(
+                  2,
+                )}kcal`}</p>
               </div>
               <div className='flex flex-row gap-1'>
                 <div className='flex flex-row bg-green-500 rounded-3xl p-2 gap-1'>
@@ -129,7 +167,7 @@ export function Dashboard() {
                   <p className='text-sm font-semibold text-white'>Protiens</p>
                 </div>
                 <p className='text-black text-sm font-semibold flex items-center'>
-                  200/1200kcal
+                  {`${macros.protein.toFixed(2)}kcal`}
                 </p>
               </div>
               <div className='flex flex-row gap-1'>
@@ -138,7 +176,7 @@ export function Dashboard() {
                   <p className='text-sm font-semibold text-white'>Carbs</p>
                 </div>
                 <p className='text-black text-sm font-semibold flex items-center'>
-                  200/1200kcal
+                  {`${macros.carbs.toFixed(2)}kcal`}
                 </p>
               </div>
               <div className='flex flex-row gap-1'>
@@ -147,7 +185,7 @@ export function Dashboard() {
                   <p className='text-sm font-semibold text-white'>Fats</p>
                 </div>
                 <p className='text-black text-sm font-semibold flex items-center'>
-                  200/1200kcal
+                  {`${macros.fats.toFixed(2)}kcal`}
                 </p>
               </div>
             </div>
