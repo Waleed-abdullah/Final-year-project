@@ -115,7 +115,7 @@ const SignUp = () => {
 
           <button
             type='submit'
-            className='relative rounded-[100px] shadow-[0px_10px_10px_rgba(0,_0,_0,_0.05)] h-[50px] text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-400 focus:ring-4 focus:outline-none text-xl text-color-base-black font-desktop-text-bold-1 w-full px-5 py-2.5 text-center  '
+            className='relative rounded-[100px] shadow-[0px_10px_10px_rgba(0,_0,_0,_0.05)] h-[50px] text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-400 focus:ring-4 focus:outline-none  sm:text-base md:text-lg lg:text-xl text-color-base-black font-desktop-text-bold-1 w-full lg:px-5 sm:px-1 py-2.5 text-center  '
           >
             <div className='relative leading-[101%] font-semibold'>
               Create Trainer Account
@@ -127,7 +127,7 @@ const SignUp = () => {
         </div>
         <button
           onClick={() => router.push('/signup/warrior')}
-          className='relative rounded-[100px] shadow-[0px_10px_10px_rgba(0,_0,_0,_0.05)] box-border w-full h-[50px] overflow-hidden shrink-0 text-center hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-black justify-center py-1.5 px-20 text-xl text-color-base-black font-desktop-text-bold-1 border-[1px] border-solid border-color-grey-grey-200'
+          className='relative rounded-[100px] shadow-[0px_10px_10px_rgba(0,_0,_0,_0.05)] box-border w-full h-[50px] overflow-hidden shrink-0 text-center hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-black justify-center py-1.5 px-5  sm:text-base md:text-lg lg:text-xl text-color-base-black font-desktop-text-bold-1 border-[1px] border-solid border-color-grey-grey-200'
         >
           <div className='relative leading-[101%] font-semibold'>
             Sign up as a User
