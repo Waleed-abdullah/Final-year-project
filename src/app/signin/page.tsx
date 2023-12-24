@@ -4,8 +4,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { UserType } from '@/src/types/auth/user';
 import WazaLogo from '@/assets/wazaLogos/Wazalogo_Black.svg';
-import trainingImage from '@/assets/signUpPage/trainingImage.png';
-import logoImage from '@/assets/signUpPage/ImageLogo.png';
+import trainingImage from '@/assets/signInPage/hero-image.png';
 import mailIcon from '@/assets/formIcons/mail.svg';
 import lockIcon from '@/assets/formIcons/lock.svg';
 import googleIcon from '@/assets/formIcons/GoogleIcon.svg';
@@ -132,14 +131,6 @@ const SignIn = () => {
         </div>
       </div>
       <div className='lg:basis-1/2 flex items-center justify-center h-full relative'>
-        <div className='absolute top-0 left-0 w-full h-full'>
-          <Image
-            src={logoImage}
-            alt='logo'
-            className='w-full h-full object-contain'
-          />
-        </div>
-
         {/* Training Image */}
         <div className='w-full h-full'>
           <Image

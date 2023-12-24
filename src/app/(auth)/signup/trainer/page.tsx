@@ -4,8 +4,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { UserType } from '@/src/types/auth/user';
 import WazaLogo from '@/assets/wazaLogos/Wazalogo_Black.svg';
-import trainingImage from '@/assets/signUpPage/trainingImage.png';
-import logoImage from '@/assets/signUpPage/ImageLogo.png';
+import trainingImage from '@/assets/signUpPage/trainer/hero-image_2.png';
 import mailIcon from '@/assets/formIcons/mail.svg';
 import lockIcon from '@/assets/formIcons/lock.svg';
 import userIcon from '@/assets/formIcons/user.svg';
@@ -70,7 +69,7 @@ const SignUp = () => {
 
   return (
     <div className='flex flex-wrap items-center justify-center w-full h-full'>
-      <div className='lg:basis-1/2 p-20 w-full flex flex-col justify-center gap-[30px] text-xl text-black font-desktop-text-bold-1'>
+      <div className='lg:basis-1/2 p-20 w-full flex flex-col justify-center gap-[20px] text-xl text-black font-desktop-text-bold-1'>
         <div>
           <Image src={WazaLogo} alt='logo' className='' />
         </div>
@@ -142,22 +141,10 @@ const SignUp = () => {
           </Link>
         </div>
       </div>
-      <div className='lg:basis-1/2 flex items-center justify-center h-full relative'>
-        <div className='absolute top-0 left-0 w-full h-full'>
-          <Image
-            src={logoImage}
-            alt='logo'
-            className='w-full h-full object-contain'
-          />
-        </div>
-
+      <div className='lg:basis-1/2 h-full '>
         {/* Training Image */}
         <div className='w-full h-full'>
-          <Image
-            src={trainingImage}
-            alt='trainingImage'
-            className='w-full h-full object-cover'
-          />
+          <Image src={trainingImage} alt='trainingImage' />
         </div>
       </div>
     </div>
