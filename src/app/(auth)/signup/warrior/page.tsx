@@ -8,6 +8,7 @@ import trainingImage from '@/assets/signUpPage/warrior/hero-image_1.png';
 import mailIcon from '@/assets/formIcons/mail.svg';
 import lockIcon from '@/assets/formIcons/lock.svg';
 import userIcon from '@/assets/formIcons/user.svg';
+import googleIcon from '@/assets/formIcons/GoogleIcon.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -31,17 +32,17 @@ const SignUp = () => {
     provider: 'credentials',
     is_verified: false,
   });
-  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.id]: e.target.value,
     });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(formData);
     try {
       const res = await fetch('/api/user', {
         method: 'POST',
@@ -57,9 +58,9 @@ const SignUp = () => {
       }
 
       const data = await res.json();
-      router.push('/api/auth/signin');
+      router.push('/signin');
     } catch (err: any) {
-      setError(err.message || 'An error occurred');
+      console.error(err.message || 'An error occurred');
     }
   };
 
@@ -69,12 +70,12 @@ const SignUp = () => {
 
   return (
     <div className='flex flex-wrap items-center justify-center w-full h-full'>
-      <div className='lg:basis-1/2 p-20 w-full flex flex-col justify-center gap-[20px] text-black font-desktop-text-bold-1'>
+      <div className='lg:basis-1/2 px-20 w-full flex flex-col justify-center gap-[20px] text-black font-desktop-text-bold-1'>
         <div>
           <Image src={WazaLogo} alt='logo' className='' />
         </div>
         <div className=' text-3xl font-semibold mb-2'>Create a New Account</div>
-        <form className='w-full mx-auto'>
+        <form onSubmit={handleSubmit} className='w-full mx-auto'>
           <div className='relative mb-5'>
             <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>
               <Image src={userIcon} alt='lockIcon' />
@@ -82,6 +83,7 @@ const SignUp = () => {
             <input
               type='text'
               id='username'
+              onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block  focus:border-yellow-400 w-full p-2 ps-10'
               placeholder='Full Name'
               required
@@ -94,6 +96,7 @@ const SignUp = () => {
             <input
               type='email'
               id='email'
+              onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block  focus:border-yellow-400 w-full p-2 ps-10'
               placeholder='E-mail'
               required
@@ -107,6 +110,7 @@ const SignUp = () => {
             <input
               type='password'
               id='password'
+              onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 ps-10'
               placeholder='Password'
               required
@@ -131,6 +135,18 @@ const SignUp = () => {
         >
           <div className='relative leading-[101%] font-semibold'>
             Sign up as a Trainer
+          </div>
+        </button>
+
+        <button
+          onClick={handleSignUpWithGoogle}
+          className='relative rounded-[100px] shadow-[0px_10px_10px_rgba(0,_0,_0,_0.05)] box-border w-full h-[50px] overflow-hidden shrink-0  hover:bg-gray-200 focus:ring-4 focus:outline-none flex flex-row focus:ring-black justify-center items-center gap-4  py-1.5 px-5  sm:text-base md:text-lg lg:text-xl text-color-base-black font-desktop-text-bold-1 border-[1px] border-solid border-color-grey-grey-200'
+        >
+          <div>
+            <Image src={googleIcon} alt='googleIcon' />
+          </div>
+          <div className='relative leading-[101%] font-semibold'>
+            Sign up with Google
           </div>
         </button>
 

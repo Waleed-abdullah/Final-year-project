@@ -12,26 +12,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 interface SignInData {
-  username: string;
   email: string;
   password: string;
-  user_type: UserType;
-  provider: string;
-  is_verified: boolean;
-  profile_pic?: string;
 }
 
 const SignIn = () => {
   const router = useRouter();
   const [formData, setFormData] = useState<SignInData>({
-    username: '',
     email: '',
     password: '',
-    user_type: UserType.WazaTrainer,
-    provider: 'credentials',
-    is_verified: false,
   });
-  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -43,33 +33,22 @@ const SignIn = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      signIn('credentials', {
+        redirect: true,
+        ...formData,
       });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Something went wrong!');
-      }
-
-      const data = await res.json();
-      router.push('/api/auth/signin');
     } catch (err: any) {
-      setError(err.message || 'An error occurred');
+      console.error(err.message || 'An error occurred');
     }
   };
 
-  const handleSignUpWithGoogle = () => {
+  const handleSignInWithGoogle = () => {
     signIn('google', { callbackUrl: '/dashboard' });
   };
 
   return (
     <div className='flex flex-wrap items-center justify-center w-full h-full'>
-      <div className='lg:basis-1/2 p-20 w-full flex flex-col justify-center gap-[20px] text-xl text-black font-desktop-text-bold-1'>
+      <div className='lg:basis-1/2 px-20 w-full flex flex-col justify-center gap-[20px] text-xl text-black font-desktop-text-bold-1'>
         <div>
           <Image src={WazaLogo} alt='logo' className='' />
         </div>
@@ -111,7 +90,10 @@ const SignIn = () => {
         <div className='my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300'>
           <p className='mx-4 mb-0 text-center font-light'>Or</p>
         </div>
-        <button className='relative rounded-[100px] shadow-[0px_10px_10px_rgba(0,_0,_0,_0.05)] box-border w-full h-[50px] overflow-hidden shrink-0  hover:bg-gray-200 focus:ring-4 focus:outline-none flex flex-row focus:ring-black justify-center items-center gap-4  py-1.5 px-5  sm:text-base md:text-lg lg:text-xl text-color-base-black font-desktop-text-bold-1 border-[1px] border-solid border-color-grey-grey-200'>
+        <button
+          onClick={handleSignInWithGoogle}
+          className='relative rounded-[100px] shadow-[0px_10px_10px_rgba(0,_0,_0,_0.05)] box-border w-full h-[50px] overflow-hidden shrink-0  hover:bg-gray-200 focus:ring-4 focus:outline-none flex flex-row focus:ring-black justify-center items-center gap-4  py-1.5 px-5  sm:text-base md:text-lg lg:text-xl text-color-base-black font-desktop-text-bold-1 border-[1px] border-solid border-color-grey-grey-200'
+        >
           <div>
             <Image src={googleIcon} alt='googleIcon' />
           </div>
