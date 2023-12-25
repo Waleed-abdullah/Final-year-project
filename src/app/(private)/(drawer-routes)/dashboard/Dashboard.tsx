@@ -12,6 +12,7 @@ import Cross from '@/assets/Dashboard/cross.svg';
 import Barbell from '@/assets/Dashboard/barbell.svg';
 import Plate from '@/assets/Dashboard/plate.svg';
 import { Warrior } from './types';
+import Link from 'next/link';
 
 export function Dashboard() {
   const [data, setData] = useState<Warrior | null>(null);
@@ -134,7 +135,7 @@ export function Dashboard() {
     day: 'numeric',
   });
   return (
-    <div className='p-4 min-h-screen'>
+    <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>Dashboard</p>
         <div className='border-2 rounded-lg p-3 border-black/10 flex flex-row gap-2 items-center'>
@@ -196,10 +197,13 @@ export function Dashboard() {
               <Image src={Barbell} width={50} height={50} alt='calender' />
               <p className='text-xl text-white font-semibold'>Log Workout</p>
             </div>
-            <div className='bg-white  p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1'>
+            <Link
+              href={'diet'}
+              className='bg-white  p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1'
+            >
               <Image src={Plate} width={50} height={50} alt='calender' />
               <p className='text-xl  font-semibold'>Log Diet</p>
-            </div>
+            </Link>
           </div>
           <div className='w-full flex flex-row justify-between mt-4 gap-4 flex-wrap'>
             <div
