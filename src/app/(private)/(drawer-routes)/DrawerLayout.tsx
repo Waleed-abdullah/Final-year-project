@@ -33,14 +33,9 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
           isLeftDrawerOpen ? 'translate-x-0' : '-translate-x-full'
         } `}
       >
-        {!isLargeScreen && (
-          <button
-            onClick={() => setIsLeftDrawerOpen(!isLeftDrawerOpen)}
-            className='lg:hidden'
-          >
-            Toggle Left Drawer
-          </button>
-        )}
+        <button onClick={() => setIsLeftDrawerOpen(!isLeftDrawerOpen)}>
+          Toggle Left Drawer
+        </button>
         {/* Logo */}
         <div className='mb-8'>
           <Image src={Logo} alt='Waza Logo' />
@@ -113,22 +108,15 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
       >
         {/* Your main content goes here */}
 
-        {!isLargeScreen && (
-          <>
-            <button
-              onClick={() => setIsLeftDrawerOpen(!isLeftDrawerOpen)}
-              className='lg:hidden'
-            >
-              Toggle Left Drawer
-            </button>
-            <button
-              onClick={() => setIsRightDrawerOpen(!isRightDrawerOpen)}
-              className='lg:hidden'
-            >
-              Toggle Right Drawer
-            </button>
-          </>
-        )}
+        <>
+          <button onClick={() => setIsLeftDrawerOpen(!isLeftDrawerOpen)}>
+            Toggle Left Drawer
+          </button>
+          <button onClick={() => setIsRightDrawerOpen(!isRightDrawerOpen)}>
+            Toggle Right Drawer
+          </button>
+        </>
+
         {children}
       </div>
 
@@ -138,14 +126,10 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
           isRightDrawerOpen ? 'translate-x-0' : 'translate-x-full'
         } lg:block`}
       >
-        {!isLargeScreen && (
-          <button
-            onClick={() => setIsRightDrawerOpen(!isRightDrawerOpen)}
-            className='lg:hidden'
-          >
-            Toggle Right Drawer
-          </button>
-        )}
+        <button onClick={() => setIsRightDrawerOpen(!isRightDrawerOpen)}>
+          Toggle Right Drawer
+        </button>
+
         {/* Drawer content */}
       </div>
     </div>
