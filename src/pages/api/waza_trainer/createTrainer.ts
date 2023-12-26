@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import { isValidID } from '@/src/utils/validationHelpers';
-import { Trainer } from '@/src/types/auth/trainer';
+import { Trainer } from '@/src/types/page/auth/trainer';
 
 export default async function createTrainer(
   req: NextApiRequest,

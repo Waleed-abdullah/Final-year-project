@@ -2,7 +2,7 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { redirect, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Calender from '@/assets//Dashboard/calender.svg';
 import DoughnutChart from '@/components/DoughnutChart/DoughnutChart';
 import Fire from '@/assets/Dashboard/fire.svg';
@@ -11,137 +11,115 @@ import Tick from '@/assets/Dashboard/tick.svg';
 import Cross from '@/assets/Dashboard/cross.svg';
 import Barbell from '@/assets/Dashboard/barbell.svg';
 import Plate from '@/assets/Dashboard/plate.svg';
-import { Warrior } from './types';
 import Link from 'next/link';
+import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
+import { MealsByType } from '@/src/types/page/waza_warrior/food_log';
+import { fetchNutrients, fetchSavedMeals } from './service';
 
 export function Dashboard() {
-  const [data, setData] = useState<Warrior | null>(null);
-  const [chartData, setChartData] = useState({
-    labels: ['Calories', 'Protein', 'Carbs', 'Fats'],
-    datasets: [
-      {
-        data: [0, 0, 0, 0], // Initialize with zero values
-        backgroundColor: ['#eab308', '#22c55e', '#6b7280', '#ef4444'],
-        borderWidth: 1,
-      },
-    ],
-  });
+  const [warrior, setWarrior] = useState<Warrior | null>(null);
   const [macros, setMacros] = useState({
     protein: 0,
     carbs: 0,
     fats: 0,
     calories: 0,
   });
+  const [date, setDate] = useState(new Date('2023-12-26'));
+
   const router = useRouter();
   const session = useSession();
-  if (session.data && session.data.user.isNewUser) {
-    redirect('/complete-user');
-  }
+
   useEffect(() => {
     if (!session.data) return;
-    else if (session.data.user.user_type === 'Waza Trainer')
+
+    if (session.data.user.isNewUser) {
+      router.push('/complete-user');
+    }
+
+    if (session.data.user.user_type === 'Waza Trainer') {
       router.push(`/api/auth/signin`);
-    // Create a proper work flow
+      return;
+    }
 
     const fetchData = async () => {
-      // Replace with the actual API endpoint to fetch your data
-      const res = await fetch(
-        `http://localhost:3000/api/waza_warrior/?user_id=${session.data.user.user_id}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
-      const fetchedData: Warrior = await res.json();
-      setData(fetchedData);
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/waza_warrior/?user_id=${session.data.user.user_id}`,
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          },
+        );
+        const fetchedData: Warrior = await res.json();
+        setWarrior(fetchedData);
+      } catch (error) {
+        console.error('Error fetching warrior data:', error);
+      }
     };
 
     fetchData();
   }, [session, router]);
 
   useEffect(() => {
-    if (data && data.meals?.length > 0) {
-      const fetchNutrients = async () => {
-        // Combine all food items from all meals
-        const allFoodItems = data.meals.flatMap((meal) => meal.meal_food_items);
-        const query = allFoodItems
-          .map(
-            (item) =>
-              `${item.quantity} ${item.unit} ${item.food_item_identifier}`,
-          )
-          .join(', ');
-        if (!query.length) return;
-        try {
-          const nutrientResponse = await fetch(
-            'https://trackapi.nutritionix.com/v2/natural/nutrients/',
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'x-app-id': `${process.env.NUTRITIONIX_APP_ID}`,
-                'x-app-key': `${process.env.NUTRITIONIX_API_KEY}`,
-                'x-remote-user-id': '0',
-              },
-              body: JSON.stringify({ query }),
+    const fetchMacros = async () => {
+      try {
+        if (!warrior) return;
+        const fetchedData = await fetchSavedMeals(warrior.warrior_id!, date);
+        const nutrients = await fetchNutrients(fetchedData);
+
+        const totals = nutrients.foods.reduce(
+          (
+            acc: {
+              calories: number;
+              protein: number;
+              carbs: number;
+              fats: number;
             },
-          );
+            food: {
+              nf_calories: number;
+              nf_protein: number;
+              nf_total_carbohydrate: number;
+              nf_total_fat: number;
+            },
+          ) => {
+            acc.calories += food.nf_calories;
+            acc.protein += food.nf_protein;
+            acc.carbs += food.nf_total_carbohydrate;
+            acc.fats += food.nf_total_fat;
+            return acc;
+          },
+          { protein: 0, carbs: 0, fats: 0, calories: 0 },
+        );
 
-          const nutrients = await nutrientResponse.json();
-          console.log(nutrients);
-          let totalCalories = 0;
-          let totalProtein = 0;
-          let totalCarbs = 0;
-          let totalFats = 0;
+        setMacros(totals);
+      } catch (error) {
+        console.error('Error fetching macro data:', error);
+      }
+    };
 
-          nutrients.foods.forEach((food: any) => {
-            totalCalories += food.nf_calories;
-            totalProtein += food.nf_protein;
-            totalCarbs += food.nf_total_carbohydrate;
-            totalFats += food.nf_total_fat;
-          });
-          setMacros({
-            protein: totalProtein,
-            carbs: totalCarbs,
-            fats: totalFats,
-            calories: totalCalories,
-          });
+    fetchMacros();
+  }, [warrior]);
+  const chartData = useMemo(
+    () => ({
+      labels: ['Calories', 'Protein', 'Carbs', 'Fats'],
+      datasets: [
+        {
+          data: [macros.calories, macros.protein, macros.carbs, macros.fats],
+          backgroundColor: ['#eab308', '#22c55e', '#6b7280', '#ef4444'],
+          borderWidth: 1,
+        },
+      ],
+    }),
+    [macros],
+  );
 
-          setChartData({
-            ...chartData,
-            datasets: [
-              {
-                ...chartData.datasets[0],
-                data: [
-                  macros.calories,
-                  macros.protein,
-                  macros.carbs,
-                  macros.fats,
-                ],
-              },
-            ],
-          });
-        } catch (error) {
-          console.error('Error fetching nutrients:', error);
-        }
-      };
-
-      fetchNutrients();
-    }
-  }, [data]);
-
-  const date = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
   return (
     <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>Dashboard</p>
         <div className='border-2 rounded-lg p-3 border-black/10 flex flex-row gap-2 items-center'>
           <Image src={Calender} width={24} height={24} alt='calender' />
-          <p className='text-sm font-medium'>{date}</p>
+          <p className='text-sm font-medium'>{date.toDateString()}</p>
         </div>
       </header>
 

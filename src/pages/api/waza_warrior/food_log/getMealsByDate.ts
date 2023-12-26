@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/src/lib/prisma';
 import { isValidID } from '@/src/utils/validationHelpers';
 import { sendErrorResponse } from '@/src/utils/errorHandler';
-import { Meal, MealsByType } from '@/src/types/waza_warrior/food_log';
+import { Meal, MealsByType } from '@/src/types/page/waza_warrior/food_log';
 
 export default async function handler(
   req: NextApiRequest,

@@ -5,7 +5,7 @@ import {
   CommonFoodItem,
   NutritionixInstantEndpoint,
 } from '../type';
-import { MealsByType } from '@/src/types/waza_warrior/food_log';
+import { MealsByType } from '@/src/types/page/waza_warrior/food_log';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');
@@ -53,11 +53,8 @@ export default function DietPage() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-app-id': `${process.env.NUTRITIONIX_APP_ID || 'afc14df9'}`,
-            'x-app-key': `${
-              process.env.NUTRITIONIX_API_KEY ||
-              '5c4d7aee8bbd8c60f25776e28929c7f1'
-            }`,
+            'x-app-id': `${process.env.NUTRITIONIX_APP_ID}`,
+            'x-app-key': `${process.env.NUTRITIONIX_API_KEY}`,
             'x-remote-user-id': '0',
           },
           body: JSON.stringify({ query }),

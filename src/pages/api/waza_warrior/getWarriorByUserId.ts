@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import { isValidID } from '@/src/utils/validationHelpers';
+import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
 
 export default async function getWarriorByUserId(
   req: NextApiRequest,
@@ -16,41 +17,23 @@ export default async function getWarriorByUserId(
     }
 
     // Check for existing Trainer
-    const existingWarrior = await prisma.waza_warriors.findUnique({
-      where: { user_id: user_id },
-      select: {
-        users: {
-          select: {
-            email: true,
-            name: true,
-            profile_pic: true,
-            username: true,
-          },
-        },
-        meals: {
-          select: {
-            meal_date: true,
-            meal_food_items: {
-              select: {
-                food_item_identifier: true,
-                quantity: true,
-                unit: true,
-              },
-            },
-            meal_types: {
-              select: {
-                name: true,
-              },
-            },
-          },
-          where: {
-            meal_date: {
-              gte: new Date(new Date().setDate(new Date().getDate())),
+    const existingWarrior: Warrior | null =
+      await prisma.waza_warriors.findUnique({
+        where: { user_id: user_id },
+        select: {
+          warrior_id: true,
+          users: {
+            select: {
+              email: true,
+              name: true,
+              profile_pic: true,
+              username: true,
+              age: true,
+              gender: true,
             },
           },
         },
-      },
-    });
+      });
     if (!existingWarrior) {
       return sendErrorResponse(res, 404, 'Warrior not found');
     }
