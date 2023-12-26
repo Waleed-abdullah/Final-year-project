@@ -197,35 +197,35 @@ model trainer_specializations {
 }
 
 model meal_food_items {
-  meal_id              String    @db.Uuid
-  food_item_identifier String    @db.VarChar(255)
-  quantity             Decimal   @db.Decimal
-  created_at           DateTime? @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime? @default(now()) @db.Timestamptz(6)
-  unit                 String?   @db.VarChar(50)
-  meals                meals     @relation(fields: [meal_id], references: [meal_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_meal_id")
+  meal_id              String   @db.Uuid
+  food_item_identifier String   @db.VarChar(255)
+  quantity             Decimal  @db.Decimal
+  created_at           DateTime @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime @default(now()) @db.Timestamptz(6)
+  unit                 String   @db.VarChar(50)
+  meals                meals    @relation(fields: [meal_id], references: [meal_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_meal_id")
 
   @@id([meal_id, food_item_identifier])
 }
 
 model meal_types {
-  meal_type_id String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name         String    @unique @db.VarChar(255)
-  created_at   DateTime? @default(now()) @db.Timestamptz(6)
-  updated_at   DateTime? @default(now()) @db.Timestamptz(6)
+  meal_type_id String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name         String   @unique @db.VarChar(255)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime @default(now()) @db.Timestamptz(6)
   meals        meals[]
 }
 
 model meals {
   meal_id         String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  warrior_id      String?           @db.Uuid
-  meal_type_id    String?           @db.Uuid
+  warrior_id      String            @db.Uuid
+  meal_type_id    String            @db.Uuid
   meal_date       DateTime          @db.Date
-  created_at      DateTime?         @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime?         @default(now()) @db.Timestamptz(6)
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime          @default(now()) @db.Timestamptz(6)
   meal_food_items meal_food_items[]
-  meal_types      meal_types?       @relation(fields: [meal_type_id], references: [meal_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_meal_type_id")
-  waza_warriors   waza_warriors?    @relation(fields: [warrior_id], references: [warrior_id], onDelete: NoAction, onUpdate: NoAction)
+  meal_types      meal_types        @relation(fields: [meal_type_id], references: [meal_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_meal_type_id")
+  waza_warriors   waza_warriors     @relation(fields: [warrior_id], references: [warrior_id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([warrior_id, meal_type_id, meal_date])
 }
