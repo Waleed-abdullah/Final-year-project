@@ -14,7 +14,7 @@ import Plate from '@/assets/Dashboard/plate.svg';
 import Link from 'next/link';
 import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
 import { MealsByType } from '@/src/types/page/waza_warrior/food_log';
-import { fetchNutrients, fetchSavedMeals } from './service';
+import { fetchNutrients, fetchSavedMeals } from '../services/meals_services';
 
 export function Dashboard() {
   const [warrior, setWarrior] = useState<Warrior | null>(null);
@@ -64,8 +64,23 @@ export function Dashboard() {
     const fetchMacros = async () => {
       try {
         if (!warrior) return;
-        const fetchedData = await fetchSavedMeals(warrior.warrior_id!, date);
-        const nutrients = await fetchNutrients(fetchedData);
+        const fetchedData: MealsByType = await fetchSavedMeals(
+          warrior.warrior_id!,
+          date,
+        );
+        const allFoodItems = Object.values(fetchedData).flatMap((mealType) =>
+          mealType.flatMap((meal) => meal.meal_food_items),
+        );
+
+        const query: string = allFoodItems
+          .map(
+            (item) =>
+              `${item.quantity} ${item.unit} ${item.food_item_identifier}`,
+          )
+          .join(', ');
+
+        if (!query.length) return;
+        const nutrients = await fetchNutrients(query);
 
         const totals = nutrients.foods.reduce(
           (

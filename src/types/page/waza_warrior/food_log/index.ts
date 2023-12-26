@@ -1,6 +1,8 @@
+import { NutritionixNutrientsEndpoint } from '@/src/types/app/(private)/(drawer-routes)/diet';
 import { Decimal } from '@prisma/client/runtime/library';
 
 export interface FoodItem {
+  nutrients: NutritionixNutrientsEndpoint;
   meal_id: string;
   food_item_identifier: string;
   quantity: Decimal;
