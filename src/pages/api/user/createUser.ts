@@ -6,7 +6,7 @@ import {
   isValidEmail,
   isValidPassword,
 } from '../../../utils/validationHelpers';
-import { User, UserType } from '@/src/types/page/auth/user';
+import { GenderType, User, UserType } from '@/src/types/page/auth/user';
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10'); // Using environment variable for salt rounds
 
@@ -23,6 +23,9 @@ export default async function createUser(
   const date = new Date();
   const {
     username,
+    name,
+    age,
+    gender,
     email,
     password,
     user_type,
@@ -35,8 +38,11 @@ export default async function createUser(
     updated_at = date,
   } = reqBody;
 
-  if (!username || !email || !user_type) {
+  if (!username || !email || !user_type || !name || !age || !gender) {
     return sendErrorResponse(res, 400, 'Missing required fields');
+  }
+  if (age < 0 || age > 120) {
+    return sendErrorResponse(res, 400, 'Invalid age');
   }
 
   if (!isValidEmail(email)) {
@@ -49,6 +55,9 @@ export default async function createUser(
       400,
       'Invalid user_type. User type must be Waza Warrior or Waza Trainer',
     );
+  }
+  if (!(Object.values(GenderType) as string[]).includes(gender)) {
+    return sendErrorResponse(res, 400, 'Invalid Gender must be Male or Female');
   }
 
   if (!provider) {
@@ -118,6 +127,9 @@ export default async function createUser(
         password: hashedPassword,
         user_type,
         provider,
+        name,
+        age,
+        gender,
         is_verified,
         profile_pic,
         date_joined,

@@ -197,7 +197,11 @@ export default function DietPage() {
                             {item.quantity.toString()} {item.unit}
                             {/* Display nutrient information */}
                             {/* You can display detailed nutrient information here */}
-                            Calories: {item.nutrients.foods[0].nf_calories}
+                            {item.nutrients && (
+                              <span>
+                                Calories: {item.nutrients.foods[0].nf_calories}
+                              </span>
+                            )}
                             {/* Add other nutrient details */}
                           </li>
                         );
