@@ -52,8 +52,8 @@ const SignIn = () => {
         <div>
           <Image src={WazaLogo} alt='logo' className='' />
         </div>
-        <div className=' text-3xl font-semibold mb-2'>Sign In</div>
-        <form className='w-full mx-auto'>
+        <div className='text-3xl font-semibold mb-2'>Sign In</div>
+        <form onSubmit={handleSubmit} className='w-full mx-auto'>
           <div className='relative mb-5'>
             <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>
               <Image src={mailIcon} alt='lockIcon' />
@@ -61,6 +61,7 @@ const SignIn = () => {
             <input
               type='email'
               id='email'
+              onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10'
               placeholder='E-mail'
               required
@@ -74,6 +75,7 @@ const SignIn = () => {
             <input
               type='password'
               id='password'
+              onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 ps-10'
               placeholder='Password'
               required

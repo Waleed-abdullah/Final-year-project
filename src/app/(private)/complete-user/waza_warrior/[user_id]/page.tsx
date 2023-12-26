@@ -2,6 +2,9 @@
 import { signIn } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import userIcon from '@/assets/formIcons/user.svg';
+import wazaLogoBlack from '@/assets/wazaLogos/Wazalogo_Black.svg';
+import Image from 'next/image';
 
 export default function Trainer() {
   const router = useRouter();
@@ -85,13 +88,52 @@ export default function Trainer() {
   };
 
   return (
-    <div>
-      <h1>Warrior</h1>
-      <form onSubmit={handleSubmit}>
-        <button type='submit'>Create Warrior Profile</button>
-      </form>
-      {isSubmitting && <p>Creating user...</p>}
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-    </div>
+    <>
+      <div className='flex flex-col items-center justify-center min-h-screen'>
+        <Image src={wazaLogoBlack} alt='wazaLogo' />
+        <form onSubmit={handleSubmit} className='w-2/6 mx-auto'>
+          <div className=' text-3xl font-semibold text-left mb-10'>
+            Complete Profile
+          </div>
+          <div className='relative mb-5'>
+            <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>
+              <Image src={userIcon} alt='lockIcon' />
+            </div>
+            <input
+              type='text'
+              id='username'
+              name='username'
+              // onChange={handleInputChange}
+              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10'
+              placeholder='Username'
+              required
+            />
+          </div>
+
+          <button
+            type='submit'
+            className='relative rounded-[100px] shadow-[0px_10px_10px_rgba(0,_0,_0,_0.05)] h-[30px] text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-400 focus:ring-4 focus:outline-none  sm:text-base md:text-lg lg:text-xl text-color-base-black font-desktop-text-bold-1 w-full text-center'
+          >
+            <div className='relative leading-[101%] font-medium'>Next</div>
+          </button>
+        </form>
+
+        {error && (
+          <p className=' text-red-600 mt-3'>
+            An unexpected error occured: {error}
+          </p>
+        )}
+      </div>
+      {isSubmitting && (
+        <div className='w-full h-full fixed top-0 left-0 bg-white opacity-75 z-50'>
+          <div className='flex justify-center items-center mt-[50vh]'>
+            <span className='sr-only'>Loading...</span>
+            <div className='h-8 w-8 bg-yellow-400 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+            <div className='h-8 w-8 bg-yellow-400 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+            <div className='h-8 w-8 bg-yellow-400 rounded-full animate-bounce'></div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
