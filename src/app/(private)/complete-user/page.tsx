@@ -107,7 +107,7 @@ export default function CompleteUserPage() {
           </div>
           <div className='relative mb-5'>
             <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>
-              <Image src={userIcon} alt='lockIcon' />
+              <Image src={userIcon} alt='userIcon' />
             </div>
             <input
               type='text'
