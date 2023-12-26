@@ -9,7 +9,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method === 'GET') {
+  if (req.method === 'POST') {
     try {
       const { warrior_id } = req.query;
       const { date }: { date: Date } = req.body; // Expecting date in 'YYYY-MM-DD' format
@@ -46,7 +46,7 @@ export default async function handler(
       res.status(500).json({ error: 'Internal Server Error' });
     }
   } else {
-    res.setHeader('Allow', ['GET']);
+    res.setHeader('Allow', ['POST']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

@@ -5,12 +5,14 @@ import {
   CommonFoodItem,
   NutritionixInstantEndpoint,
 } from '../type';
+import { MealsByType } from '@/src/types/waza_warrior/food_log';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');
   const [selectedFoods, setSelectedFoods] = useState<
     Map<string, { item: CommonFoodItem | BrandedFoodItem; count: number }>
   >(new Map());
+  const [savedMeals, setSavedMeals] = useState<MealsByType>({});
 
   const [suggestions, setSuggestions] =
     useState<NutritionixInstantEndpoint | null>(null);
@@ -19,6 +21,57 @@ export default function DietPage() {
   const [mealDate, setMealDate] = useState(
     new Date().toISOString().split('T')[0],
   );
+
+  const fetchSavedMeals = async (warrior_id: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/waza_warrior/food_log/getMealsByDate?warrior_id=${warrior_id}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            date: new Date().toISOString().split('T')[0],
+          }),
+        },
+      );
+      const data = await response.json();
+      setSavedMeals(data);
+      console.log('=====================saved meals=====================');
+      console.log(data);
+      console.log('==================================================');
+    } catch (error) {
+      console.error('Error fetching saved meals:', error);
+    }
+  };
+
+  // Function to fetch nutrient details
+  const fetchNutrientDetails = async (query: string) => {
+    try {
+      const nutrientResponse = await fetch(
+        'https://trackapi.nutritionix.com/v2/natural/nutrients/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-app-id': `${process.env.NUTRITIONIX_APP_ID || 'afc14df9'}`,
+            'x-app-key': `${
+              process.env.NUTRITIONIX_API_KEY ||
+              '5c4d7aee8bbd8c60f25776e28929c7f1'
+            }`,
+            'x-remote-user-id': '0',
+          },
+          body: JSON.stringify({ query }),
+        },
+      );
+      return await nutrientResponse.json();
+    } catch (error) {
+      console.error('Error fetching nutrient details:', error);
+      return null;
+    }
+  };
+  useEffect(() => {
+    fetchSavedMeals('37914f58-6fe8-46dd-a20b-06f3a1cd0e8e');
+  }, []);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -160,6 +213,36 @@ export default function DietPage() {
         onChange={handleMealDateChange}
         className='p-2 border border-gray-300 rounded mt-2'
       />
+      {savedMeals &&
+        Object.entries(savedMeals).map(([mealType, meals]) => (
+          <div key={mealType}>
+            <h3>{mealType}</h3>
+            {meals.map((meal) => (
+              <div key={meal.meal_id}>
+                <p>Meal Date: {meal.meal_date.toString()}</p>
+                <ul>
+                  {meal.meal_food_items.map((item, index) => {
+                    // const nutrientInfo = await fetchNutrientDetails(
+                    //   `${item.quantity} ${item.unit} ${item.food_item_identifier}`,
+                    // );
+                    return (
+                      <li key={index}>
+                        {item.food_item_identifier} - {item.quantity.toString()}{' '}
+                        {item.unit}
+                        {/* Display nutrient information */}
+                        <div>
+                          {/* You can display detailed nutrient information here */}
+                          {/* Calories: {nutrientInfo?.foods[0].nf_calories} */}
+                          {/* Add other nutrient details */}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
+        ))}
     </div>
   );
 }

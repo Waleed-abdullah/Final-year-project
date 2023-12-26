@@ -87,6 +87,7 @@ export function Dashboard() {
           );
 
           const nutrients = await nutrientResponse.json();
+          console.log(nutrients);
           let totalCalories = 0;
           let totalProtein = 0;
           let totalCarbs = 0;
