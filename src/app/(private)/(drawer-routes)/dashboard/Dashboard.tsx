@@ -24,7 +24,7 @@ export function Dashboard() {
     fats: 0,
     calories: 0,
   });
-  const [date, setDate] = useState(new Date('2023-12-26'));
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
   const router = useRouter();
   const session = useSession();
@@ -127,15 +127,24 @@ export function Dashboard() {
     }),
     [macros],
   );
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(event.target.value);
+  };
 
   return (
     <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>Dashboard</p>
-        <div className='border-2 rounded-lg p-3 border-black/10 flex flex-row gap-2 items-center'>
-          <Image src={Calender} width={24} height={24} alt='calender' />
-          <p className='text-sm font-medium'>{date.toDateString()}</p>
-        </div>
+        <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
+          <Image src={Calender} width={24} height={24} alt='calendar' />
+          <input
+            type='date'
+            name='date'
+            value={date}
+            onChange={handleDateChange}
+            className='text-sm font-medium bg-transparent focus:outline-none'
+          />
+        </label>
       </header>
 
       <main>

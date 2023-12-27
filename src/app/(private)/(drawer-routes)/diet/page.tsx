@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   BrandedFoodItem,
   CommonFoodItem,
@@ -100,7 +100,6 @@ export default function DietPage() {
   const handleMealDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMealDate(event.target.value);
   };
-
   return (
     // <div>
     //   <input
@@ -173,59 +172,21 @@ export default function DietPage() {
     //   </select>
 
     //   {/* Date Picker */}
-    //   <input
-    //     type='date'
-    //     value={mealDate}
-    //     onChange={handleMealDateChange}
-    //     className='p-2 border border-gray-300 rounded mt-2'
-    //   />
-    //   {savedMeals &&
-    //     Object.entries(savedMeals).map(
-    //       ([mealType, meals]) =>
-    //         meals.length && (
-    //           <div key={mealType}>
-    //             <h3>{mealType}</h3>
-    //             {meals.map((meal) => (
-    //               <div key={meal.meal_id}>
-    //                 <p>
-    //                   Meal Date:{' '}
-    //                   {new Date(meal.meal_date).toISOString().split('T')[0]}
-    //                 </p>
-    //                 <ul>
-    //                   {meal.meal_food_items.map((item, index) => {
-    //                     // const nutrientInfo = await fetchNutrientDetails(
-    //                     //   `${item.quantity} ${item.unit} ${item.food_item_identifier}`,
-    //                     // );
-    //                     return (
-    //                       <li key={index}>
-    //                         {item.food_item_identifier} -{' '}
-    //                         {item.quantity.toString()} {item.unit}
-    //                         {/* Display nutrient information */}
-    //                         {/* You can display detailed nutrient information here */}
-    //                         {item.nutrients && (
-    //                           <span>
-    //                             Calories: {item.nutrients.foods[0].nf_calories}
-    //                           </span>
-    //                         )}
-    //                         {/* Add other nutrient details */}
-    //                       </li>
-    //                     );
-    //                   })}
-    //                 </ul>
-    //               </div>
-    //             ))}
-    //           </div>
-    //         ),
-    //     )}
-    // </div>
+
     <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>My Diet</p>
         <div className='flex flex-row gap-4'>
-          <div className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center'>
-            <Image src={Calender} width={24} height={24} alt='calender' />
-            <p className='text-sm font-medium'>{mealDate}</p>
-          </div>
+          <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
+            <Image src={Calender} width={24} height={24} alt='calendar' />
+            <input
+              type='date'
+              name='mealDate'
+              value={mealDate}
+              onChange={handleMealDateChange}
+              className='text-sm font-medium bg-transparent focus:outline-none'
+            />
+          </label>
           <div className='border-2 rounded-3xl py-1 px-3 border-black/10 flex flex-row gap-2 items-center'>
             <Image src={Dropdown} width={20} height={20} alt='profile-pic' />
             <p className='text-sm font-medium'>Waleed Abdullah</p>
