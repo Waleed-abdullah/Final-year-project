@@ -7,11 +7,11 @@ import {
   NutritionixNutrientsEndpoint,
 } from '../../../../types/app/(private)/(drawer-routes)/diet';
 import { MealsByType } from '@/src/types/page/waza_warrior/food_log';
-// import {
-//   fetchNutrients,
-//   fetchSavedMeals,
-//   fetchSuggestions,
-// } from '../services/meals_services';
+import {
+  fetchNutrients,
+  fetchSavedMeals,
+  fetchSuggestions,
+} from '../services/meals_services';
 
 import Calender from '@/assets//Dashboard/calender.svg';
 import Dropdown from '@/assets/Diet/dropdown.svg';
@@ -35,46 +35,44 @@ export default function DietPage() {
     new Date().toISOString().split('T')[0],
   );
 
-  // useEffect(() => {
-  //   const warriorId = '37914f58-6fe8-46dd-a20b-06f3a1cd0e8e'; // replace with actual warrior ID
+  useEffect(() => {
+    const warriorId = '37914f58-6fe8-46dd-a20b-06f3a1cd0e8e'; // replace with actual warrior ID
 
-  //   const fetchData = async () => {
-  //     const meals: MealsByType = await fetchSavedMeals(
-  //       warriorId,
-  //       new Date(mealDate),
-  //     );
+    const fetchData = async () => {
+      const meals: MealsByType = await fetchSavedMeals(
+        warriorId,
+        new Date(mealDate),
+      );
 
-  //     for (const mealType of Object.keys(meals)) {
-  //       for (const meal of meals[mealType]) {
-  //         for (const item of meal.meal_food_items) {
-  //           const foodItemQuery = `${item.quantity} ${item.unit} ${item.food_item_identifier}`;
-  //           // Fetch nutrient details for each food item
-  //           const nutrientDetails = await fetchNutrients(foodItemQuery);
-  //           // Merge the nutrient details with the food item
-  //           item.nutrients = nutrientDetails;
-  //         }
-  //       }
-  //     }
+      for (const mealType of Object.keys(meals)) {
+        for (const meal of meals[mealType]) {
+          for (const item of meal.meal_food_items) {
+            const foodItemQuery = `${item.quantity} ${item.unit} ${item.food_item_identifier}`;
+            const nutrientDetails = await fetchNutrients(foodItemQuery);
+            item.nutrients = nutrientDetails;
+          }
+        }
+      }
 
-  //     setSavedMeals(meals);
-  //     console.log(meals);
-  //   };
+      setSavedMeals(meals);
+      console.log(meals);
+    };
 
-  //   fetchData();
-  // }, [mealDate]);
+    fetchData();
+  }, [mealDate]);
 
-  // useEffect(() => {
-  //   const debounceTimeout = setTimeout(async () => {
-  //     if (query.length < 3) return;
-  //     setIsLoading(true);
-  //     const suggestions: NutritionixInstantEndpoint =
-  //       await fetchSuggestions(query);
-  //     setSuggestions(suggestions);
-  //     setIsLoading(false);
-  //   }, 500); // 500ms debounce time
+  useEffect(() => {
+    const debounceTimeout = setTimeout(async () => {
+      if (query.length < 3) return;
+      setIsLoading(true);
+      const suggestions: NutritionixInstantEndpoint =
+        await fetchSuggestions(query);
+      setSuggestions(suggestions);
+      setIsLoading(false);
+    }, 500); // 500ms debounce time
 
-  //   return () => clearTimeout(debounceTimeout);
-  // }, [query]);
+    return () => clearTimeout(debounceTimeout);
+  }, [query]);
 
   const handleQueryChange = (event: any) => {
     setQuery(event.target.value);
@@ -291,48 +289,49 @@ export default function DietPage() {
                   465<span className='font-normal text-sm '>kcal</span>
                 </p>
               </div>
-              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-                <div className='flex flex-row items-center gap-1'>
-                  <Image src={Calender} width={24} height={24} alt='calender' />
-                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
-                </div>
-                <div className='flex flex-row items-center gap-1'>
-                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                  <p className='text-sm font-bold   text-lg'>2</p>
-                </div>
-                <p className='text-sm font-bold   text-lg'>
-                  200<span className='font-normal text-sm '>kcal</span>
-                </p>
-                <Image src={Delete} width={20} height={20} alt='profile-pic' />
-              </div>
-              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-                <div className='flex flex-row items-center gap-1'>
-                  <Image src={Calender} width={24} height={24} alt='calender' />
-                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
-                </div>
-                <div className='flex flex-row items-center gap-1'>
-                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                  <p className='text-sm font-bold   text-lg'>2</p>
-                </div>
-                <p className='text-sm font-bold   text-lg'>
-                  200<span className='font-normal text-sm '>kcal</span>
-                </p>
-                <Image src={Delete} width={20} height={20} alt='profile-pic' />
-              </div>
-              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-                <div className='flex flex-row items-center gap-1'>
-                  <Image src={Calender} width={24} height={24} alt='calender' />
-                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
-                </div>
-                <div className='flex flex-row items-center gap-1'>
-                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                  <p className='text-sm font-bold   text-lg'>2</p>
-                </div>
-                <p className='text-sm font-bold   text-lg'>
-                  200<span className='font-normal text-sm '>kcal</span>
-                </p>
-                <Image src={Delete} width={20} height={20} alt='profile-pic' />
-              </div>
+
+              {savedMeals['Breakfast']?.map((meal) =>
+                meal.meal_food_items.map((item) => (
+                  <div
+                    className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
+                    key={item.food_item_identifier}
+                  >
+                    <div className='flex flex-row items-center gap-1'>
+                      <Image
+                        src={
+                          item.nutrients?.foods[0].photo.thumb ||
+                          'robohash.org/asdasd'
+                        }
+                        width={24}
+                        height={24}
+                        alt='calender'
+                      />
+                      <p className='text-sm font-bold   text-lg'>
+                        {item.food_item_identifier}
+                      </p>
+                    </div>
+                    <div className='flex flex-row items-center gap-1'>
+                      <div className='rounded-lg bg-gray-200  py-1 px-2'>
+                        Qty
+                      </div>
+                      <p className='text-sm font-bold   text-lg'>
+                        {item.quantity.toString()}
+                      </p>
+                    </div>
+                    <p className='text-sm font-bold   text-lg'>
+                      {item.nutrients?.foods[0].nf_calories}
+                      <span className='font-normal text-sm '>kcal</span>
+                    </p>
+                    <Image
+                      src={Delete}
+                      width={20}
+                      height={20}
+                      alt='profile-pic'
+                    />
+                  </div>
+                )),
+              )}
+
               <div className='border-black/10 border mt-5' />
               {/* Lunch */}
               <div className='flex flex-row justify-start mt-5 items-center gap-2'>
@@ -343,6 +342,47 @@ export default function DietPage() {
                   0<span className='font-normal text-sm '>kcal</span>
                 </p>
               </div>
+              {savedMeals['Lunch']?.map((meal) =>
+                meal.meal_food_items.map((item) => (
+                  <div
+                    className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
+                    key={item.food_item_identifier}
+                  >
+                    <div className='flex flex-row items-center gap-1'>
+                      <Image
+                        src={
+                          item.nutrients?.foods[0].photo.thumb ||
+                          'robohash.org/asdasd'
+                        }
+                        width={24}
+                        height={24}
+                        alt='calender'
+                      />
+                      <p className='text-sm font-bold   text-lg'>
+                        {item.food_item_identifier}
+                      </p>
+                    </div>
+                    <div className='flex flex-row items-center gap-1'>
+                      <div className='rounded-lg bg-gray-200  py-1 px-2'>
+                        Qty
+                      </div>
+                      <p className='text-sm font-bold   text-lg'>
+                        {item.quantity.toString()}
+                      </p>
+                    </div>
+                    <p className='text-sm font-bold   text-lg'>
+                      {item.nutrients?.foods[0].nf_calories}
+                      <span className='font-normal text-sm '>kcal</span>
+                    </p>
+                    <Image
+                      src={Delete}
+                      width={20}
+                      height={20}
+                      alt='profile-pic'
+                    />
+                  </div>
+                )),
+              )}
 
               <div className='border-black/10 border mt-5' />
               {/* Dinner */}
@@ -354,21 +394,47 @@ export default function DietPage() {
                   465<span className='font-normal text-sm '>kcal</span>
                 </p>
               </div>
-              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-                <div className='flex flex-row items-center gap-1'>
-                  <Image src={Calender} width={24} height={24} alt='calender' />
-                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
-                </div>
-                <div className='flex flex-row items-center gap-1'>
-                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                  <p className='text-sm font-bold   text-lg'>2</p>
-                </div>
-                <p className='text-sm font-bold   text-lg'>
-                  200<span className='font-normal text-sm '>kcal</span>
-                </p>
-                <Image src={Delete} width={20} height={20} alt='profile-pic' />
-              </div>
-              <div className='border-black/10 border mt-5' />
+              {savedMeals['Dinner']?.map((meal) =>
+                meal.meal_food_items.map((item) => (
+                  <div
+                    className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
+                    key={item.food_item_identifier}
+                  >
+                    <div className='flex flex-row items-center gap-1'>
+                      <Image
+                        src={
+                          item.nutrients?.foods[0].photo.thumb ||
+                          'robohash.org/asdasd'
+                        }
+                        width={24}
+                        height={24}
+                        alt='calender'
+                      />
+                      <p className='text-sm font-bold   text-lg'>
+                        {item.food_item_identifier}
+                      </p>
+                    </div>
+                    <div className='flex flex-row items-center gap-1'>
+                      <div className='rounded-lg bg-gray-200  py-1 px-2'>
+                        Qty
+                      </div>
+                      <p className='text-sm font-bold   text-lg'>
+                        {item.quantity.toString()}
+                      </p>
+                    </div>
+                    <p className='text-sm font-bold   text-lg'>
+                      {item.nutrients?.foods[0].nf_calories}
+                      <span className='font-normal text-sm '>kcal</span>
+                    </p>
+                    <Image
+                      src={Delete}
+                      width={20}
+                      height={20}
+                      alt='profile-pic'
+                    />
+                  </div>
+                )),
+              )}
               {/* Snacks */}
               <div className='flex flex-row justify-start mt-5 items-center gap-2'>
                 <div className='px-4 py-1 bg-gray-800 rounded-xl '>
@@ -378,34 +444,47 @@ export default function DietPage() {
                   465<span className='font-normal text-sm '>kcal</span>
                 </p>
               </div>
-              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-                <div className='flex flex-row items-center gap-1'>
-                  <Image src={Calender} width={24} height={24} alt='calender' />
-                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
-                </div>
-                <div className='flex flex-row items-center gap-1'>
-                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                  <p className='text-sm font-bold   text-lg'>2</p>
-                </div>
-                <p className='text-sm font-bold   text-lg'>
-                  200<span className='font-normal text-sm '>kcal</span>
-                </p>
-                <Image src={Delete} width={20} height={20} alt='profile-pic' />
-              </div>
-              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-                <div className='flex flex-row items-center gap-1'>
-                  <Image src={Calender} width={24} height={24} alt='calender' />
-                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
-                </div>
-                <div className='flex flex-row items-center gap-1'>
-                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                  <p className='text-sm font-bold   text-lg'>2</p>
-                </div>
-                <p className='text-sm font-bold   text-lg'>
-                  200<span className='font-normal text-sm '>kcal</span>
-                </p>
-                <Image src={Delete} width={20} height={20} alt='profile-pic' />
-              </div>
+              {savedMeals['Snacks']?.map((meal) =>
+                meal.meal_food_items.map((item) => (
+                  <div
+                    className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
+                    key={item.food_item_identifier}
+                  >
+                    <div className='flex flex-row items-center gap-1'>
+                      <Image
+                        src={
+                          item.nutrients?.foods[0].photo.thumb ||
+                          'robohash.org/asdasd'
+                        }
+                        width={24}
+                        height={24}
+                        alt='calender'
+                      />
+                      <p className='text-sm font-bold   text-lg'>
+                        {item.food_item_identifier}
+                      </p>
+                    </div>
+                    <div className='flex flex-row items-center gap-1'>
+                      <div className='rounded-lg bg-gray-200  py-1 px-2'>
+                        Qty
+                      </div>
+                      <p className='text-sm font-bold   text-lg'>
+                        {item.quantity.toString()}
+                      </p>
+                    </div>
+                    <p className='text-sm font-bold   text-lg'>
+                      {item.nutrients?.foods[0].nf_calories}
+                      <span className='font-normal text-sm '>kcal</span>
+                    </p>
+                    <Image
+                      src={Delete}
+                      width={20}
+                      height={20}
+                      alt='profile-pic'
+                    />
+                  </div>
+                )),
+              )}
             </div>
           </div>
         </div>
