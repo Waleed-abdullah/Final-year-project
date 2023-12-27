@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BrandedFoodItem,
   CommonFoodItem,
@@ -216,16 +216,36 @@ export default function DietPage() {
                 />
               </div>
               <div className='flex flex-row justify-start gap-3 mt-4'>
-                <div className='px-4 py-1 bg-sky-400 rounded-xl '>
+                <div
+                  className={`px-4 py-1  rounded-xl ${
+                    mealType === 'Breakfast' ? 'bg-sky-400' : 'bg-gray-400'
+                  }`}
+                  onClick={() => setMealType('Breakfast')}
+                >
                   <p className='text-white font-semibold'>Breakfast</p>
                 </div>
-                <div className='px-4 py-1 bg-gray-400 rounded-xl '>
+                <div
+                  className={`px-4 py-1  rounded-xl ${
+                    mealType === 'Lunch' ? 'bg-sky-400' : 'bg-gray-400'
+                  }`}
+                  onClick={() => setMealType('Lunch')}
+                >
                   <p className='text-white font-semibold'>Lunch</p>
                 </div>
-                <div className='px-4 py-1 bg-gray-400 rounded-xl '>
+                <div
+                  className={`px-4 py-1  rounded-xl ${
+                    mealType === 'Dinner' ? 'bg-sky-400' : 'bg-gray-400'
+                  }`}
+                  onClick={() => setMealType('Dinner')}
+                >
                   <p className='text-white font-semibold'>Dinner</p>
                 </div>
-                <div className='px-4 py-1 bg-gray-400 rounded-xl '>
+                <div
+                  className={`px-4 py-1  rounded-xl ${
+                    mealType === 'Snack' ? 'bg-sky-400' : 'bg-gray-400'
+                  }`}
+                  onClick={() => setMealType('Snack')}
+                >
                   <p className='text-white font-semibold'>Snack</p>
                 </div>
               </div>
