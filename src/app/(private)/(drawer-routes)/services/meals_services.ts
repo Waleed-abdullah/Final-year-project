@@ -25,10 +25,10 @@ export const fetchNutrients = async (query: string) => {
       {
         method: 'POST',
         headers: {
-          'x-app-id': `${process.env.NUTRITIONIX_APP_ID || 'ff9eb302'}`,
+          'x-app-id': `${process.env.NUTRITIONIX_APP_ID || 'afc14df9'}`,
           'x-app-key': `${
             process.env.NUTRITIONIX_API_KEY ||
-            '7d757979b4cc77735b029e29cbd7d5d4'
+            '9b4c341882cf7021cee2e2cc4b79ba2d'
           }`,
           'x-remote-user-id': '0',
           'Content-Type': 'application/json',

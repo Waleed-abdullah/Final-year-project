@@ -22,40 +22,64 @@ import Image from 'next/image';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');
+
   const [selectedFoods, setSelectedFoods] = useState<
     Map<string, { item: CommonFoodItem | BrandedFoodItem; count: number }>
   >(new Map());
-  const [savedMeals, setSavedMeals] = useState<MealsByType>({});
-
   const [suggestions, setSuggestions] =
     useState<NutritionixInstantEndpoint | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [savedMeals, setSavedMeals] = useState<MealsByType>({});
   const [mealType, setMealType] = useState('Breakfast');
   const [mealDate, setMealDate] = useState(
     new Date().toISOString().split('T')[0],
   );
+  const [totalMealTypeCalories, setTotalMealTypeCalories] = useState({
+    Breakfast: 0,
+    Lunch: 0,
+    Dinner: 0,
+    Snack: 0,
+  });
 
   useEffect(() => {
-    const warriorId = '37914f58-6fe8-46dd-a20b-06f3a1cd0e8e'; // replace with actual warrior ID
+    const warriorId = '37914f58-6fe8-46dd-a20b-06f3a1cd0e8e'; // Replace with actual warrior ID
 
     const fetchData = async () => {
-      const meals: MealsByType = await fetchSavedMeals(
-        warriorId,
-        new Date(mealDate),
-      );
+      try {
+        const meals: MealsByType = await fetchSavedMeals(
+          warriorId,
+          new Date(mealDate),
+        );
 
-      for (const mealType of Object.keys(meals)) {
-        for (const meal of meals[mealType]) {
-          for (const item of meal.meal_food_items) {
-            const foodItemQuery = `${item.quantity} ${item.unit} ${item.food_item_identifier}`;
-            const nutrientDetails = await fetchNutrients(foodItemQuery);
-            item.nutrients = nutrientDetails;
+        const mealTypeCalories = {
+          Breakfast: 0,
+          Lunch: 0,
+          Dinner: 0,
+          Snack: 0,
+        };
+
+        for (const [mealType, mealsArray] of Object.entries(meals)) {
+          for (const meal of mealsArray) {
+            for (const item of meal.meal_food_items) {
+              const foodItemQuery = `${item.quantity} ${item.unit} ${item.food_item_identifier}`;
+              try {
+                const nutrientDetails = await fetchNutrients(foodItemQuery);
+                item.nutrients = nutrientDetails;
+                mealTypeCalories[mealType as keyof typeof mealTypeCalories] +=
+                  nutrientDetails.foods[0].nf_calories;
+              } catch (error) {
+                console.error('Error fetching nutrients for item:', item);
+              }
+            }
           }
         }
+        console.log(meals);
+        setSavedMeals(meals);
+        setTotalMealTypeCalories(mealTypeCalories);
+      } catch (error) {
+        console.error('Error fetching or processing meals:', error);
       }
-
-      setSavedMeals(meals);
-      console.log(meals);
     };
 
     fetchData();
@@ -267,50 +291,53 @@ export default function DietPage() {
                   <p className='text-white font-semibold'>Breakfast</p>
                 </div>
                 <p className='text-sm font-bold   text-lg'>
-                  465<span className='font-normal text-sm '>kcal</span>
+                  {totalMealTypeCalories.Breakfast}
+                  <span className='font-normal text-sm '>kcal</span>
                 </p>
               </div>
 
               {savedMeals['Breakfast']?.map((meal) =>
-                meal.meal_food_items.map((item) => (
-                  <div
-                    className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
-                    key={item.food_item_identifier}
-                  >
-                    <div className='flex flex-row items-center gap-1'>
-                      <Image
-                        src={
-                          item.nutrients?.foods[0].photo.thumb ||
-                          'robohash.org/asdasd'
-                        }
-                        width={24}
-                        height={24}
-                        alt='calender'
-                      />
-                      <p className='text-sm font-bold   text-lg'>
-                        {item.food_item_identifier}
-                      </p>
-                    </div>
-                    <div className='flex flex-row items-center gap-1'>
-                      <div className='rounded-lg bg-gray-200  py-1 px-2'>
-                        Qty
+                meal.meal_food_items.map((item) => {
+                  return (
+                    <div
+                      className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
+                      key={item.food_item_identifier}
+                    >
+                      <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
+                        <Image
+                          src={
+                            item.nutrients?.foods[0].photo.thumb ||
+                            'https://robohash.org/asdasd'
+                          }
+                          width={24}
+                          height={24}
+                          alt='calender'
+                        />
+                        <p className='text-sm font-bold   text-lg'>
+                          {item.food_item_identifier}
+                        </p>
                       </div>
-                      <p className='text-sm font-bold   text-lg'>
-                        {item.quantity.toString()}
+                      <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
+                        <div className='rounded-lg bg-gray-200  py-1 px-2'>
+                          Qty
+                        </div>
+                        <p className='text-sm font-bold   text-lg'>
+                          {`${item.quantity.toString()} ${item.unit}`}
+                        </p>
+                      </div>
+                      <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
+                        {item.nutrients?.foods[0].nf_calories}
+                        <span className='font-normal text-sm '>kcal</span>
                       </p>
+                      <Image
+                        src={Delete}
+                        width={20}
+                        height={20}
+                        alt='profile-pic'
+                      />
                     </div>
-                    <p className='text-sm font-bold   text-lg'>
-                      {item.nutrients?.foods[0].nf_calories}
-                      <span className='font-normal text-sm '>kcal</span>
-                    </p>
-                    <Image
-                      src={Delete}
-                      width={20}
-                      height={20}
-                      alt='profile-pic'
-                    />
-                  </div>
-                )),
+                  );
+                }),
               )}
 
               <div className='border-black/10 border mt-5' />
@@ -320,49 +347,52 @@ export default function DietPage() {
                   <p className='text-white font-semibold'>Lunch</p>
                 </div>
                 <p className='text-sm font-bold   text-lg'>
-                  0<span className='font-normal text-sm '>kcal</span>
+                  {totalMealTypeCalories.Lunch}
+                  <span className='font-normal text-sm '>kcal</span>
                 </p>
               </div>
               {savedMeals['Lunch']?.map((meal) =>
-                meal.meal_food_items.map((item) => (
-                  <div
-                    className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
-                    key={item.food_item_identifier}
-                  >
-                    <div className='flex flex-row items-center gap-1'>
-                      <Image
-                        src={
-                          item.nutrients?.foods[0].photo.thumb ||
-                          'robohash.org/asdasd'
-                        }
-                        width={24}
-                        height={24}
-                        alt='calender'
-                      />
-                      <p className='text-sm font-bold   text-lg'>
-                        {item.food_item_identifier}
-                      </p>
-                    </div>
-                    <div className='flex flex-row items-center gap-1'>
-                      <div className='rounded-lg bg-gray-200  py-1 px-2'>
-                        Qty
+                meal.meal_food_items.map((item) => {
+                  return (
+                    <div
+                      className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
+                      key={item.food_item_identifier}
+                    >
+                      <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
+                        <Image
+                          src={
+                            item.nutrients?.foods[0].photo.thumb ||
+                            'https://robohash.org/asdasd'
+                          }
+                          width={24}
+                          height={24}
+                          alt='calender'
+                        />
+                        <p className='text-sm font-bold   text-lg'>
+                          {item.food_item_identifier}
+                        </p>
                       </div>
-                      <p className='text-sm font-bold   text-lg'>
-                        {item.quantity.toString()}
+                      <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
+                        <div className='rounded-lg bg-gray-200  py-1 px-2'>
+                          Qty
+                        </div>
+                        <p className='text-sm font-bold   text-lg'>
+                          {item.quantity.toString()}
+                        </p>
+                      </div>
+                      <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
+                        {item.nutrients?.foods[0].nf_calories}
+                        <span className='font-normal text-sm '>kcal</span>
                       </p>
+                      <Image
+                        src={Delete}
+                        width={20}
+                        height={20}
+                        alt='profile-pic'
+                      />
                     </div>
-                    <p className='text-sm font-bold   text-lg'>
-                      {item.nutrients?.foods[0].nf_calories}
-                      <span className='font-normal text-sm '>kcal</span>
-                    </p>
-                    <Image
-                      src={Delete}
-                      width={20}
-                      height={20}
-                      alt='profile-pic'
-                    />
-                  </div>
-                )),
+                  );
+                }),
               )}
 
               <div className='border-black/10 border mt-5' />
@@ -372,49 +402,52 @@ export default function DietPage() {
                   <p className='text-white font-semibold'>Dinner</p>
                 </div>
                 <p className='text-sm font-bold   text-lg'>
-                  465<span className='font-normal text-sm '>kcal</span>
+                  {totalMealTypeCalories.Dinner}
+                  <span className='font-normal text-sm '>kcal</span>
                 </p>
               </div>
               {savedMeals['Dinner']?.map((meal) =>
-                meal.meal_food_items.map((item) => (
-                  <div
-                    className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
-                    key={item.food_item_identifier}
-                  >
-                    <div className='flex flex-row items-center gap-1'>
-                      <Image
-                        src={
-                          item.nutrients?.foods[0].photo.thumb ||
-                          'robohash.org/asdasd'
-                        }
-                        width={24}
-                        height={24}
-                        alt='calender'
-                      />
-                      <p className='text-sm font-bold   text-lg'>
-                        {item.food_item_identifier}
-                      </p>
-                    </div>
-                    <div className='flex flex-row items-center gap-1'>
-                      <div className='rounded-lg bg-gray-200  py-1 px-2'>
-                        Qty
+                meal.meal_food_items.map((item) => {
+                  return (
+                    <div
+                      className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
+                      key={item.food_item_identifier}
+                    >
+                      <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
+                        <Image
+                          src={
+                            item.nutrients?.foods[0].photo.thumb ||
+                            'https://robohash.org/asdasd'
+                          }
+                          width={24}
+                          height={24}
+                          alt='calender'
+                        />
+                        <p className='text-sm font-bold   text-lg'>
+                          {item.food_item_identifier}
+                        </p>
                       </div>
-                      <p className='text-sm font-bold   text-lg'>
-                        {item.quantity.toString()}
+                      <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
+                        <div className='rounded-lg bg-gray-200  py-1 px-2'>
+                          Qty
+                        </div>
+                        <p className='text-sm font-bold   text-lg'>
+                          {item.quantity.toString()}
+                        </p>
+                      </div>
+                      <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
+                        {item.nutrients?.foods[0].nf_calories}
+                        <span className='font-normal text-sm '>kcal</span>
                       </p>
+                      <Image
+                        src={Delete}
+                        width={20}
+                        height={20}
+                        alt='profile-pic'
+                      />
                     </div>
-                    <p className='text-sm font-bold   text-lg'>
-                      {item.nutrients?.foods[0].nf_calories}
-                      <span className='font-normal text-sm '>kcal</span>
-                    </p>
-                    <Image
-                      src={Delete}
-                      width={20}
-                      height={20}
-                      alt='profile-pic'
-                    />
-                  </div>
-                )),
+                  );
+                }),
               )}
               {/* Snacks */}
               <div className='flex flex-row justify-start mt-5 items-center gap-2'>
@@ -422,49 +455,52 @@ export default function DietPage() {
                   <p className='text-white font-semibold'>Snacks</p>
                 </div>
                 <p className='text-sm font-bold   text-lg'>
-                  465<span className='font-normal text-sm '>kcal</span>
+                  {totalMealTypeCalories.Snack}
+                  <span className='font-normal text-sm '>kcal</span>
                 </p>
               </div>
               {savedMeals['Snacks']?.map((meal) =>
-                meal.meal_food_items.map((item) => (
-                  <div
-                    className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
-                    key={item.food_item_identifier}
-                  >
-                    <div className='flex flex-row items-center gap-1'>
-                      <Image
-                        src={
-                          item.nutrients?.foods[0].photo.thumb ||
-                          'robohash.org/asdasd'
-                        }
-                        width={24}
-                        height={24}
-                        alt='calender'
-                      />
-                      <p className='text-sm font-bold   text-lg'>
-                        {item.food_item_identifier}
-                      </p>
-                    </div>
-                    <div className='flex flex-row items-center gap-1'>
-                      <div className='rounded-lg bg-gray-200  py-1 px-2'>
-                        Qty
+                meal.meal_food_items.map((item) => {
+                  return (
+                    <div
+                      className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
+                      key={item.food_item_identifier}
+                    >
+                      <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
+                        <Image
+                          src={
+                            item.nutrients?.foods[0].photo.thumb ||
+                            'https://robohash.org/asdasd'
+                          }
+                          width={24}
+                          height={24}
+                          alt='calender'
+                        />
+                        <p className='text-sm font-bold   text-lg'>
+                          {item.food_item_identifier}
+                        </p>
                       </div>
-                      <p className='text-sm font-bold   text-lg'>
-                        {item.quantity.toString()}
+                      <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
+                        <div className='rounded-lg bg-gray-200  py-1 px-2'>
+                          Qty
+                        </div>
+                        <p className='text-sm font-bold   text-lg'>
+                          {item.quantity.toString()}
+                        </p>
+                      </div>
+                      <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
+                        {item.nutrients?.foods[0].nf_calories}
+                        <span className='font-normal text-sm '>kcal</span>
                       </p>
+                      <Image
+                        src={Delete}
+                        width={20}
+                        height={20}
+                        alt='profile-pic'
+                      />
                     </div>
-                    <p className='text-sm font-bold   text-lg'>
-                      {item.nutrients?.foods[0].nf_calories}
-                      <span className='font-normal text-sm '>kcal</span>
-                    </p>
-                    <Image
-                      src={Delete}
-                      width={20}
-                      height={20}
-                      alt='profile-pic'
-                    />
-                  </div>
-                )),
+                  );
+                }),
               )}
             </div>
           </div>
