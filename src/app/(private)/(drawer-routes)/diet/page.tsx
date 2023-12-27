@@ -277,7 +277,9 @@ export default function DietPage() {
             </div>
           </div>
           <div className='bg-white  p-4 rounded-lg shadow flex flex-col flex-wrap flex-1 grow'>
-            <p className='text-lg font-semibold text-gray-400'>Today's Log</p>
+            <p className='text-lg font-semibold text-gray-400'>
+              {`Today's Log`}
+            </p>
             <div className='border-black/10 border mt-3' />
             {/* {Break fast} */}
             <div className='flex flex-row justify-start mt-5 items-center gap-2'>
