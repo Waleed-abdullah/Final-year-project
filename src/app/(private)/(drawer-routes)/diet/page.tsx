@@ -243,7 +243,7 @@ export default function DietPage() {
       <main>
         <p className='text-2xl font-semibold mb-4'>Log Diet</p>
         <div className='flex flex-row gap-3 justify-between flex-wrap'>
-          <div className='basis-1/2 shrink'>
+          <div className='min-w-max grow'>
             <div className='bg-white  py-14 rounded-lg shadow flex justify-center items-center flex-wrap flex-1 '>
               Charts
             </div>
@@ -276,134 +276,136 @@ export default function DietPage() {
               </div>
             </div>
           </div>
-          <div className='bg-white  p-4 rounded-lg shadow flex flex-col flex-wrap flex-1 grow'>
-            <p className='text-lg font-semibold text-gray-400'>
-              {`Today's Log`}
-            </p>
-            <div className='border-black/10 border mt-3' />
-            {/* {Break fast} */}
-            <div className='flex flex-row justify-start mt-5 items-center gap-2'>
-              <div className='px-4 py-1 bg-sky-400 rounded-xl '>
-                <p className='text-white font-semibold'>Breakfast</p>
-              </div>
-              <p className='text-sm font-bold   text-lg'>
-                465<span className='font-normal text-sm '>kcal</span>
+          <div className='grow min-w-max'>
+            <div className='bg-white  p-4 rounded-lg shadow flex flex-col flex-wrap flex-1'>
+              <p className='text-lg font-semibold text-gray-400'>
+                {`Today's Log`}
               </p>
-            </div>
-            <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-              <div className='flex flex-row items-center gap-1'>
-                <Image src={Calender} width={24} height={24} alt='calender' />
-                <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+              <div className='border-black/10 border mt-3' />
+              {/* {Break fast} */}
+              <div className='flex flex-row justify-start mt-5 items-center gap-2'>
+                <div className='px-4 py-1 bg-sky-400 rounded-xl '>
+                  <p className='text-white font-semibold'>Breakfast</p>
+                </div>
+                <p className='text-sm font-bold   text-lg'>
+                  465<span className='font-normal text-sm '>kcal</span>
+                </p>
               </div>
-              <div className='flex flex-row items-center gap-1'>
-                <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                <p className='text-sm font-bold   text-lg'>2</p>
+              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
+                <div className='flex flex-row items-center gap-1'>
+                  <Image src={Calender} width={24} height={24} alt='calender' />
+                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+                </div>
+                <div className='flex flex-row items-center gap-1'>
+                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
+                  <p className='text-sm font-bold   text-lg'>2</p>
+                </div>
+                <p className='text-sm font-bold   text-lg'>
+                  200<span className='font-normal text-sm '>kcal</span>
+                </p>
+                <Image src={Delete} width={20} height={20} alt='profile-pic' />
               </div>
-              <p className='text-sm font-bold   text-lg'>
-                200<span className='font-normal text-sm '>kcal</span>
-              </p>
-              <Image src={Delete} width={20} height={20} alt='profile-pic' />
-            </div>
-            <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-              <div className='flex flex-row items-center gap-1'>
-                <Image src={Calender} width={24} height={24} alt='calender' />
-                <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
+                <div className='flex flex-row items-center gap-1'>
+                  <Image src={Calender} width={24} height={24} alt='calender' />
+                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+                </div>
+                <div className='flex flex-row items-center gap-1'>
+                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
+                  <p className='text-sm font-bold   text-lg'>2</p>
+                </div>
+                <p className='text-sm font-bold   text-lg'>
+                  200<span className='font-normal text-sm '>kcal</span>
+                </p>
+                <Image src={Delete} width={20} height={20} alt='profile-pic' />
               </div>
-              <div className='flex flex-row items-center gap-1'>
-                <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                <p className='text-sm font-bold   text-lg'>2</p>
+              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
+                <div className='flex flex-row items-center gap-1'>
+                  <Image src={Calender} width={24} height={24} alt='calender' />
+                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+                </div>
+                <div className='flex flex-row items-center gap-1'>
+                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
+                  <p className='text-sm font-bold   text-lg'>2</p>
+                </div>
+                <p className='text-sm font-bold   text-lg'>
+                  200<span className='font-normal text-sm '>kcal</span>
+                </p>
+                <Image src={Delete} width={20} height={20} alt='profile-pic' />
               </div>
-              <p className='text-sm font-bold   text-lg'>
-                200<span className='font-normal text-sm '>kcal</span>
-              </p>
-              <Image src={Delete} width={20} height={20} alt='profile-pic' />
-            </div>
-            <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-              <div className='flex flex-row items-center gap-1'>
-                <Image src={Calender} width={24} height={24} alt='calender' />
-                <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+              <div className='border-black/10 border mt-5' />
+              {/* Lunch */}
+              <div className='flex flex-row justify-start mt-5 items-center gap-2'>
+                <div className='px-4 py-1 bg-yellow-400 rounded-xl '>
+                  <p className='text-white font-semibold'>Lunch</p>
+                </div>
+                <p className='text-sm font-bold   text-lg'>
+                  0<span className='font-normal text-sm '>kcal</span>
+                </p>
               </div>
-              <div className='flex flex-row items-center gap-1'>
-                <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                <p className='text-sm font-bold   text-lg'>2</p>
-              </div>
-              <p className='text-sm font-bold   text-lg'>
-                200<span className='font-normal text-sm '>kcal</span>
-              </p>
-              <Image src={Delete} width={20} height={20} alt='profile-pic' />
-            </div>
-            <div className='border-black/10 border mt-5' />
-            {/* Lunch */}
-            <div className='flex flex-row justify-start mt-5 items-center gap-2'>
-              <div className='px-4 py-1 bg-yellow-400 rounded-xl '>
-                <p className='text-white font-semibold'>Lunch</p>
-              </div>
-              <p className='text-sm font-bold   text-lg'>
-                0<span className='font-normal text-sm '>kcal</span>
-              </p>
-            </div>
 
-            <div className='border-black/10 border mt-5' />
-            {/* Dinner */}
-            <div className='flex flex-row justify-start mt-5 items-center gap-2'>
-              <div className='px-4 py-1 bg-red-500 rounded-xl '>
-                <p className='text-white font-semibold'>Dinner</p>
+              <div className='border-black/10 border mt-5' />
+              {/* Dinner */}
+              <div className='flex flex-row justify-start mt-5 items-center gap-2'>
+                <div className='px-4 py-1 bg-red-500 rounded-xl '>
+                  <p className='text-white font-semibold'>Dinner</p>
+                </div>
+                <p className='text-sm font-bold   text-lg'>
+                  465<span className='font-normal text-sm '>kcal</span>
+                </p>
               </div>
-              <p className='text-sm font-bold   text-lg'>
-                465<span className='font-normal text-sm '>kcal</span>
-              </p>
-            </div>
-            <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-              <div className='flex flex-row items-center gap-1'>
-                <Image src={Calender} width={24} height={24} alt='calender' />
-                <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
+                <div className='flex flex-row items-center gap-1'>
+                  <Image src={Calender} width={24} height={24} alt='calender' />
+                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+                </div>
+                <div className='flex flex-row items-center gap-1'>
+                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
+                  <p className='text-sm font-bold   text-lg'>2</p>
+                </div>
+                <p className='text-sm font-bold   text-lg'>
+                  200<span className='font-normal text-sm '>kcal</span>
+                </p>
+                <Image src={Delete} width={20} height={20} alt='profile-pic' />
               </div>
-              <div className='flex flex-row items-center gap-1'>
-                <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                <p className='text-sm font-bold   text-lg'>2</p>
+              <div className='border-black/10 border mt-5' />
+              {/* Snacks */}
+              <div className='flex flex-row justify-start mt-5 items-center gap-2'>
+                <div className='px-4 py-1 bg-gray-800 rounded-xl '>
+                  <p className='text-white font-semibold'>Snacks</p>
+                </div>
+                <p className='text-sm font-bold   text-lg'>
+                  465<span className='font-normal text-sm '>kcal</span>
+                </p>
               </div>
-              <p className='text-sm font-bold   text-lg'>
-                200<span className='font-normal text-sm '>kcal</span>
-              </p>
-              <Image src={Delete} width={20} height={20} alt='profile-pic' />
-            </div>
-            <div className='border-black/10 border mt-5' />
-            {/* Snacks */}
-            <div className='flex flex-row justify-start mt-5 items-center gap-2'>
-              <div className='px-4 py-1 bg-gray-800 rounded-xl '>
-                <p className='text-white font-semibold'>Snacks</p>
+              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
+                <div className='flex flex-row items-center gap-1'>
+                  <Image src={Calender} width={24} height={24} alt='calender' />
+                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+                </div>
+                <div className='flex flex-row items-center gap-1'>
+                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
+                  <p className='text-sm font-bold   text-lg'>2</p>
+                </div>
+                <p className='text-sm font-bold   text-lg'>
+                  200<span className='font-normal text-sm '>kcal</span>
+                </p>
+                <Image src={Delete} width={20} height={20} alt='profile-pic' />
               </div>
-              <p className='text-sm font-bold   text-lg'>
-                465<span className='font-normal text-sm '>kcal</span>
-              </p>
-            </div>
-            <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-              <div className='flex flex-row items-center gap-1'>
-                <Image src={Calender} width={24} height={24} alt='calender' />
-                <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+              <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
+                <div className='flex flex-row items-center gap-1'>
+                  <Image src={Calender} width={24} height={24} alt='calender' />
+                  <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
+                </div>
+                <div className='flex flex-row items-center gap-1'>
+                  <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
+                  <p className='text-sm font-bold   text-lg'>2</p>
+                </div>
+                <p className='text-sm font-bold   text-lg'>
+                  200<span className='font-normal text-sm '>kcal</span>
+                </p>
+                <Image src={Delete} width={20} height={20} alt='profile-pic' />
               </div>
-              <div className='flex flex-row items-center gap-1'>
-                <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                <p className='text-sm font-bold   text-lg'>2</p>
-              </div>
-              <p className='text-sm font-bold   text-lg'>
-                200<span className='font-normal text-sm '>kcal</span>
-              </p>
-              <Image src={Delete} width={20} height={20} alt='profile-pic' />
-            </div>
-            <div className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'>
-              <div className='flex flex-row items-center gap-1'>
-                <Image src={Calender} width={24} height={24} alt='calender' />
-                <p className='text-sm font-bold   text-lg'>Half Fried Egg</p>
-              </div>
-              <div className='flex flex-row items-center gap-1'>
-                <div className='rounded-lg bg-gray-200  py-1 px-2'>Qty</div>
-                <p className='text-sm font-bold   text-lg'>2</p>
-              </div>
-              <p className='text-sm font-bold   text-lg'>
-                200<span className='font-normal text-sm '>kcal</span>
-              </p>
-              <Image src={Delete} width={20} height={20} alt='profile-pic' />
             </div>
           </div>
         </div>
