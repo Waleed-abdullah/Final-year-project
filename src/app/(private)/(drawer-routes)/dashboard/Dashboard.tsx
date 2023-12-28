@@ -13,8 +13,8 @@ import Barbell from '@/assets/Dashboard/barbell.svg';
 import Plate from '@/assets/Dashboard/plate.svg';
 import Link from 'next/link';
 import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
-import { MealsByType } from '@/src/types/page/waza_warrior/food_log';
-// import { fetchNutrients, fetchSavedMeals } from '../services/meals_services';
+import { Meal, MealsByType } from '@/src/types/page/waza_warrior/food_log';
+import { fetchNutrients, fetchSavedMeals } from '../services/meals_services';
 
 export function Dashboard() {
   const [warrior, setWarrior] = useState<Warrior | null>(null);
@@ -60,60 +60,60 @@ export function Dashboard() {
     fetchData();
   }, [session, router]);
 
-  // useEffect(() => {
-  //   const fetchMacros = async () => {
-  //     try {
-  //       if (!warrior) return;
-  //       const fetchedData: MealsByType = await fetchSavedMeals(
-  //         warrior.warrior_id!,
-  //         date,
-  //       );
-  //       const allFoodItems = Object.values(fetchedData).flatMap((mealType) =>
-  //         mealType.flatMap((meal) => meal.meal_food_items),
-  //       );
+  useEffect(() => {
+    const fetchMacros = async () => {
+      try {
+        if (!warrior) return;
+        const fetchedData: MealsByType = await fetchSavedMeals(
+          warrior.warrior_id!,
+          new Date(date),
+        );
+        const allFoodItems = Object.values(fetchedData).flatMap((mealType) =>
+          mealType.flatMap((meal: Meal) => meal.meal_food_items),
+        );
 
-  //       const query: string = allFoodItems
-  //         .map(
-  //           (item) =>
-  //             `${item.quantity} ${item.unit} ${item.food_item_identifier}`,
-  //         )
-  //         .join(', ');
+        const query: string = allFoodItems
+          .map(
+            (item) =>
+              `${item.quantity} ${item.unit} ${item.food_item_identifier}`,
+          )
+          .join(', ');
 
-  //       if (!query.length) return;
-  //       const nutrients = await fetchNutrients(query);
+        if (!query.length) return;
+        const nutrients = await fetchNutrients(query);
 
-  //       const totals = nutrients.foods.reduce(
-  //         (
-  //           acc: {
-  //             calories: number;
-  //             protein: number;
-  //             carbs: number;
-  //             fats: number;
-  //           },
-  //           food: {
-  //             nf_calories: number;
-  //             nf_protein: number;
-  //             nf_total_carbohydrate: number;
-  //             nf_total_fat: number;
-  //           },
-  //         ) => {
-  //           acc.calories += food.nf_calories;
-  //           acc.protein += food.nf_protein;
-  //           acc.carbs += food.nf_total_carbohydrate;
-  //           acc.fats += food.nf_total_fat;
-  //           return acc;
-  //         },
-  //         { protein: 0, carbs: 0, fats: 0, calories: 0 },
-  //       );
+        const totals = nutrients.foods.reduce(
+          (
+            acc: {
+              calories: number;
+              protein: number;
+              carbs: number;
+              fats: number;
+            },
+            food: {
+              nf_calories: number;
+              nf_protein: number;
+              nf_total_carbohydrate: number;
+              nf_total_fat: number;
+            },
+          ) => {
+            acc.calories += food.nf_calories;
+            acc.protein += food.nf_protein;
+            acc.carbs += food.nf_total_carbohydrate;
+            acc.fats += food.nf_total_fat;
+            return acc;
+          },
+          { protein: 0, carbs: 0, fats: 0, calories: 0 },
+        );
 
-  //       setMacros(totals);
-  //     } catch (error) {
-  //       console.error('Error fetching macro data:', error);
-  //     }
-  //   };
+        setMacros(totals);
+      } catch (error) {
+        console.error('Error fetching macro data:', error);
+      }
+    };
 
-  //   fetchMacros();
-  // }, [warrior]);
+    fetchMacros();
+  }, [warrior, date]);
   const chartData = useMemo(
     () => ({
       labels: ['Calories', 'Protein', 'Carbs', 'Fats'],

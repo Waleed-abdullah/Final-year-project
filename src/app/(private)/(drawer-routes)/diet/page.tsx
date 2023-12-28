@@ -1,28 +1,28 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import Image from 'next/image';
 import {
   BrandedFoodItem,
   CommonFoodItem,
   NutritionixInstantEndpoint,
   NutritionixNutrientsEndpoint,
 } from '../../../../types/app/(private)/(drawer-routes)/diet';
-import { MealsByType } from '@/src/types/page/waza_warrior/food_log';
+import { FoodItem, MealsByType } from '@/src/types/page/waza_warrior/food_log';
 import {
   fetchNutrients,
   fetchSavedMeals,
   fetchSuggestions,
 } from '../services/meals_services';
 
-import Calender from '@/assets//Dashboard/calender.svg';
+import Calender from '@/assets/Dashboard/calender.svg';
 import Dropdown from '@/assets/Diet/dropdown.svg';
 import Delete from '@/assets/Diet/delete.svg';
 import Search from '@/assets/Diet/search.svg';
 import Add from '@/assets/Diet/add.svg';
-import Image from 'next/image';
+import { it } from 'node:test';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');
-
   const [selectedFoods, setSelectedFoods] = useState<
     Map<string, { item: CommonFoodItem | BrandedFoodItem; count: number }>
   >(new Map());
@@ -30,17 +30,74 @@ export default function DietPage() {
     useState<NutritionixInstantEndpoint | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [savedMeals, setSavedMeals] = useState<MealsByType>({});
-  const [mealType, setMealType] = useState('Breakfast');
+  const [savedMeals, setSavedMeals] = useState<MealsByType | null>(null);
+  const [mealType, setMealType] = useState<
+    'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'
+  >('Breakfast');
   const [mealDate, setMealDate] = useState(
     new Date().toISOString().split('T')[0],
   );
+
   const [totalMealTypeCalories, setTotalMealTypeCalories] = useState({
     Breakfast: 0,
     Lunch: 0,
     Dinner: 0,
     Snack: 0,
   });
+  // Helper functions for processing data
+  // ... [previous code remains unchanged]
+
+  const processMeals = useCallback(async (meals: MealsByType) => {
+    const mealTypeCalories = {
+      Breakfast: 0,
+      Lunch: 0,
+      Dinner: 0,
+      Snack: 0,
+    };
+
+    // Collect all food items across meal types
+    const allFoodItems = [];
+    for (const mealsArray of Object.values(meals)) {
+      for (const meal of mealsArray) {
+        allFoodItems.push(
+          ...meal.meal_food_items.map((item: FoodItem) => {
+            return `${item.quantity} ${item.unit} ${item.food_item_identifier}`;
+          }),
+        );
+      }
+    }
+
+    // Create a unique query string for all items
+    const queryString = allFoodItems.join('; ');
+    try {
+      // Fetch nutritional details for all items in one API call
+      const allItemNutrients: NutritionixNutrientsEndpoint =
+        await fetchNutrients(queryString);
+      // Iterate through the meals to assign the nutrient details
+      for (const [mealType, mealsArray] of Object.entries(meals)) {
+        for (const meal of mealsArray) {
+          for (const item of meal.meal_food_items) {
+            const nutrientDetails = allItemNutrients.foods.find(
+              (food) =>
+                food.food_name === item.food_item_identifier &&
+                food.serving_qty == item.quantity,
+            );
+
+            if (nutrientDetails) {
+              item.nutrients = { foods: [] };
+              item.nutrients.foods[0] = nutrientDetails;
+              mealTypeCalories[mealType as keyof typeof mealTypeCalories] +=
+                nutrientDetails.nf_calories;
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching nutrients for items:', error);
+    }
+
+    return { meals, mealTypeCalories };
+  }, []);
 
   useEffect(() => {
     const warriorId = '37914f58-6fe8-46dd-a20b-06f3a1cd0e8e'; // Replace with actual warrior ID
@@ -52,52 +109,32 @@ export default function DietPage() {
           new Date(mealDate),
         );
 
-        const mealTypeCalories = {
-          Breakfast: 0,
-          Lunch: 0,
-          Dinner: 0,
-          Snack: 0,
-        };
-
-        for (const [mealType, mealsArray] of Object.entries(meals)) {
-          for (const meal of mealsArray) {
-            for (const item of meal.meal_food_items) {
-              const foodItemQuery = `${item.quantity} ${item.unit} ${item.food_item_identifier}`;
-              try {
-                const nutrientDetails = await fetchNutrients(foodItemQuery);
-                item.nutrients = nutrientDetails;
-                mealTypeCalories[mealType as keyof typeof mealTypeCalories] +=
-                  nutrientDetails.foods[0].nf_calories;
-              } catch (error) {
-                console.error('Error fetching nutrients for item:', item);
-              }
-            }
-          }
-        }
-        console.log(meals);
-        setSavedMeals(meals);
+        const { meals: processedMeals, mealTypeCalories } =
+          await processMeals(meals);
+        setSavedMeals(processedMeals);
+        console.log(processedMeals);
         setTotalMealTypeCalories(mealTypeCalories);
       } catch (error) {
-        console.error('Error fetching or processing meals:', error);
+        console.error('Error fetching saved meals:', error);
       }
     };
-
     fetchData();
-  }, [mealDate]);
+  }, [mealDate, processMeals]);
 
-  useEffect(() => {
-    const debounceTimeout = setTimeout(async () => {
+  const debounceSearch = useCallback((query: string) => {
+    setTimeout(async () => {
       if (query.length < 3) return;
       setIsLoading(true);
       const suggestions: NutritionixInstantEndpoint =
         await fetchSuggestions(query);
       setSuggestions(suggestions);
       setIsLoading(false);
-    }, 500); // 500ms debounce time
+    }, 500);
+  }, []);
 
-    return () => clearTimeout(debounceTimeout);
-  }, [query]);
-
+  useEffect(() => {
+    debounceSearch(query);
+  }, [query, debounceSearch]);
   const handleQueryChange = (event: any) => {
     setQuery(event.target.value);
   };
@@ -119,10 +156,18 @@ export default function DietPage() {
   const handleMealTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    setMealType(event.target.value);
+    setMealType(
+      event.target.value as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack',
+    );
   };
   const handleMealDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMealDate(event.target.value);
+  };
+  const mealTypeColors = {
+    Breakfast: 'bg-sky-400',
+    Lunch: 'bg-yellow-400',
+    Dinner: 'bg-red-400',
+    Snack: 'bg-gray-600',
   };
   return (
     // <div>
@@ -285,223 +330,78 @@ export default function DietPage() {
                 {`Today's Log`}
               </p>
               <div className='border-black/10 border mt-3' />
-              {/* {Break fast} */}
-              <div className='flex flex-row justify-start mt-5 items-center gap-2'>
-                <div className='px-4 py-1 bg-sky-400 rounded-xl '>
-                  <p className='text-white font-semibold'>Breakfast</p>
-                </div>
-                <p className='text-sm font-bold   text-lg'>
-                  {totalMealTypeCalories.Breakfast}
-                  <span className='font-normal text-sm '>kcal</span>
-                </p>
-              </div>
 
-              {savedMeals['Breakfast']?.map((meal) =>
-                meal.meal_food_items.map((item) => {
-                  return (
-                    <div
-                      className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
-                      key={item.food_item_identifier}
-                    >
-                      <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
-                        <Image
-                          src={
-                            item.nutrients?.foods[0].photo.thumb ||
-                            'https://robohash.org/asdasd'
-                          }
-                          width={24}
-                          height={24}
-                          alt='calender'
-                        />
-                        <p className='text-sm font-bold   text-lg'>
-                          {item.food_item_identifier}
-                        </p>
+              {savedMeals &&
+                Object.keys(savedMeals).map((mealType, idx) => (
+                  <div key={idx}>
+                    <div className='flex flex-row justify-start mt-5 items-center gap-2'>
+                      <div
+                        className={`px-4 py-1  rounded-xl ${
+                          mealTypeColors[
+                            mealType as keyof typeof totalMealTypeCalories
+                          ] || 'bg-gray-200'
+                        }`}
+                      >
+                        <p className='text-white font-semibold'>{mealType}</p>
                       </div>
-                      <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
-                        <div className='rounded-lg bg-gray-200  py-1 px-2'>
-                          Qty
-                        </div>
-                        <p className='text-sm font-bold   text-lg'>
-                          {`${item.quantity.toString()} ${item.unit}`}
-                        </p>
-                      </div>
-                      <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
-                        {item.nutrients?.foods[0].nf_calories}
+                      <p className='text-sm font-bold   text-lg'>
+                        {
+                          totalMealTypeCalories[
+                            mealType as keyof typeof totalMealTypeCalories
+                          ]
+                        }
                         <span className='font-normal text-sm '>kcal</span>
                       </p>
-                      <Image
-                        src={Delete}
-                        width={20}
-                        height={20}
-                        alt='profile-pic'
-                      />
                     </div>
-                  );
-                }),
-              )}
-
-              <div className='border-black/10 border mt-5' />
-              {/* Lunch */}
-              <div className='flex flex-row justify-start mt-5 items-center gap-2'>
-                <div className='px-4 py-1 bg-yellow-400 rounded-xl '>
-                  <p className='text-white font-semibold'>Lunch</p>
-                </div>
-                <p className='text-sm font-bold   text-lg'>
-                  {totalMealTypeCalories.Lunch}
-                  <span className='font-normal text-sm '>kcal</span>
-                </p>
-              </div>
-              {savedMeals['Lunch']?.map((meal) =>
-                meal.meal_food_items.map((item) => {
-                  return (
-                    <div
-                      className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
-                      key={item.food_item_identifier}
-                    >
-                      <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
-                        <Image
-                          src={
-                            item.nutrients?.foods[0].photo.thumb ||
-                            'https://robohash.org/asdasd'
-                          }
-                          width={24}
-                          height={24}
-                          alt='calender'
-                        />
-                        <p className='text-sm font-bold   text-lg'>
-                          {item.food_item_identifier}
-                        </p>
-                      </div>
-                      <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
-                        <div className='rounded-lg bg-gray-200  py-1 px-2'>
-                          Qty
-                        </div>
-                        <p className='text-sm font-bold   text-lg'>
-                          {item.quantity.toString()}
-                        </p>
-                      </div>
-                      <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
-                        {item.nutrients?.foods[0].nf_calories}
-                        <span className='font-normal text-sm '>kcal</span>
-                      </p>
-                      <Image
-                        src={Delete}
-                        width={20}
-                        height={20}
-                        alt='profile-pic'
-                      />
-                    </div>
-                  );
-                }),
-              )}
-
-              <div className='border-black/10 border mt-5' />
-              {/* Dinner */}
-              <div className='flex flex-row justify-start mt-5 items-center gap-2'>
-                <div className='px-4 py-1 bg-red-500 rounded-xl '>
-                  <p className='text-white font-semibold'>Dinner</p>
-                </div>
-                <p className='text-sm font-bold   text-lg'>
-                  {totalMealTypeCalories.Dinner}
-                  <span className='font-normal text-sm '>kcal</span>
-                </p>
-              </div>
-              {savedMeals['Dinner']?.map((meal) =>
-                meal.meal_food_items.map((item) => {
-                  return (
-                    <div
-                      className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
-                      key={item.food_item_identifier}
-                    >
-                      <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
-                        <Image
-                          src={
-                            item.nutrients?.foods[0].photo.thumb ||
-                            'https://robohash.org/asdasd'
-                          }
-                          width={24}
-                          height={24}
-                          alt='calender'
-                        />
-                        <p className='text-sm font-bold   text-lg'>
-                          {item.food_item_identifier}
-                        </p>
-                      </div>
-                      <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
-                        <div className='rounded-lg bg-gray-200  py-1 px-2'>
-                          Qty
-                        </div>
-                        <p className='text-sm font-bold   text-lg'>
-                          {item.quantity.toString()}
-                        </p>
-                      </div>
-                      <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
-                        {item.nutrients?.foods[0].nf_calories}
-                        <span className='font-normal text-sm '>kcal</span>
-                      </p>
-                      <Image
-                        src={Delete}
-                        width={20}
-                        height={20}
-                        alt='profile-pic'
-                      />
-                    </div>
-                  );
-                }),
-              )}
-              {/* Snacks */}
-              <div className='flex flex-row justify-start mt-5 items-center gap-2'>
-                <div className='px-4 py-1 bg-gray-800 rounded-xl '>
-                  <p className='text-white font-semibold'>Snacks</p>
-                </div>
-                <p className='text-sm font-bold   text-lg'>
-                  {totalMealTypeCalories.Snack}
-                  <span className='font-normal text-sm '>kcal</span>
-                </p>
-              </div>
-              {savedMeals['Snacks']?.map((meal) =>
-                meal.meal_food_items.map((item) => {
-                  return (
-                    <div
-                      className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
-                      key={item.food_item_identifier}
-                    >
-                      <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
-                        <Image
-                          src={
-                            item.nutrients?.foods[0].photo.thumb ||
-                            'https://robohash.org/asdasd'
-                          }
-                          width={24}
-                          height={24}
-                          alt='calender'
-                        />
-                        <p className='text-sm font-bold   text-lg'>
-                          {item.food_item_identifier}
-                        </p>
-                      </div>
-                      <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
-                        <div className='rounded-lg bg-gray-200  py-1 px-2'>
-                          Qty
-                        </div>
-                        <p className='text-sm font-bold   text-lg'>
-                          {item.quantity.toString()}
-                        </p>
-                      </div>
-                      <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
-                        {item.nutrients?.foods[0].nf_calories}
-                        <span className='font-normal text-sm '>kcal</span>
-                      </p>
-                      <Image
-                        src={Delete}
-                        width={20}
-                        height={20}
-                        alt='profile-pic'
-                      />
-                    </div>
-                  );
-                }),
-              )}
+                    <div className='border-black/10 border mt-5' />
+                    {savedMeals[
+                      mealType as keyof typeof totalMealTypeCalories
+                    ]?.map((meal) =>
+                      meal.meal_food_items.map((item) => {
+                        return (
+                          <div
+                            className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
+                            key={item.food_item_identifier}
+                          >
+                            <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
+                              {item.nutrients && (
+                                <Image
+                                  src={item.nutrients.foods[0].photo.thumb}
+                                  width={24}
+                                  height={24}
+                                  alt='calender'
+                                />
+                              )}
+                              <p className='text-sm font-bold   text-lg'>
+                                {item.food_item_identifier}
+                              </p>
+                            </div>
+                            <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
+                              <div className='rounded-lg bg-gray-200  py-1 px-2'>
+                                Qty
+                              </div>
+                              <p className='text-sm font-bold   text-lg'>
+                                {item.quantity.toString()}
+                              </p>
+                            </div>
+                            <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
+                              {item.nutrients
+                                ? item.nutrients.foods[0].nf_calories
+                                : 0}
+                              <span className='font-normal text-sm '>kcal</span>
+                            </p>
+                            <Image
+                              src={Delete}
+                              width={20}
+                              height={20}
+                              alt='profile-pic'
+                            />
+                          </div>
+                        );
+                      }),
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
         </div>

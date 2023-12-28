@@ -33,11 +33,20 @@ export default async function handler(
       const mealsByType: MealsByType = meals.reduce(
         (acc, meal) => {
           const mealTypeName = meal.meal_types.name;
-          if (!acc[mealTypeName]) acc[mealTypeName] = [];
-          acc[mealTypeName].push(meal);
+          if (!acc[mealTypeName as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'])
+            acc[mealTypeName as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'] =
+              [];
+          acc[mealTypeName as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'].push(
+            meal,
+          );
           return acc;
         },
-        {} as { [key: string]: Meal[] },
+        {
+          Breakfast: [],
+          Lunch: [],
+          Dinner: [],
+          Snack: [],
+        } as MealsByType,
       );
 
       res.status(200).json(mealsByType);

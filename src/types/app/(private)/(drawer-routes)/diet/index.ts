@@ -67,36 +67,10 @@ export interface NutritionixNutrientsEndpoint {
       attr_id: number;
       value: number;
     }[];
-    nix_brand_name: string;
-    nix_brand_id: string;
-    nix_item_name: string;
-    nix_item_id: string;
-    metadata: {
-      is_raw_food: boolean;
-    };
-    source: number;
-    ndb_no: number;
-    tags: {
-      item: string;
-      measure: null | string;
-      quantity: number;
-      tag_id: number;
-    }[];
-    alt_measures: {
-      serving_weight: number;
-      measure: string;
-      seq: number;
-      qty: number;
-    }[];
-    lat: null;
-    lng: null;
-    meal_type: number;
     photo: {
       thumb: string;
       highres: string;
       is_user_uploaded: boolean;
     };
-    sub_recipe: null;
   }[];
-  branded: BrandedFoodItem[];
 }

@@ -30,5 +30,8 @@ export interface Meal {
 }
 
 export interface MealsByType {
-  [type: string]: Meal[];
+  Breakfast: Meal[];
+  Lunch: Meal[];
+  Dinner: Meal[];
+  Snack: Meal[];
 }

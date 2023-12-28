@@ -1,6 +1,7 @@
 import { MealsByType } from '@/src/types/page/waza_warrior/food_log';
 
 export const fetchSavedMeals = async (warrior_id: string, date: Date) => {
+  console.log('Called fetchSavedMeals');
   try {
     const response = await fetch(
       `http://localhost:3000/api/waza_warrior/food_log/getMealsByDate?warrior_id=${warrior_id}`,
@@ -19,6 +20,7 @@ export const fetchSavedMeals = async (warrior_id: string, date: Date) => {
 };
 
 export const fetchNutrients = async (query: string) => {
+  console.log('Called fetchNutrients');
   try {
     const nutrientResponse = await fetch(
       'https://trackapi.nutritionix.com/v2/natural/nutrients/',
@@ -44,6 +46,7 @@ export const fetchNutrients = async (query: string) => {
 };
 
 export const fetchSuggestions = async (query: string) => {
+  console.log('Called fetchSuggestions');
   try {
     const response = await fetch(
       `https://trackapi.nutritionix.com/v2/search/instant/?query=${query}`,
