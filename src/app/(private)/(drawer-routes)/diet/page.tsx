@@ -41,11 +41,11 @@ export default function DietPage() {
   });
   const chartData = useMemo(
     () => ({
-      labels: ['Calories', 'Protein', 'Carbs', 'Fats'],
+      labels: ['Protein', 'Carbs', 'Fats'],
       datasets: [
         {
-          data: [macros.calories, macros.protein, macros.carbs, macros.fats],
-          backgroundColor: ['#eab308', '#22c55e', '#6b7280', '#ef4444'],
+          data: [macros.protein, macros.carbs, macros.fats],
+          backgroundColor: ['#22c55e', '#6b7280', '#ef4444'],
           borderWidth: 1,
         },
       ],
@@ -245,8 +245,16 @@ export default function DietPage() {
         <div className='flex flex-row gap-3 justify-between flex-wrap '>
           <div className='min-w-max basis-5/12 grow flex flex-col'>
             <div className='bg-white grow py-14 rounded-lg shadow flex justify-center items-center flex-wrap flex-1 '>
-              <div className='w-60'>
+              <div className='w-64 relative'>
                 <DoughnutChart data={chartData} />
+                <div className='absolute top-1/2 left-2/4 -translate-x-1/2 -translate-y-1/4 flex flex-col items-center '>
+                  <p className='font-bold text-3xl'>
+                    {macros.calories.toFixed(0)}{' '}
+                  </p>
+                  <p className='bg-yellow-400 py-1 px-5 rounded-3xl  text-md'>
+                    <span className='font-bold'>/ 1500</span> kcal
+                  </p>
+                </div>
               </div>
 
               <div className='flex flex-col gap-2 justify-between min-w-fit mt-5'>

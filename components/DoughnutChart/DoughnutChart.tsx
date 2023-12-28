@@ -18,7 +18,14 @@ interface DoughnutChartProps {
 }
 
 const DoughnutChart: React.FC<DoughnutChartProps> = ({ data }) => {
-  return <Doughnut data={data} />;
+  return (
+    <Doughnut
+      data={data}
+      options={{
+        cutout: 80,
+      }}
+    />
+  );
 };
 
 export default DoughnutChart;
