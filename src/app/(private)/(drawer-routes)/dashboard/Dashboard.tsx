@@ -13,8 +13,13 @@ import Barbell from '@/assets/Dashboard/barbell.svg';
 import Plate from '@/assets/Dashboard/plate.svg';
 import Link from 'next/link';
 import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
-import { Meal, MealsByType } from '@/src/types/page/waza_warrior/food_log';
+import {
+  FoodItem,
+  Meal,
+  MealsByType,
+} from '@/src/types/page/waza_warrior/food_log';
 import { fetchNutrients, fetchSavedMeals } from '../services/meals_services';
+import { NutritionixNutrientsEndpoint } from '@/src/types/app/(private)/(drawer-routes)/diet';
 
 export function Dashboard() {
   const [warrior, setWarrior] = useState<Warrior | null>(null);
@@ -68,19 +73,20 @@ export function Dashboard() {
           warrior.warrior_id!,
           new Date(date),
         );
-        const allFoodItems = Object.values(fetchedData).flatMap((mealType) =>
-          mealType.flatMap((meal: Meal) => meal.meal_food_items),
-        );
+        const allFoodItems = [];
+        for (const meal of Object.values(fetchedData)) {
+          allFoodItems.push(
+            ...meal.meal_food_items.map((item: FoodItem) => {
+              return `${item.quantity} ${item.unit} ${item.food_item_identifier}`;
+            }),
+          );
+        }
 
-        const query: string = allFoodItems
-          .map(
-            (item) =>
-              `${item.quantity} ${item.unit} ${item.food_item_identifier}`,
-          )
-          .join(', ');
+        const query: string = allFoodItems.join(', ');
 
         if (!query.length) return;
-        const nutrients = await fetchNutrients(query);
+        const nutrients: NutritionixNutrientsEndpoint =
+          await fetchNutrients(query);
 
         const totals = nutrients.foods.reduce(
           (
@@ -98,9 +104,9 @@ export function Dashboard() {
             },
           ) => {
             acc.calories += food.nf_calories;
-            acc.protein += food.nf_protein;
-            acc.carbs += food.nf_total_carbohydrate;
-            acc.fats += food.nf_total_fat;
+            acc.protein += food.nf_protein * 4;
+            acc.carbs += food.nf_total_carbohydrate * 4;
+            acc.fats += food.nf_total_fat * 9;
             return acc;
           },
           { protein: 0, carbs: 0, fats: 0, calories: 0 },
@@ -161,14 +167,12 @@ export function Dashboard() {
                 <p className='text-sm font-semibold text-yellow-500'>
                   Calories Burned
                 </p>
-                <p className='text-white text-sm font-semibold '>{`${macros.calories.toFixed(
-                  2,
-                )}kcal`}</p>
+                <p className='text-white text-sm font-semibold '>{`${0}kcal`}</p>
               </div>
               <div className='flex flex-row gap-1'>
                 <div className='flex flex-row bg-green-500 rounded-3xl p-2 gap-1'>
                   <Image src={Minus} width={20} height={20} alt='minus' />
-                  <p className='text-sm font-semibold text-white'>Protiens</p>
+                  <p className='text-sm font-semibold text-white'>Protien</p>
                 </div>
                 <p className='text-black text-sm font-semibold flex items-center'>
                   {`${macros.protein.toFixed(2)}kcal`}

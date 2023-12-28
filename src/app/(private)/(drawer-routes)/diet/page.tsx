@@ -20,12 +20,38 @@ import Dropdown from '@/assets/Diet/dropdown.svg';
 import Delete from '@/assets/Diet/delete.svg';
 import Search from '@/assets/Diet/search.svg';
 import Add from '@/assets/Diet/add.svg';
+import Fire from '@/assets/Dashboard/fire.svg';
+import Minus from '@/assets/Dashboard/minus.svg';
+import Tick from '@/assets/Dashboard/tick.svg';
+import Cross from '@/assets/Dashboard/cross.svg';
+
+import DoughnutChart from '@/components/DoughnutChart/DoughnutChart';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');
   const [warriorId, setWarriorId] = useState(
     '37914f58-6fe8-46dd-a20b-06f3a1cd0e8e',
-  ); // Replace with actual warrior ID
+  );
+
+  const [macros, setMacros] = useState({
+    protein: 10,
+    carbs: 20,
+    fats: 30,
+    calories: 40,
+  });
+  const chartData = useMemo(
+    () => ({
+      labels: ['Calories', 'Protein', 'Carbs', 'Fats'],
+      datasets: [
+        {
+          data: [macros.calories, macros.protein, macros.carbs, macros.fats],
+          backgroundColor: ['#eab308', '#22c55e', '#6b7280', '#ef4444'],
+          borderWidth: 1,
+        },
+      ],
+    }),
+    [macros],
+  );
   const [selectedFoods, setSelectedFoods] = useState<
     Map<string, { item: CommonFoodItem | BrandedFoodItem; count: number }>
   >(new Map());
@@ -75,6 +101,31 @@ export default function DietPage() {
       // Fetch nutritional details for all items in one API call
       const allItemNutrients: NutritionixNutrientsEndpoint =
         await fetchNutrients(queryString);
+      const totals = allItemNutrients.foods.reduce(
+        (
+          acc: {
+            calories: number;
+            protein: number;
+            carbs: number;
+            fats: number;
+          },
+          food: {
+            nf_calories: number;
+            nf_protein: number;
+            nf_total_carbohydrate: number;
+            nf_total_fat: number;
+          },
+        ) => {
+          acc.calories += food.nf_calories;
+          acc.protein += food.nf_protein * 4;
+          acc.carbs += food.nf_total_carbohydrate * 4;
+          acc.fats += food.nf_total_fat * 9;
+          return acc;
+        },
+        { protein: 0, carbs: 0, fats: 0, calories: 0 },
+      );
+
+      setMacros(totals);
 
       for (const [mealType, meal] of Object.entries(meals)) {
         for (const item of meal.meal_food_items) {
@@ -111,7 +162,6 @@ export default function DietPage() {
         const { meals: processedMeals, mealTypeCalories } =
           await processMeals(meals);
         setSavedMeals(processedMeals);
-        console.log(processedMeals);
         setTotalMealTypeCalories(mealTypeCalories);
       } catch (error) {
         console.error('Error fetching saved meals:', error);
@@ -164,68 +214,10 @@ export default function DietPage() {
     Snack: 'bg-gray-600',
   };
   return (
-    // <div>
-    //   <input
-    //     type='text'
-    //     value={query}
-    //     onChange={handleQueryChange}
-    //     placeholder='Search for food items'
-    //   />
-    //   {isLoading && <div>Loading...</div>}
-    //   {!isLoading && suggestions && suggestions.common?.length > 0 && (
-    //     <ul className='max-h-60 overflow-y-auto'>
-    //       <p>Common</p>
-    //       {suggestions.common.map((item, index) => (
-    //         <li
-    //           key={index}
-    //           onClick={() => handleFoodSelect(item)}
-    //           className='flex items-center p-2 hover:bg-gray-100 cursor-pointer'
-    //         >
-    //           <img
-    //             src={item.photo.thumb}
-    //             alt={item.food_name}
-    //             className='w-10 h-10 mr-2'
-    //           />
-    //           {item.food_name}
-    //         </li>
-    //       ))}
-    //       <p>Branded</p>
-    //       {suggestions.branded.map((item, index) => (
-    //         <li
-    //           key={index}
-    //           onClick={() => handleFoodSelect(item)}
-    //           className='flex items-center p-2 hover:bg-gray-100 cursor-pointer'
-    //         >
-    //           <img
-    //             src={item.photo.thumb}
-    //             alt={item.food_name}
-    //             className='w-10 h-10 mr-2'
-    //           />
-    //           {item.food_name}
-    //           {item.nf_calories}
-    //         </li>
-    //       ))}
-    //     </ul>
-    //   )}
-
-    //   {/* Meal Type Selector */}
-    //   <select
-    //     value={mealType}
-    //     onChange={handleMealTypeChange}
-    //     className='p-2 border border-gray-300 rounded mt-2'
-    //   >
-    //     <option value='Breakfast'>Breakfast</option>
-    //     <option value='Lunch'>Lunch</option>
-    //     <option value='Dinner'>Dinner</option>
-    //     <option value='Snack'>Snack</option>
-    //   </select>
-
-    //   {/* Date Picker */}
-
     <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>My Diet</p>
-        <div className='flex flex-row gap-4'>
+        <div className='flex flex-row gap-4 '>
           <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
             <Image src={Calender} width={24} height={24} alt='calendar' />
             <input
@@ -250,12 +242,51 @@ export default function DietPage() {
       </header>
       <main>
         <p className='text-2xl font-semibold mb-4'>Log Diet</p>
-        <div className='flex flex-row gap-3 justify-between flex-wrap'>
-          <div className='min-w-max grow'>
-            <div className='bg-white  py-14 rounded-lg shadow flex justify-center items-center flex-wrap flex-1 '>
-              Charts
+        <div className='flex flex-row gap-3 justify-between flex-wrap '>
+          <div className='min-w-max basis-5/12 grow flex flex-col'>
+            <div className='bg-white grow py-14 rounded-lg shadow flex justify-center items-center flex-wrap flex-1 '>
+              <div className='w-60'>
+                <DoughnutChart data={chartData} />
+              </div>
+
+              <div className='flex flex-col gap-2 justify-between min-w-fit mt-5'>
+                <div className='flex flex-row bg-black rounded-3xl p-2 gap-1'>
+                  <Image src={Fire} width={20} height={20} alt='fire' />
+                  <p className='text-sm font-semibold text-yellow-500'>
+                    Calories Burned
+                  </p>
+                  <p className='text-white text-sm font-semibold '>{`${0}kcal`}</p>
+                </div>
+                <div className='flex flex-row gap-1'>
+                  <div className='flex flex-row bg-green-500 rounded-3xl p-2 gap-1'>
+                    <Image src={Minus} width={20} height={20} alt='minus' />
+                    <p className='text-sm font-semibold text-white'>Protiens</p>
+                  </div>
+                  <p className='text-black text-sm font-semibold flex items-center'>
+                    {`${macros.protein.toFixed(2)}kcal`}
+                  </p>
+                </div>
+                <div className='flex flex-row gap-1'>
+                  <div className='flex flex-row bg-gray-500 rounded-3xl p-2 gap-1'>
+                    <Image src={Tick} width={20} height={20} alt='tick' />
+                    <p className='text-sm font-semibold text-white'>Carbs</p>
+                  </div>
+                  <p className='text-black text-sm font-semibold flex items-center'>
+                    {`${macros.carbs.toFixed(2)}kcal`}
+                  </p>
+                </div>
+                <div className='flex flex-row gap-1'>
+                  <div className='flex flex-row bg-red-500 rounded-3xl p-2 gap-1'>
+                    <Image src={Cross} width={20} height={20} alt='cross' />
+                    <p className='text-sm font-semibold text-white'>Fats</p>
+                  </div>
+                  <p className='text-black text-sm font-semibold flex items-center'>
+                    {`${macros.fats.toFixed(2)}kcal`}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className='bg-white  p-4 rounded-lg shadow flex flex-col items-start flex-wrap flex-1 mt-4'>
+            <div className='bg-white grow   p-4 rounded-lg shadow flex flex-col items-start flex-wrap flex-1 mt-4'>
               <div className='border p-4 rounded-lg flex flex-row border-black/10 w-full'>
                 <Image src={Search} width={24} height={24} alt='calender' />
                 <input
@@ -372,7 +403,7 @@ export default function DietPage() {
               </div>
             </div>
           </div>
-          <div className='grow min-w-max'>
+          <div className='basis-5/12 grow min-w-max max-h-[900px]  overflow-y-scroll scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-100'>
             <div className='bg-white  p-4 rounded-lg shadow flex flex-col flex-wrap flex-1'>
               <p className='text-lg font-semibold text-gray-400'>
                 {`Today's Log`}
