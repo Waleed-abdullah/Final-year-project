@@ -149,7 +149,7 @@ const SignUp = () => {
           </div>
         </button>
 
-        <div className='relative text-[20px] leading-[101%] text-black text-center font-poppins'>
+        <div className=' mb-2 relative text-[20px] leading-[101%] text-black text-center font-poppins'>
           <span>{`Already have an account? `}</span>
           <Link href={'/signin'} className='font-semibold hover:font-bold'>
             Sign In

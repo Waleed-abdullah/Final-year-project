@@ -104,7 +104,7 @@ const SignIn = () => {
           </div>
         </button>
 
-        <div className='relative text-[20px] leading-[101%] text-black text-center font-poppins'>
+        <div className='mb-2 relative text-[20px] leading-[101%] text-black text-center font-poppins'>
           <span>Not registered yet? </span>
           <Link
             href={'/signup/warrior'}
