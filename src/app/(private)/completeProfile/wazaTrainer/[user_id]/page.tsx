@@ -6,7 +6,7 @@ import userIcon from '@/assets/formIcons/user.svg';
 import wazaLogoBlack from '@/assets/wazaLogos/Wazalogo_Black.svg';
 import Image from 'next/image';
 
-export default function Trainer() {
+export default function CompleteTrainerProfile() {
   const router = useRouter();
   const { user_id } = useParams<{ user_id: string }>() || { user_id: '' };
   const [trainerDetails, setTrainerDetails] = useState({
@@ -54,7 +54,7 @@ export default function Trainer() {
       });
       if (!res.ok) {
         console.log('User Not found:');
-        router.push(`/complete-user`);
+        router.push(`/completeProfile`);
       }
     })();
   }, [user_id, router]);
@@ -147,14 +147,14 @@ export default function Trainer() {
             />
           </div>
           <div className='relative mb-5'>
-            <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>
+            <div className='absolute inset-y-0 start-0 flex items-start ps-2.5 pt-2 pointer-events-none'>
               <Image src={userIcon} alt='lockIcon' />
             </div>
             <textarea
               id='bio'
               name='bio'
               onChange={handleInputChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10'
+              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10 h-32'
               placeholder='Bio'
               required
             />

@@ -32,6 +32,7 @@ const SignUp = () => {
     provider: 'credentials',
     is_verified: false,
   });
+  const [error, setError] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -61,20 +62,28 @@ const SignUp = () => {
       router.push('/signin');
     } catch (err: any) {
       console.error(err.message || 'An error occurred');
+      setError('There was an error signing up.');
     }
   };
 
   const handleSignUpWithGoogle = () => {
-    signIn('google', { callbackUrl: '/dashboard' });
+    try {
+      signIn('google', { callbackUrl: '/dashboard' });
+    } catch (err: any) {
+      setError('There was an error signing up.');
+    }
   };
 
   return (
-    <div className='flex flex-wrap items-center justify-center w-full h-full'>
+    <div className='flex flex-wrap items-center justify-center w-full min-h-screen'>
       <div className='lg:basis-1/2 px-20 w-full flex flex-col justify-center gap-[20px] text-black font-desktop-text-bold-1'>
         <div>
           <Image src={WazaLogo} alt='logo' className='' />
         </div>
         <div className=' text-3xl font-semibold mb-2'>Create a New Account</div>
+        {error.length ? (
+          <div className='text-lg text-red-500'>error</div>
+        ) : null}
         <form onSubmit={handleSubmit} className='w-full mx-auto'>
           <div className='relative mb-5'>
             <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>

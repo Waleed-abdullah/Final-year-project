@@ -7,7 +7,7 @@ export function Dashboard() {
   const router = useRouter();
   const session = useSession();
   if (session.data && session.data.user.isNewUser) {
-    redirect('/complete-user');
+    redirect('/completeProfile');
   }
   useEffect(() => {
     (async () => {
@@ -31,7 +31,7 @@ export function Dashboard() {
         const data = await res.json();
         console.log('User not found:', data);
         router.push(
-          `/complete-user/${route_type}/${session.data.user.user_id}`,
+          `/completeProfile/${route_type}/${session.data.user.user_id}`,
         );
       }
     })();

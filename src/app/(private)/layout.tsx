@@ -12,7 +12,7 @@ export default async function PrivateLayout({
 }) {
   const session = await getServerSession(authOptions);
   // if (!session) {
-  //   redirect('/api/auth/signin');
+  //   redirect('signin');
   // }
 
   return <SessionProvider session={session}>{children}</SessionProvider>;

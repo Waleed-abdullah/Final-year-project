@@ -1,31 +1,43 @@
 'use client';
-import { signIn } from 'next-auth/react';
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import userIcon from '@/assets/formIcons/user.svg';
+import { UserType } from '@/src/types/auth/user';
 import wazaLogoBlack from '@/assets/wazaLogos/Wazalogo_Black.svg';
 import Image from 'next/image';
 
-export default function Trainer() {
+export default function CompleteProfilePage() {
   const router = useRouter();
-  const { user_id } = useParams<{ user_id: string }>() || { user_id: '' };
-  const [warriorDetails, setWarriorDetails] = useState({
-    user_id: user_id,
+  const { data: sessionData, status } = useSession();
+  const [userDetails, setUserDetails] = useState({
+    username: '',
+    user_type: UserType.WazaWarrior,
+    email: sessionData?.user.email || '',
+    profile_pic: sessionData?.user.image || '',
+    is_verified: sessionData?.user.is_verified || false,
+    provider: sessionData?.user.provider || '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
+  // Update userDetails with session data when it's loaded
   useEffect(() => {
-    setWarriorDetails((prevDetails) => ({
-      ...prevDetails,
-      user_id: user_id,
-    }));
-  }, [user_id]);
+    if (status === 'authenticated') {
+      setUserDetails((prevDetails) => ({
+        ...prevDetails,
+        email: sessionData.user.email || '',
+        profile_pic: sessionData.user.image || '',
+        is_verified: sessionData.user.is_verified || false,
+        provider: sessionData.user.provider || '',
+      }));
+    }
+  }, [sessionData, status]);
 
   useEffect(() => {
     (async () => {
       const res = await fetch(
-        `http://localhost:3000/api/waza_warrior?user_id=${user_id}`,
+        `http://localhost:3000/api/user?email=${sessionData?.user.email}`,
         {
           method: 'GET',
           headers: {
@@ -35,26 +47,24 @@ export default function Trainer() {
       );
       if (res.ok) {
         const data = await res.json();
-        console.log('Warrior found:', data);
-        router.push(`/dashboard`);
+        console.log('User found:', data);
+        if (data.user_type === 'Waza Trainer') {
+          router.push(`/completeProfile/wazaTrainer/${data.user_id}`);
+        } else if (data.user_type === 'Waza Warrior') {
+          router.push(`/completeProfile/wazaWarrior/${data.user_id}`);
+        }
       }
     })();
-  }, [user_id, router]);
+  }, [sessionData, router]);
 
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(`http://localhost:3000/api/user?id=${user_id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!res.ok) {
-        console.log('User Not found:');
-        router.push(`/complete-user`);
-      }
-    })();
-  }, [user_id, router]);
+  // Handle input changes for each field
+  const handleInputChange = (e: any) => {
+    const { id, value, type, checked } = e.target;
+    setUserDetails((prevDetails) => ({
+      ...prevDetails,
+      [id]: type === 'checkbox' ? checked : value,
+    }));
+  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -62,31 +72,32 @@ export default function Trainer() {
     setError('');
 
     try {
-      const response = await fetch(`http://localhost:3000/api/waza_warrior`, {
+      console.log('User details:', userDetails);
+      const response = await fetch(`http://localhost:3000/api/user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(warriorDetails),
+        body: JSON.stringify(userDetails),
       });
 
       const data = await response.json();
+      console.log(data);
       if (!response.ok) {
         throw new Error(data.message || 'Something went wrong!');
       }
-      console.log('Warrior created:', data);
-      signIn(); // Use router.navigate for Next.js 13+
-    } catch (err) {
-      // If err is an instance of Error, use its message, otherwise use a default error message
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      console.error('Error creating warrior:', errorMessage);
-      setError(errorMessage);
+      console.log('User created:', data);
+      if (data.user_type === 'Waza Warrior')
+        router.push(`completeProfile/wazaWarrior/${data.user_id}`);
+      else if (data.user_type === 'Waza Trainer')
+        router.push(`completeProfile/wazaTrainer/${data.user_id}`);
+    } catch (err: any) {
+      console.error('Error creating user:', err);
+      setError(err.message);
     } finally {
       setIsSubmitting(false);
     }
   };
-
   return (
     <>
       <div className='flex flex-col items-center justify-center min-h-screen'>
@@ -103,13 +114,24 @@ export default function Trainer() {
               type='text'
               id='username'
               name='username'
-              // onChange={handleInputChange}
+              onChange={handleInputChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10'
               placeholder='Username'
               required
             />
           </div>
-
+          <div className='relative mb-5'>
+            <select
+              id='user_type'
+              onChange={handleInputChange}
+              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-400 focus:border-yellow-400 block w-full p-2.5'
+            >
+              <option selected value={UserType.WazaWarrior}>
+                Waza Warrior
+              </option>
+              <option value={UserType.WazaTrainer}>Waza Trainer</option>
+            </select>
+          </div>
           <button
             type='submit'
             className='relative rounded-[100px] shadow-[0px_10px_10px_rgba(0,_0,_0,_0.05)] h-[30px] text-black bg-yellow-400 hover:bg-yellow-500 focus:ring-yellow-400 focus:ring-4 focus:outline-none  sm:text-base md:text-lg lg:text-xl text-color-base-black font-desktop-text-bold-1 w-full text-center'

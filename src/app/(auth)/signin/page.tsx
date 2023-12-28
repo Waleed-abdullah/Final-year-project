@@ -22,11 +22,12 @@ const SignIn = () => {
     email: '',
     password: '',
   });
+  const [error, setError] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.id]: e.target.value,
     });
   };
 
@@ -39,20 +40,28 @@ const SignIn = () => {
       });
     } catch (err: any) {
       console.error(err.message || 'An error occurred');
+      setError('There was an error Signing In.');
     }
   };
 
   const handleSignInWithGoogle = () => {
-    signIn('google', { callbackUrl: '/dashboard' });
+    try {
+      signIn('google', { callbackUrl: '/dashboard' });
+    } catch (err: any) {
+      setError('There was an error Signing In.');
+    }
   };
 
   return (
-    <div className='flex flex-wrap items-center justify-center w-full h-full'>
+    <div className='flex flex-wrap items-center justify-center w-full min-h-screen'>
       <div className='lg:basis-1/2 px-20 w-full flex flex-col justify-center gap-[20px] text-xl text-black font-desktop-text-bold-1'>
         <div>
           <Image src={WazaLogo} alt='logo' className='' />
         </div>
         <div className='text-3xl font-semibold mb-2'>Sign In</div>
+        {error.length ? (
+          <div className='text-lg text-red-500'>error</div>
+        ) : null}
         <form onSubmit={handleSubmit} className='w-full mx-auto'>
           <div className='relative mb-5'>
             <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>
