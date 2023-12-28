@@ -53,8 +53,11 @@ export const fetchSuggestions = async (query: string) => {
       {
         method: 'GET',
         headers: {
-          'x-app-id': `${process.env.NUTRITIONIX_APP_ID}`,
-          'x-app-key': `${process.env.NUTRITIONIX_API_KEY}`,
+          'x-app-id': `${process.env.NUTRITIONIX_APP_ID || 'afc14df9'}`,
+          'x-app-key': `${
+            process.env.NUTRITIONIX_API_KEY ||
+            '9b4c341882cf7021cee2e2cc4b79ba2d'
+          }`,
           'x-remote-user-id': '0',
           'Content-Type': 'application/json',
         },

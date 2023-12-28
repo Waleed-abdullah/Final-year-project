@@ -19,7 +19,6 @@ import Dropdown from '@/assets/Diet/dropdown.svg';
 import Delete from '@/assets/Diet/delete.svg';
 import Search from '@/assets/Diet/search.svg';
 import Add from '@/assets/Diet/add.svg';
-import { it } from 'node:test';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');
@@ -282,8 +281,49 @@ export default function DietPage() {
                   type='text'
                   placeholder='Search for food items'
                   className='flex-grow ml-2 focus:outline-none'
+                  value={query}
+                  onChange={handleQueryChange}
                 />
               </div>
+              {suggestions && suggestions.branded && (
+                <div className='p-4 rounded-lg bg-black w-full mt-4 max-h-64 overflow-y-scroll'>
+                  {suggestions.branded.map((suggestion) => (
+                    <div className='flex flex-row justify-between items-center py-2 px-4 border-2 my-3 border-white hover:border-yellow-400 rounded-lg text-white'>
+                      <div className='flex flex-row items-center gap-1 w-4/12 '>
+                        <Image
+                          src={suggestion.photo.thumb}
+                          width={30}
+                          height={30}
+                          alt='photo'
+                          className='rounded-lg'
+                        />
+                        <p className='text-sm font-bold'>
+                          {suggestion.food_name}
+                        </p>
+                      </div>
+                      <div className='flex flex-row justify-between  w-7/12 '>
+                        <div className='flex flex-col'>
+                          <p className='text-sm font-bold text-yellow-400'>
+                            {'Calories'}
+                          </p>
+                          <p className='text-sm font-bold text-white'>
+                            {suggestion.nf_calories}kcal
+                          </p>
+                        </div>
+                        <div className='flex flex-col'>
+                          <p className='text-sm font-bold text-green-400'>
+                            {'Quantity'}
+                          </p>
+                          <p className='text-sm font-bold text-white-400'>
+                            {`${suggestion.serving_qty} ${suggestion.serving_unit}`}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <div className='flex flex-row justify-start gap-3 mt-4'>
                 <div
                   className={`px-4 py-1  rounded-xl ${
