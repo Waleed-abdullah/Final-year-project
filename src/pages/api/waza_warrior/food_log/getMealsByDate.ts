@@ -30,24 +30,11 @@ export default async function handler(
           meal_types: true,
         },
       });
-      const mealsByType: MealsByType = meals.reduce(
-        (acc, meal) => {
-          const mealTypeName = meal.meal_types.name;
-          if (!acc[mealTypeName as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'])
-            acc[mealTypeName as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'] =
-              [];
-          acc[mealTypeName as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'].push(
-            meal,
-          );
-          return acc;
-        },
-        {
-          Breakfast: [],
-          Lunch: [],
-          Dinner: [],
-          Snack: [],
-        } as MealsByType,
-      );
+      const mealsByType: MealsByType = meals.reduce((acc, meal) => {
+        const mealTypeName = meal.meal_types.name;
+        acc[mealTypeName as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'] = meal;
+        return acc;
+      }, {} as MealsByType);
 
       res.status(200).json(mealsByType);
     } catch (error) {

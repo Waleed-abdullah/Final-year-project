@@ -30,8 +30,15 @@ export interface Meal {
 }
 
 export interface MealsByType {
-  Breakfast: Meal[];
-  Lunch: Meal[];
-  Dinner: Meal[];
-  Snack: Meal[];
+  Breakfast: Meal;
+  Lunch: Meal;
+  Dinner: Meal;
+  Snack: Meal;
+}
+
+export interface SelectedFoods {
+  Breakfast: Meal;
+  Lunch: Meal;
+  Dinner: Meal;
+  Snack: Meal;
 }

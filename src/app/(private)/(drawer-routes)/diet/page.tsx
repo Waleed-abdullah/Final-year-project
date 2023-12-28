@@ -9,6 +9,7 @@ import {
 } from '../../../../types/app/(private)/(drawer-routes)/diet';
 import { FoodItem, MealsByType } from '@/src/types/page/waza_warrior/food_log';
 import {
+  createMeal,
   fetchNutrients,
   fetchSavedMeals,
   fetchSuggestions,
@@ -22,17 +23,21 @@ import Add from '@/assets/Diet/add.svg';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');
+  const [warriorId, setWarriorId] = useState(
+    '37914f58-6fe8-46dd-a20b-06f3a1cd0e8e',
+  ); // Replace with actual warrior ID
   const [selectedFoods, setSelectedFoods] = useState<
     Map<string, { item: CommonFoodItem | BrandedFoodItem; count: number }>
   >(new Map());
   const [suggestions, setSuggestions] =
     useState<NutritionixInstantEndpoint | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [savedMeals, setSavedMeals] = useState<MealsByType | null>(null);
   const [mealType, setMealType] = useState<
     'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'
   >('Breakfast');
+
+  const [savedMeals, setSavedMeals] = useState<MealsByType | null>(null);
+
   const [mealDate, setMealDate] = useState(
     new Date().toISOString().split('T')[0],
   );
@@ -56,14 +61,12 @@ export default function DietPage() {
 
     // Collect all food items across meal types
     const allFoodItems = [];
-    for (const mealsArray of Object.values(meals)) {
-      for (const meal of mealsArray) {
-        allFoodItems.push(
-          ...meal.meal_food_items.map((item: FoodItem) => {
-            return `${item.quantity} ${item.unit} ${item.food_item_identifier}`;
-          }),
-        );
-      }
+    for (const meal of Object.values(meals)) {
+      allFoodItems.push(
+        ...meal.meal_food_items.map((item: FoodItem) => {
+          return `${item.quantity} ${item.unit} ${item.food_item_identifier}`;
+        }),
+      );
     }
 
     // Create a unique query string for all items
@@ -72,22 +75,21 @@ export default function DietPage() {
       // Fetch nutritional details for all items in one API call
       const allItemNutrients: NutritionixNutrientsEndpoint =
         await fetchNutrients(queryString);
-      // Iterate through the meals to assign the nutrient details
-      for (const [mealType, mealsArray] of Object.entries(meals)) {
-        for (const meal of mealsArray) {
-          for (const item of meal.meal_food_items) {
-            const nutrientDetails = allItemNutrients.foods.find(
-              (food) =>
-                food.food_name === item.food_item_identifier &&
-                food.serving_qty == item.quantity,
-            );
 
-            if (nutrientDetails) {
-              item.nutrients = { foods: [] };
-              item.nutrients.foods[0] = nutrientDetails;
-              mealTypeCalories[mealType as keyof typeof mealTypeCalories] +=
-                nutrientDetails.nf_calories;
-            }
+      for (const [mealType, meal] of Object.entries(meals)) {
+        for (const item of meal.meal_food_items) {
+          const nutrientDetails = allItemNutrients.foods.find(
+            (food) =>
+              item.food_item_identifier
+                .toLowerCase()
+                .includes(food.food_name.toLowerCase()) &&
+              food.serving_qty == item.quantity,
+          );
+          if (nutrientDetails) {
+            item.nutrients = { foods: [] };
+            item.nutrients.foods[0] = nutrientDetails;
+            mealTypeCalories[mealType as keyof typeof mealTypeCalories] +=
+              nutrientDetails.nf_calories;
           }
         }
       }
@@ -99,8 +101,6 @@ export default function DietPage() {
   }, []);
 
   useEffect(() => {
-    const warriorId = '37914f58-6fe8-46dd-a20b-06f3a1cd0e8e'; // Replace with actual warrior ID
-
     const fetchData = async () => {
       try {
         const meals: MealsByType = await fetchSavedMeals(
@@ -118,9 +118,10 @@ export default function DietPage() {
       }
     };
     fetchData();
-  }, [mealDate, processMeals]);
+  }, [mealDate, processMeals, warriorId]);
 
   const debounceSearch = useCallback((query: string) => {
+    setSuggestions(null);
     setTimeout(async () => {
       if (query.length < 3) return;
       setIsLoading(true);
@@ -152,13 +153,7 @@ export default function DietPage() {
       }
     });
   };
-  const handleMealTypeChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    setMealType(
-      event.target.value as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack',
-    );
-  };
+
   const handleMealDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMealDate(event.target.value);
   };
@@ -212,21 +207,7 @@ export default function DietPage() {
     //       ))}
     //     </ul>
     //   )}
-    //   {selectedFoods.size > 0 && (
-    //     <div className='mt-4'>
-    //       <h3 className='font-bold'>Selected Foods:</h3>
-    //       <ul>
-    //         {Array.from(selectedFoods.values()).map(
-    //           ({ item, count }, index) => (
-    //             <li key={index} className='p-2 border-b border-gray-300'>
-    //               {item.food_name} - {count} x {item.serving_qty}{' '}
-    //               {item.serving_unit}
-    //             </li>
-    //           ),
-    //         )}
-    //       </ul>
-    //     </div>
-    //   )}
+
     //   {/* Meal Type Selector */}
     //   <select
     //     value={mealType}
@@ -286,9 +267,13 @@ export default function DietPage() {
                 />
               </div>
               {suggestions && suggestions.branded && (
-                <div className='p-4 rounded-lg bg-black w-full mt-4 max-h-64 overflow-y-scroll'>
-                  {suggestions.branded.map((suggestion) => (
-                    <div className='flex flex-row justify-between items-center py-2 px-4 border-2 my-3 border-white hover:border-yellow-400 rounded-lg text-white'>
+                <div className='p-4 rounded-2xl bg-black w-full mt-4 max-h-72 overflow-y-scroll scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-100'>
+                  {suggestions.branded.map((suggestion, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => handleFoodSelect(suggestion)}
+                      className='flex flex-row justify-between items-center py-2 px-4 border-2 my-3 border-white hover:border-yellow-400 rounded-lg text-white'
+                    >
                       <div className='flex flex-row items-center gap-1 w-4/12 '>
                         <Image
                           src={suggestion.photo.thumb}
@@ -321,6 +306,24 @@ export default function DietPage() {
                       </div>
                     </div>
                   ))}
+                </div>
+              )}
+              {selectedFoods.size > 0 && (
+                <div className='mt-4'>
+                  <h3 className='font-bold'>Selected Foods:</h3>
+                  <ul>
+                    {Array.from(selectedFoods.values()).map(
+                      ({ item, count }, index) => (
+                        <li
+                          key={index}
+                          className='p-2 border-b border-gray-300'
+                        >
+                          {item.food_name} - {count} x {item.serving_qty}{' '}
+                          {item.serving_unit}
+                        </li>
+                      ),
+                    )}
+                  </ul>
                 </div>
               )}
 
@@ -358,7 +361,12 @@ export default function DietPage() {
                   <p className='text-white font-semibold'>Snack</p>
                 </div>
               </div>
-              <div className='py-3 px-4 rounded-3xl bg-yellow-400 flex flex-row mt-4 gap-2'>
+              <div
+                className='py-3 px-4 rounded-3xl bg-yellow-400 flex flex-row mt-4 gap-2'
+                onClick={() =>
+                  createMeal(warriorId, mealType, mealDate, selectedFoods)
+                }
+              >
                 <Image src={Add} width={24} height={24} alt='calender' />
                 <p className='text-white font-semibold'>Add Food</p>
               </div>
@@ -396,50 +404,48 @@ export default function DietPage() {
                     <div className='border-black/10 border mt-5' />
                     {savedMeals[
                       mealType as keyof typeof totalMealTypeCalories
-                    ]?.map((meal) =>
-                      meal.meal_food_items.map((item) => {
-                        return (
-                          <div
-                            className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
-                            key={item.food_item_identifier}
-                          >
-                            <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
-                              {item.nutrients && (
-                                <Image
-                                  src={item.nutrients.foods[0].photo.thumb}
-                                  width={24}
-                                  height={24}
-                                  alt='calender'
-                                />
-                              )}
-                              <p className='text-sm font-bold   text-lg'>
-                                {item.food_item_identifier}
-                              </p>
-                            </div>
-                            <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
-                              <div className='rounded-lg bg-gray-200  py-1 px-2'>
-                                Qty
-                              </div>
-                              <p className='text-sm font-bold   text-lg'>
-                                {item.quantity.toString()}
-                              </p>
-                            </div>
-                            <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
-                              {item.nutrients
-                                ? item.nutrients.foods[0].nf_calories
-                                : 0}
-                              <span className='font-normal text-sm '>kcal</span>
+                    ].meal_food_items.map((item) => {
+                      return (
+                        <div
+                          className='flex flex-row justify-between items-center p-2 border border-black/10 mt-5 rounded-lg'
+                          key={item.food_item_identifier}
+                        >
+                          <div className='flex flex-row items-center gap-1 w-4/12 min-w-max'>
+                            {item.nutrients && (
+                              <Image
+                                src={item.nutrients.foods[0].photo.thumb}
+                                width={24}
+                                height={24}
+                                alt='calender'
+                              />
+                            )}
+                            <p className='text-sm font-bold   text-lg'>
+                              {item.food_item_identifier}
                             </p>
-                            <Image
-                              src={Delete}
-                              width={20}
-                              height={20}
-                              alt='profile-pic'
-                            />
                           </div>
-                        );
-                      }),
-                    )}
+                          <div className='flex flex-row items-center gap-1 w-3/12 min-w-max'>
+                            <div className='rounded-lg bg-gray-200  py-1 px-2'>
+                              Qty
+                            </div>
+                            <p className='text-sm font-bold   text-lg'>
+                              {item.quantity.toString()}
+                            </p>
+                          </div>
+                          <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
+                            {item.nutrients
+                              ? item.nutrients.foods[0].nf_calories
+                              : 0}
+                            <span className='font-normal text-sm '>kcal</span>
+                          </p>
+                          <Image
+                            src={Delete}
+                            width={20}
+                            height={20}
+                            alt='profile-pic'
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 ))}
             </div>

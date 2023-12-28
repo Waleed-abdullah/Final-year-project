@@ -28,7 +28,10 @@ export default async function handler(
   if (!warriorId || !isValidID(warriorId)) {
     return res.status(400).json({ message: 'Invalid warrior ID.' });
   }
-  if (!mealType || !isValidID(mealType)) {
+  if (
+    !mealType ||
+    !['Breakfast', 'Lunch', 'Dinner', 'Snack'].includes(mealType)
+  ) {
     return res.status(400).json({ message: 'Invalid meal type.' });
   }
   if (!mealDate) {
@@ -42,14 +45,27 @@ export default async function handler(
 
   try {
     await prisma.$transaction(async (prismaTransaction) => {
+      // Fetch the meal_type_id based on the mealType name
+      const mealTypeRecord = await prismaTransaction.meal_types.findFirst({
+        where: { name: mealType },
+      });
+
+      if (!mealTypeRecord) {
+        throw new Error('Invalid meal type name.');
+      }
+
+      const mealTypeId = mealTypeRecord.meal_type_id;
+
+      // Create the meal
       const newMeal = await prismaTransaction.meals.create({
         data: {
           warrior_id: warriorId,
-          meal_type_id: mealType,
+          meal_type_id: mealTypeId,
           meal_date: new Date(mealDate),
         },
       });
 
+      // Create meal food items
       await Promise.all(
         foodItems.map((foodItem) =>
           prismaTransaction.meal_food_items.create({
