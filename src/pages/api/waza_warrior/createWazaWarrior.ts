@@ -4,6 +4,8 @@ import { sendErrorResponse } from '@/src/utils/errorHandler';
 
 type CreateWazaWarriorRequestBody = {
   user_id: string;
+  age: number;
+  caloricGoal: number;
 };
 
 export default async function createWazaWarrior(
@@ -11,7 +13,8 @@ export default async function createWazaWarrior(
   res: NextApiResponse,
 ) {
   try {
-    const { user_id }: CreateWazaWarriorRequestBody = req.body;
+    const { user_id, age, caloricGoal }: CreateWazaWarriorRequestBody =
+      req.body;
 
     if (!user_id || typeof user_id !== 'string') {
       return sendErrorResponse(
@@ -51,6 +54,8 @@ export default async function createWazaWarrior(
     const newWazaWarrior = await prisma.waza_warriors.create({
       data: {
         user_id,
+        age,
+        caloric_goal: caloricGoal,
       },
     });
 
