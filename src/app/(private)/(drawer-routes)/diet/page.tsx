@@ -178,7 +178,7 @@ export default function DietPage() {
 
     return { meals, mealTypeCalories };
   }, []);
-  const fetchData = async () => {
+  const fetchMeals = async () => {
     try {
       if (!warrior) return;
       const meals: MealsByType = await fetchSavedMeals(
@@ -195,8 +195,8 @@ export default function DietPage() {
     }
   };
   useEffect(() => {
-    fetchData();
-  }, [mealDate, processMeals, warrior, fetchData]);
+    fetchMeals();
+  }, [mealDate, processMeals, warrior, fetchMeals]);
 
   const debounceSearch = useCallback((query: string) => {
     setSuggestions(null);
@@ -438,7 +438,7 @@ export default function DietPage() {
                     mealDate,
                     selectedFoods,
                   );
-                  fetchData();
+                  fetchMeals();
                 }}
               >
                 <Image src={Add} width={24} height={24} alt='calender' />
