@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { UserType } from '@/src/types/auth/user';
+import { UserType } from '@/src/types/page/auth/user';
 import WazaLogo from '@/assets/wazaLogos/Wazalogo_Black.svg';
 import trainingImage from '@/assets/signUpPage/warrior/hero-image_1.png';
 import mailIcon from '@/assets/formIcons/mail.svg';
