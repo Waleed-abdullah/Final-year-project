@@ -178,25 +178,26 @@ export default function DietPage() {
 
     return { meals, mealTypeCalories };
   }, []);
-  const fetchMeals = async () => {
-    try {
-      if (!warrior) return;
-      const meals: MealsByType = await fetchSavedMeals(
-        warrior.warrior_id,
-        new Date(mealDate),
-      );
 
-      const { meals: processedMeals, mealTypeCalories } =
-        await processMeals(meals);
-      setSavedMeals(processedMeals);
-      setTotalMealTypeCalories(mealTypeCalories);
-    } catch (error) {
-      console.error('Error fetching saved meals:', error);
-    }
-  };
   useEffect(() => {
+    const fetchMeals = async () => {
+      try {
+        if (!warrior) return;
+        const meals: MealsByType = await fetchSavedMeals(
+          warrior.warrior_id,
+          new Date(mealDate),
+        );
+
+        const { meals: processedMeals, mealTypeCalories } =
+          await processMeals(meals);
+        setSavedMeals(processedMeals);
+        setTotalMealTypeCalories(mealTypeCalories);
+      } catch (error) {
+        console.error('Error fetching saved meals:', error);
+      }
+    };
     fetchMeals();
-  }, [mealDate, processMeals, warrior, fetchMeals]);
+  }, [warrior, mealDate, processMeals]);
 
   const debounceSearch = useCallback((query: string) => {
     setSuggestions(null);
@@ -438,7 +439,6 @@ export default function DietPage() {
                     mealDate,
                     selectedFoods,
                   );
-                  fetchMeals();
                 }}
               >
                 <Image src={Add} width={24} height={24} alt='calender' />
