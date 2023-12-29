@@ -26,18 +26,52 @@ import Tick from '@/assets/Dashboard/tick.svg';
 import Cross from '@/assets/Dashboard/cross.svg';
 
 import DoughnutChart from '@/components/DoughnutChart/DoughnutChart';
+import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');
-  const [warriorId, setWarriorId] = useState(
-    '37914f58-6fe8-46dd-a20b-06f3a1cd0e8e',
-  );
+  const [warrior, setWarrior] = useState<Warrior | null>(null);
+  const router = useRouter();
+  const session = useSession();
+  useEffect(() => {
+    if (!session.data) return;
+
+    if (session.data.user.isNewUser) {
+      router.push('/complete-user');
+    }
+
+    if (session.data.user.user_type === 'Waza Trainer') {
+      router.push(`/api/auth/signin`);
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/waza_warrior/?user_id=${session.data.user.user_id}`,
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          },
+        );
+        const fetchedData: Warrior = await res.json();
+        setWarrior(fetchedData);
+        console.log(fetchedData);
+      } catch (error) {
+        console.error('Error fetching warrior data:', error);
+      }
+    };
+
+    fetchData();
+  }, [session, router]);
 
   const [macros, setMacros] = useState({
-    protein: 10,
-    carbs: 20,
-    fats: 30,
-    calories: 40,
+    protein: 0,
+    carbs: 0,
+    fats: 0,
+    calories: 0,
   });
   const chartData = useMemo(
     () => ({
@@ -96,7 +130,7 @@ export default function DietPage() {
     }
 
     // Create a unique query string for all items
-    const queryString = allFoodItems.join('; ');
+    const queryString = allFoodItems.join(';');
     try {
       // Fetch nutritional details for all items in one API call
       const allItemNutrients: NutritionixNutrientsEndpoint =
@@ -126,16 +160,10 @@ export default function DietPage() {
       );
 
       setMacros(totals);
-
+      let j = 0;
       for (const [mealType, meal] of Object.entries(meals)) {
         for (const item of meal.meal_food_items) {
-          const nutrientDetails = allItemNutrients.foods.find(
-            (food) =>
-              item.food_item_identifier
-                .toLowerCase()
-                .includes(food.food_name.toLowerCase()) &&
-              food.serving_qty == item.quantity,
-          );
+          const nutrientDetails = allItemNutrients.foods[j++];
           if (nutrientDetails) {
             item.nutrients = { foods: [] };
             item.nutrients.foods[0] = nutrientDetails;
@@ -150,25 +178,25 @@ export default function DietPage() {
 
     return { meals, mealTypeCalories };
   }, []);
+  const fetchData = async () => {
+    try {
+      if (!warrior) return;
+      const meals: MealsByType = await fetchSavedMeals(
+        warrior.warrior_id,
+        new Date(mealDate),
+      );
 
+      const { meals: processedMeals, mealTypeCalories } =
+        await processMeals(meals);
+      setSavedMeals(processedMeals);
+      setTotalMealTypeCalories(mealTypeCalories);
+    } catch (error) {
+      console.error('Error fetching saved meals:', error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const meals: MealsByType = await fetchSavedMeals(
-          warriorId,
-          new Date(mealDate),
-        );
-
-        const { meals: processedMeals, mealTypeCalories } =
-          await processMeals(meals);
-        setSavedMeals(processedMeals);
-        setTotalMealTypeCalories(mealTypeCalories);
-      } catch (error) {
-        console.error('Error fetching saved meals:', error);
-      }
-    };
     fetchData();
-  }, [mealDate, processMeals, warriorId]);
+  }, [mealDate, processMeals, warrior]);
 
   const debounceSearch = useCallback((query: string) => {
     setSuggestions(null);
@@ -230,7 +258,7 @@ export default function DietPage() {
           </label>
           <div className='border-2 rounded-3xl py-1 px-3 border-black/10 flex flex-row gap-2 items-center'>
             <Image src={Dropdown} width={20} height={20} alt='profile-pic' />
-            <p className='text-sm font-medium'>Waleed Abdullah</p>
+            <p className='text-sm font-medium'>{warrior?.users?.name}</p>
             <Image
               src={'https://robohash.org/asdasd'}
               width={40}
@@ -368,7 +396,7 @@ export default function DietPage() {
 
               <div className='flex flex-row justify-start gap-3 mt-4'>
                 <div
-                  className={`px-4 py-1  rounded-xl ${
+                  className={`px-4 py-1  rounded-xl cursor-pointer ${
                     mealType === 'Breakfast' ? 'bg-sky-400' : 'bg-gray-400'
                   }`}
                   onClick={() => setMealType('Breakfast')}
@@ -376,7 +404,7 @@ export default function DietPage() {
                   <p className='text-white font-semibold'>Breakfast</p>
                 </div>
                 <div
-                  className={`px-4 py-1  rounded-xl ${
+                  className={`px-4 py-1  rounded-xl cursor-pointer ${
                     mealType === 'Lunch' ? 'bg-sky-400' : 'bg-gray-400'
                   }`}
                   onClick={() => setMealType('Lunch')}
@@ -384,7 +412,7 @@ export default function DietPage() {
                   <p className='text-white font-semibold'>Lunch</p>
                 </div>
                 <div
-                  className={`px-4 py-1  rounded-xl ${
+                  className={`px-4 py-1  rounded-xl cursor-pointer ${
                     mealType === 'Dinner' ? 'bg-sky-400' : 'bg-gray-400'
                   }`}
                   onClick={() => setMealType('Dinner')}
@@ -392,7 +420,7 @@ export default function DietPage() {
                   <p className='text-white font-semibold'>Dinner</p>
                 </div>
                 <div
-                  className={`px-4 py-1  rounded-xl ${
+                  className={`px-4 py-1  rounded-xl cursor-pointer ${
                     mealType === 'Snack' ? 'bg-sky-400' : 'bg-gray-400'
                   }`}
                   onClick={() => setMealType('Snack')}
@@ -401,10 +429,17 @@ export default function DietPage() {
                 </div>
               </div>
               <div
-                className='py-3 px-4 rounded-3xl bg-yellow-400 flex flex-row mt-4 gap-2'
-                onClick={() =>
-                  createMeal(warriorId, mealType, mealDate, selectedFoods)
-                }
+                className='py-3 px-4 rounded-3xl bg-yellow-400 flex flex-row mt-4 gap-2 cursor-pointer'
+                onClick={async () => {
+                  if (!warrior) return;
+                  await createMeal(
+                    warrior.warrior_id,
+                    mealType,
+                    mealDate,
+                    selectedFoods,
+                  );
+                  fetchData();
+                }}
               >
                 <Image src={Add} width={24} height={24} alt='calender' />
                 <p className='text-white font-semibold'>Add Food</p>

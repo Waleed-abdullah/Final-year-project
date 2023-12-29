@@ -57,6 +57,7 @@ export function Dashboard() {
         );
         const fetchedData: Warrior = await res.json();
         setWarrior(fetchedData);
+        console.log(fetchedData);
       } catch (error) {
         console.error('Error fetching warrior data:', error);
       }
@@ -82,7 +83,7 @@ export function Dashboard() {
           );
         }
 
-        const query: string = allFoodItems.join(', ');
+        const query: string = allFoodItems.join(';');
 
         if (!query.length) return;
         const nutrients: NutritionixNutrientsEndpoint =
@@ -164,7 +165,10 @@ export function Dashboard() {
                   {macros.calories.toFixed(0)}{' '}
                 </p>
                 <p className='bg-yellow-400 py-1 px-5 rounded-3xl  text-md'>
-                  <span className='font-bold'>/ 1500</span> kcal
+                  <span className='font-bold'>
+                    / {warrior?.caloric_goal ?? 1500}
+                  </span>{' '}
+                  kcal
                 </p>
               </div>
             </div>
@@ -229,7 +233,7 @@ export function Dashboard() {
             </div>
             <div
               aria-label='Market place'
-              className='bg-white  rounded-lg gap-2 px-10 py-20 shadow flex justify-center items-center min-w-fit flex-1'
+              className='bg-white  rounded-lg gap-2 px-10 py-20 shadow flex justify-center items-center min-w-fit flex-1 cursor-pointer'
             >
               <p className='text-xl  font-semibold'>Trainer Marketplace</p>
             </div>
