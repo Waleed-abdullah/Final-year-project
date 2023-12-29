@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import wazaLogo from '@/assets/Waza_logo.svg';
+import wazaLogo from '@/assets/wazaLogos/WazaLogo_yello_white.svg';
 
 export default function LandingPage() {
   return (

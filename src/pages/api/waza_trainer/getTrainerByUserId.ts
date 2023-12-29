@@ -20,16 +20,62 @@ export default async function getTrainerByUserId(
       where: { user_id: user_id },
       select: {
         trainer_id: true,
-        user_id: true,
         hourly_rate: true,
         bio: true,
         location: true,
-        availability: true,
-        exercise: true,
-        trainer_certifications: true,
-        trainer_specializations: true,
-        reviews: true,
-        session: true,
+        experience: true,
+        users: {
+          select: {
+            user_id: true,
+            name: true,
+            profile_pic: true,
+            age: true,
+            gender: true,
+          },
+        },
+        trainer_specializations: {
+          select: {
+            specializations: {
+              select: {
+                specialization_name: true,
+              },
+            },
+          },
+        },
+        trainer_certifications: {
+          select: {
+            certifications: {
+              select: {
+                certification_name: true,
+              },
+            },
+          },
+        },
+        reviews: {
+          select: {
+            review_id: true,
+            rating: true,
+            comment: true,
+            waza_warriors: {
+              select: {
+                users: {
+                  select: {
+                    name: true,
+                    profile_pic: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        availability: {
+          select: {
+            availability_id: true,
+            start_time: true,
+            end_time: true,
+            weekday: true,
+          },
+        },
       },
     });
 

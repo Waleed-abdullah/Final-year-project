@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import createWazaWarrior from './createWazaWarrior';
-import getWazaWarrior from './getWazaWrrior';
+import getWazaWarrior from './getWazaWarrior';
 import deleteWazaWarrior from './deleteWazaWarrior';
 import getWarriorByUserId from './getWarriorByUserId';
 
