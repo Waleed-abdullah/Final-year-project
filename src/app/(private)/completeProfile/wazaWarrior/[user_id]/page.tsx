@@ -3,6 +3,8 @@ import { signIn } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import userIcon from '@/assets/formIcons/user.svg';
+import ageIcon from '@/assets/formIcons/age.svg';
+import calGoalIcon from '@/assets/formIcons/calories.svg';
 import wazaLogoBlack from '@/assets/wazaLogos/Wazalogo_Black.svg';
 import Image from 'next/image';
 
@@ -97,21 +99,7 @@ export default function CompleteWarriorProfile() {
           </div>
           <div className='relative mb-5'>
             <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>
-              <Image src={userIcon} alt='userIcon' />
-            </div>
-            <input
-              type='text'
-              id='name'
-              name='name'
-              // onChange={handleInputChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10'
-              placeholder='Username'
-              required
-            />
-          </div>
-          <div className='relative mb-5'>
-            <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>
-              <Image src={userIcon} alt='userIcon' />
+              <Image src={ageIcon} width={25} height={25} alt='userIcon' />
             </div>
             <input
               type='number'
@@ -119,7 +107,21 @@ export default function CompleteWarriorProfile() {
               name='age'
               // onChange={handleInputChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10'
-              placeholder='Username'
+              placeholder='Age'
+              required
+            />
+          </div>
+          <div className='relative mb-5'>
+            <div className='absolute inset-y-0 start-0 flex items-center ps-2 pointer-events-none'>
+              <Image src={calGoalIcon} width={30} height={25} alt='userIcon' />
+            </div>
+            <input
+              type='number'
+              id='goals'
+              name='goals'
+              // onChange={handleInputChange}
+              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10'
+              placeholder='Caloric Goal'
               required
             />
           </div>

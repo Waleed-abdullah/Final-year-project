@@ -3,6 +3,9 @@ import { signIn } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import userIcon from '@/assets/formIcons/user.svg';
+import hourlyRateIcon from '@/assets/formIcons/hourly-rate.svg';
+import locationIcon from '@/assets/formIcons/location.svg';
+import bioIcon from '@/assets/formIcons/resume.svg';
 import wazaLogoBlack from '@/assets/wazaLogos/Wazalogo_Black.svg';
 import Image from 'next/image';
 
@@ -134,7 +137,12 @@ export default function CompleteTrainerProfile() {
           </div>
           <div className='relative mb-5'>
             <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>
-              <Image src={userIcon} alt='lockIcon' />
+              <Image
+                src={hourlyRateIcon}
+                width={25}
+                height={25}
+                alt='lockIcon'
+              />
             </div>
             <input
               type='number'
@@ -148,7 +156,7 @@ export default function CompleteTrainerProfile() {
           </div>
           <div className='relative mb-5'>
             <div className='absolute inset-y-0 start-0 flex items-start ps-2.5 pt-2 pointer-events-none'>
-              <Image src={userIcon} alt='lockIcon' />
+              <Image src={bioIcon} width={25} height={25} alt='lockIcon' />
             </div>
             <textarea
               id='bio'
@@ -161,7 +169,7 @@ export default function CompleteTrainerProfile() {
           </div>
           <div className='relative mb-5'>
             <div className='absolute inset-y-0 start-0 flex items-center ps-2.5 pointer-events-none'>
-              <Image src={userIcon} alt='lockIcon' />
+              <Image src={locationIcon} width={25} height={25} alt='lockIcon' />
             </div>
             <input
               type='text'
