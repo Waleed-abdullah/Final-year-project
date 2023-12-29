@@ -2,7 +2,6 @@
 import { signIn } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import userIcon from '@/assets/formIcons/user.svg';
 import ageIcon from '@/assets/formIcons/age.svg';
 import calGoalIcon from '@/assets/formIcons/calories.svg';
 import wazaLogoBlack from '@/assets/wazaLogos/Wazalogo_Black.svg';
@@ -58,6 +57,15 @@ export default function CompleteWarriorProfile() {
     })();
   }, [user_id, router]);
 
+  const handleInputChange = (e: any) => {
+    console.log(typeof e.target.value);
+    const { id, value } = e.target;
+    setWarriorDetails((prevDetails) => ({
+      ...prevDetails,
+      [id]: Number(value),
+    }));
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -77,7 +85,7 @@ export default function CompleteWarriorProfile() {
         throw new Error(data.message || 'Something went wrong!');
       }
       console.log('Warrior created:', data);
-      signIn(); // Use router.navigate for Next.js 13+
+      router.push('/dashboard');
     } catch (err) {
       // If err is an instance of Error, use its message, otherwise use a default error message
       const errorMessage =
@@ -105,7 +113,9 @@ export default function CompleteWarriorProfile() {
               type='number'
               id='age'
               name='age'
-              // onChange={handleInputChange}
+              min={5}
+              max={120}
+              onChange={handleInputChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10'
               placeholder='Age'
               required
@@ -119,7 +129,8 @@ export default function CompleteWarriorProfile() {
               type='number'
               id='goals'
               name='goals'
-              // onChange={handleInputChange}
+              min={0}
+              onChange={handleInputChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10'
               placeholder='Caloric Goal'
               required

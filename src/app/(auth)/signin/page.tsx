@@ -35,7 +35,7 @@ const SignIn = () => {
     e.preventDefault();
     try {
       signIn('credentials', {
-        redirect: true,
+        callbackUrl: '/dashboard',
         ...formData,
       });
     } catch (err: any) {

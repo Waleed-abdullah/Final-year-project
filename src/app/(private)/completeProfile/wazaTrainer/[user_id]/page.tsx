@@ -63,10 +63,10 @@ export default function CompleteTrainerProfile() {
   }, [user_id, router]);
 
   const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
+    const { id, value } = e.target;
     setTrainerDetails((prevDetails) => ({
       ...prevDetails,
-      [name]: value,
+      [id]: value,
     }));
   };
 
@@ -101,7 +101,7 @@ export default function CompleteTrainerProfile() {
         throw new Error(data.message || 'Something went wrong!');
       }
       console.log('Trainer created:', data);
-      signIn(); // Use router.navigate for Next.js 13+
+      router.push('/dashboard');
     } catch (err) {
       // If err is an instance of Error, use its message, otherwise use a default error message
       const errorMessage =

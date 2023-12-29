@@ -11,15 +11,18 @@ export function Dashboard() {
   }
   useEffect(() => {
     (async () => {
-      let route_type = '';
+      let apiRouteType: string = '';
+      let pageRouteType: string;
       if (!session.data) return;
-      else if (session.data.user.user_type === 'Waza Trainer')
-        route_type = 'waza_trainer';
-      else if (session.data.user.user_type === 'Waza Warrior')
-        route_type = 'waza_warrior';
-      else return;
+      else if (session.data.user.user_type === 'Waza Trainer') {
+        apiRouteType = 'waza_trainer';
+        pageRouteType = 'wazaTrainer';
+      } else if (session.data.user.user_type === 'Waza Warrior') {
+        apiRouteType = 'waza_warrior';
+        pageRouteType = 'wazaWarrior';
+      } else return;
       const res = await fetch(
-        `http://localhost:3000/api/${route_type}/?user_id=${session.data.user.user_id}`,
+        `http://localhost:3000/api/${apiRouteType}/?user_id=${session.data.user.user_id}`,
         {
           method: 'GET',
           headers: {
@@ -31,7 +34,7 @@ export function Dashboard() {
         const data = await res.json();
         console.log('User not found:', data);
         router.push(
-          `/completeProfile/${route_type}/${session.data.user.user_id}`,
+          `/completeProfile/${pageRouteType}/${session.data.user.user_id}`,
         );
       }
     })();

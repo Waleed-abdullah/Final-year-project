@@ -62,7 +62,7 @@ const SignUp = () => {
       router.push('/signin');
     } catch (err: any) {
       console.error(err.message || 'An error occurred');
-      setError('There was an error signing up.');
+      setError(err.message);
     }
   };
 
@@ -70,7 +70,7 @@ const SignUp = () => {
     try {
       signIn('google', { callbackUrl: '/dashboard' });
     } catch (err: any) {
-      setError('There was an error signing up.');
+      setError(err.message);
     }
   };
 
@@ -82,7 +82,7 @@ const SignUp = () => {
         </div>
         <div className=' text-3xl font-semibold mb-2'>Create a New Account</div>
         {error.length ? (
-          <div className='text-lg text-red-500'>error</div>
+          <div className='text-lg text-red-500'>{error}</div>
         ) : null}
         <form onSubmit={handleSubmit} className='w-full mx-auto'>
           <div className='relative mb-5'>
@@ -94,7 +94,7 @@ const SignUp = () => {
               id='username'
               onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block  focus:border-yellow-400 w-full p-2 ps-10'
-              placeholder='Full Name'
+              placeholder='Username'
               required
             />
           </div>
