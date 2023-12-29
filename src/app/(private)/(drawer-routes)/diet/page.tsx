@@ -258,7 +258,7 @@ export default function DietPage() {
           </label>
           <div className='border-2 rounded-3xl py-1 px-3 border-black/10 flex flex-row gap-2 items-center'>
             <Image src={Dropdown} width={20} height={20} alt='profile-pic' />
-            <p className='text-sm font-medium'>{warrior?.users?.name}</p>
+            <p className='text-sm font-medium'>{warrior?.users?.username}</p>
             <Image
               src={'https://robohash.org/asdasd'}
               width={40}
