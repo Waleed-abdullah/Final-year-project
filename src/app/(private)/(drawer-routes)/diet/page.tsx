@@ -196,7 +196,7 @@ export default function DietPage() {
   };
   useEffect(() => {
     fetchData();
-  }, [mealDate, processMeals, warrior]);
+  }, [mealDate, processMeals, warrior, fetchData]);
 
   const debounceSearch = useCallback((query: string) => {
     setSuggestions(null);
