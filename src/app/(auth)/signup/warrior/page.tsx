@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { UserType } from '@/src/types/auth/user';
+import { UserType } from '@/src/types/page/auth/user';
 import WazaLogo from '@/assets/wazaLogos/Wazalogo_Black.svg';
 import trainingImage from '@/assets/signUpPage/warrior/hero-image_1.png';
 import mailIcon from '@/assets/formIcons/mail.svg';
@@ -43,7 +43,6 @@ const SignUp = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     try {
       const res = await fetch('/api/user', {
         method: 'POST',
@@ -59,7 +58,7 @@ const SignUp = () => {
       }
 
       const data = await res.json();
-      router.push('/signin');
+      router.push('/completeProfile');
     } catch (err: any) {
       console.error(err.message || 'An error occurred');
       setError(err.message);

@@ -38,11 +38,8 @@ export default async function createUser(
     updated_at = date,
   } = reqBody;
 
-  if (!username || !email || !user_type || !name || !age || !gender) {
+  if (!username || !email || !user_type) {
     return sendErrorResponse(res, 400, 'Missing required fields');
-  }
-  if (age < 0 || age > 120) {
-    return sendErrorResponse(res, 400, 'Invalid age');
   }
 
   if (!isValidEmail(email)) {
@@ -56,9 +53,9 @@ export default async function createUser(
       'Invalid user_type. User type must be Waza Warrior or Waza Trainer',
     );
   }
-  if (!(Object.values(GenderType) as string[]).includes(gender)) {
-    return sendErrorResponse(res, 400, 'Invalid Gender must be Male or Female');
-  }
+  // if (!(Object.values(GenderType) as string[]).includes(gender)) {
+  //   return sendErrorResponse(res, 400, 'Invalid Gender must be Male or Female');
+  // }
 
   if (!provider) {
     return sendErrorResponse(

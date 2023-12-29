@@ -199,6 +199,7 @@ export default function DietPage() {
     fetchMeals();
   }, [warrior, mealDate, processMeals]);
 
+  // put in utility functions
   const debounceSearch = useCallback((query: string) => {
     setSuggestions(null);
     setTimeout(async () => {
@@ -208,7 +209,7 @@ export default function DietPage() {
         await fetchSuggestions(query);
       setSuggestions(suggestions);
       setIsLoading(false);
-    }, 500);
+    }, 100);
   }, []);
 
   useEffect(() => {
@@ -335,7 +336,7 @@ export default function DietPage() {
                 />
               </div>
               {suggestions && suggestions.branded && (
-                <div className='p-4 rounded-2xl bg-black w-full mt-4 max-h-72 overflow-y-scroll scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-100'>
+                <div className='p-4 rounded-2xl bg-black w-full mt-4 max-h-72 overflow-y-scroll  scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-100'>
                   {suggestions.branded.map((suggestion, idx) => (
                     <div
                       key={idx}
@@ -446,7 +447,7 @@ export default function DietPage() {
               </div>
             </div>
           </div>
-          <div className='basis-5/12 grow min-w-max max-h-[900px]  overflow-y-scroll scrollbar scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-100'>
+          <div className='basis-5/12 grow min-w-max max-h-[900px]  overflow-y-scroll  scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-100'>
             <div className='bg-white  p-4 rounded-lg shadow flex flex-col flex-wrap flex-1'>
               <p className='text-lg font-semibold text-gray-400'>
                 {`Today's Log`}
@@ -466,7 +467,7 @@ export default function DietPage() {
                       >
                         <p className='text-white font-semibold'>{mealType}</p>
                       </div>
-                      <p className='text-sm font-bold   text-lg'>
+                      <p className='sm:text-sm font-bold text-lg'>
                         {
                           totalMealTypeCalories[
                             mealType as keyof typeof totalMealTypeCalories
@@ -493,7 +494,7 @@ export default function DietPage() {
                                 alt='calender'
                               />
                             )}
-                            <p className='text-sm font-bold   text-lg'>
+                            <p className='sm:text-sm font-bold   text-lg'>
                               {item.food_item_identifier}
                             </p>
                           </div>
@@ -501,11 +502,11 @@ export default function DietPage() {
                             <div className='rounded-lg bg-gray-200  py-1 px-2'>
                               Qty
                             </div>
-                            <p className='text-sm font-bold   text-lg'>
+                            <p className='sm:text-sm font-bold   text-lg'>
                               {item.quantity.toString()}
                             </p>
                           </div>
-                          <p className='text-sm font-bold   text-lg w-3/12 min-w-max'>
+                          <p className='sm:text-sm font-bold   text-lg w-3/12 min-w-max'>
                             {item.nutrients
                               ? item.nutrients.foods[0].nf_calories
                               : 0}
