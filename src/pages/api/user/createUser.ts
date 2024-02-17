@@ -87,14 +87,14 @@ export default async function createUser(
     return sendErrorResponse(
       res,
       400,
-      'Invalid password format. Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character',
+      'Invalid password format. Password must be at least 8 characters long', //and include at least one uppercase letter, one lowercase letter, one digit, and one special character
     );
   }
   if (password && !isValidPassword(password)) {
     return sendErrorResponse(
       res,
       400,
-      'Invalid password format. Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character',
+      'Invalid password format. Password must be at least 8 characters long', // and include at least one uppercase letter, one lowercase letter, one digit, and one special character',
     );
   }
 
