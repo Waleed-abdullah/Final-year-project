@@ -57,17 +57,22 @@ const SignUp = () => {
         throw new Error(errorData.message || 'Something went wrong!');
       }
 
-      const data = await res.json();
-      router.push('/completeProfile');
+      const result = await signIn('credentials', {
+        callbackUrl: '/dashboard',
+        email: formData.email,
+        password: formData.password,
+      });
+      if (result?.error) throw new Error();
     } catch (err: any) {
       console.error(err.message || 'An error occurred');
       setError(err.message);
     }
   };
 
-  const handleSignUpWithGoogle = () => {
+  const handleSignUpWithGoogle = async () => {
     try {
-      signIn('google', { callbackUrl: '/dashboard' });
+      const result = await signIn('google', { callbackUrl: '/dashboard' });
+      if (result?.error) throw new Error();
     } catch (err: any) {
       setError(err.message);
     }

@@ -38,15 +38,6 @@ export default function DietPage() {
   useEffect(() => {
     if (!session.data) return;
 
-    if (session.data.user.isNewUser) {
-      router.push('/complete-user');
-    }
-
-    if (session.data.user.user_type === 'Waza Trainer') {
-      router.push(`/api/auth/signin`);
-      return;
-    }
-
     const fetchData = async () => {
       try {
         const res = await fetch(

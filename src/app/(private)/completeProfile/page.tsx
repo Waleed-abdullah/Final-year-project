@@ -9,7 +9,7 @@ import Image from 'next/image';
 
 export default function CompleteProfilePage() {
   const router = useRouter();
-  const { data: sessionData, status } = useSession();
+  const { data: sessionData, update } = useSession();
   const [userDetails, setUserDetails] = useState({
     username: '',
     user_type: UserType.WazaWarrior,
@@ -20,43 +20,6 @@ export default function CompleteProfilePage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-
-  // Update userDetails with session data when it's loaded
-  useEffect(() => {
-    if (status === 'authenticated') {
-      setUserDetails((prevDetails) => ({
-        ...prevDetails,
-        email: sessionData.user.email || '',
-        profile_pic: sessionData.user.image || '',
-        is_verified: sessionData.user.is_verified || false,
-        provider: sessionData.user.provider || '',
-      }));
-    }
-  }, [sessionData, status]);
-
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `http://localhost:3000/api/user?email=${sessionData?.user.email}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      if (res.ok) {
-        const data = await res.json();
-        console.log('User found:', data);
-        if (data.user_type === 'Waza Trainer') {
-          router.push(`/completeProfile/wazaTrainer/${data.user_id}`);
-        } else if (data.user_type === 'Waza Warrior') {
-          router.push(`/completeProfile/wazaWarrior/${data.user_id}`);
-        }
-      }
-    })();
-  }, [sessionData, router]);
-
   // Handle input changes for each field
   const handleInputChange = (e: any) => {
     const { id, value, type, checked } = e.target;
@@ -87,10 +50,17 @@ export default function CompleteProfilePage() {
         throw new Error(data.message || 'Something went wrong!');
       }
       console.log('User created:', data);
+      // update the session
+      await update({
+        newUser: true,
+        id: data.user_id,
+        type: data.user_type,
+      });
+
       if (data.user_type === 'Waza Warrior')
-        router.push(`completeProfile/wazaWarrior/${data.user_id}`);
+        router.push(`completeProfile/wazaWarrior`);
       else if (data.user_type === 'Waza Trainer')
-        router.push(`completeProfile/wazaTrainer/${data.user_id}`);
+        router.push(`completeProfile/wazaTrainer`);
     } catch (err: any) {
       console.error('Error creating user:', err);
       setError(err.message);
@@ -126,9 +96,7 @@ export default function CompleteProfilePage() {
               onChange={handleInputChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yellow-400 focus:border-yellow-400 block w-full p-2.5'
             >
-              <option selected value={UserType.WazaWarrior}>
-                Waza Warrior
-              </option>
+              <option value={UserType.WazaWarrior}>Waza Warrior</option>
               <option value={UserType.WazaTrainer}>Waza Trainer</option>
             </select>
           </div>

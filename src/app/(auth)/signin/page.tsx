@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import WazaLogo from '@/assets/wazaLogos/Wazalogo_Black.svg';
 import trainingImage from '@/assets/signInPage/hero-image.png';
 import mailIcon from '@/assets/formIcons/mail.svg';
@@ -16,7 +15,6 @@ interface SignInData {
 }
 
 const SignIn = () => {
-  const router = useRouter();
   const [formData, setFormData] = useState<SignInData>({
     email: '',
     password: '',
@@ -33,13 +31,14 @@ const SignIn = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      signIn('credentials', {
+      const result = await signIn('credentials', {
         callbackUrl: '/dashboard',
         ...formData,
       });
+      if (result?.error) throw new Error();
     } catch (err: any) {
       console.error(err.message || 'An error occurred');
-      setError('There was an error Signing In.');
+      setError('There was an error signing in.');
     }
   };
 
@@ -47,7 +46,7 @@ const SignIn = () => {
     try {
       signIn('google', { callbackUrl: '/dashboard' });
     } catch (err: any) {
-      setError('There was an error Signing In.');
+      setError('There was an error signing in.');
     }
   };
 
@@ -59,7 +58,7 @@ const SignIn = () => {
         </div>
         <div className='text-3xl font-semibold mb-2'>Sign In</div>
         {error.length ? (
-          <div className='text-lg text-red-500'>error</div>
+          <div className='text-lg text-red-500'>{error}</div>
         ) : null}
         <form onSubmit={handleSubmit} className='w-full mx-auto'>
           <div className='relative mb-5'>

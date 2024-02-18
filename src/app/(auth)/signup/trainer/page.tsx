@@ -57,8 +57,12 @@ const SignUp = () => {
         throw new Error(errorData.message || 'Something went wrong!');
       }
 
-      const data = await res.json();
-      router.push('/signin');
+      const result = await signIn('credentials', {
+        callbackUrl: '/dashboard',
+        email: formData.email,
+        password: formData.password,
+      });
+      if (result?.error) throw new Error();
     } catch (err: any) {
       console.error(err.message || 'An error occurred');
       setError('There was a problem signing up.');
@@ -67,7 +71,8 @@ const SignUp = () => {
 
   const handleSignUpWithGoogle = async () => {
     try {
-      signIn('google', { callbackUrl: '/dashboard' });
+      const result = await signIn('google', { callbackUrl: '/dashboard' });
+      if (result?.error) throw new Error();
     } catch (err: any) {
       console.error(err.message || 'An error occurred');
       setError('There was a problem signing up.');
@@ -82,7 +87,7 @@ const SignUp = () => {
         </div>
         <div className=' text-3xl font-semibold mb-2'>Create a New Account</div>
         {error.length ? (
-          <div className='text-lg text-red-500'>error</div>
+          <div className='text-lg text-red-500'>{error}</div>
         ) : null}
         <form onSubmit={handleSubmit} className='w-full mx-auto'>
           <div className='relative mb-5'>

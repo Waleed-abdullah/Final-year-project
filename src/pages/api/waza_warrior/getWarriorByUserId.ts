@@ -39,7 +39,7 @@ export default async function getWarriorByUserId(
       return sendErrorResponse(res, 404, 'Warrior not found');
     }
 
-    // Return the existing Trainer
+    // Return the existing Warrior
     return res.status(200).json(existingWarrior);
   } catch (e: unknown) {
     console.error('Error in getTrainer:', e);

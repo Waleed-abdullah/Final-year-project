@@ -1,6 +1,6 @@
 'use client';
-import { signIn } from 'next-auth/react';
-import { useParams, useRouter } from 'next/navigation';
+import { signIn, useSession } from 'next-auth/react';
+import { redirect, useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ageIcon from '@/assets/formIcons/age.svg';
 import calGoalIcon from '@/assets/formIcons/calories.svg';
@@ -9,19 +9,17 @@ import Image from 'next/image';
 
 export default function CompleteWarriorProfile() {
   const router = useRouter();
-  const { user_id } = useParams<{ user_id: string }>() || { user_id: '' };
+  const { data: sessionData, update } = useSession();
+  const user_id = sessionData!.user.user_id;
   const [warriorDetails, setWarriorDetails] = useState({
-    user_id: user_id,
+    user_id: sessionData!.user.user_id,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    setWarriorDetails((prevDetails) => ({
-      ...prevDetails,
-      user_id: user_id,
-    }));
-  }, [user_id]);
+  if (!user_id) {
+    redirect('completeProfile');
+  }
 
   useEffect(() => {
     (async () => {
@@ -38,21 +36,6 @@ export default function CompleteWarriorProfile() {
         const data = await res.json();
         console.log('Warrior found:', data);
         router.push(`/dashboard`);
-      }
-    })();
-  }, [user_id, router]);
-
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(`http://localhost:3000/api/user?id=${user_id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!res.ok) {
-        console.log('User Not found:');
-        router.push(`/completeProfile`);
       }
     })();
   }, [user_id, router]);
@@ -85,6 +68,11 @@ export default function CompleteWarriorProfile() {
         throw new Error(data.message || 'Something went wrong!');
       }
       console.log('Warrior created:', data);
+      await update({
+        newUser: false,
+        id: sessionData!.user.user_id,
+        type: sessionData!.user.user_type,
+      });
       router.push('/dashboard');
     } catch (err) {
       // If err is an instance of Error, use its message, otherwise use a default error message

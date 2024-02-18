@@ -26,6 +26,7 @@ declare module 'next-auth' {
       user_type: string;
       email: string;
       image: string;
+      caloric_goal?: Number;
     };
   }
 }
