@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/prisma';
+import prisma from '../../../lib/database/prisma';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import { isValidID } from '@/src/utils/validationHelpers';
 import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';

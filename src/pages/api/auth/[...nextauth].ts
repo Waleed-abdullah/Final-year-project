@@ -1,4 +1,4 @@
-import prisma from '@/src/lib/prisma';
+import prisma from '@/src/lib/database/prisma';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';

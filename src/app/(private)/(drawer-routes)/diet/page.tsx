@@ -13,7 +13,7 @@ import {
   fetchNutrients,
   fetchSavedMeals,
   fetchSuggestions,
-} from '../services/meals_services';
+} from '../../../../lib/nutritionService/meals_services';
 
 import Calender from '@/assets/Dashboard/calender.svg';
 import Dropdown from '@/assets/Diet/dropdown.svg';

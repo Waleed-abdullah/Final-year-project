@@ -115,8 +115,8 @@ export default function CompleteWarriorProfile() {
             </div>
             <input
               type='number'
-              id='goals'
-              name='goals'
+              id='caloricGoal'
+              name='caloric_goal'
               min={0}
               onChange={handleInputChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block focus:ring-yellow-400 focus:border-yellow-400 w-full p-2 ps-10'

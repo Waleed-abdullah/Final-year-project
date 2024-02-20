@@ -18,10 +18,13 @@ import {
   Meal,
   MealsByType,
 } from '@/src/types/page/waza_warrior/food_log';
-import { fetchNutrients, fetchSavedMeals } from '../services/meals_services';
+import {
+  fetchNutrients,
+  fetchSavedMeals,
+} from '@/src/lib/nutritionService/meals_services';
 import { NutritionixNutrientsEndpoint } from '@/src/types/app/(private)/(drawer-routes)/diet';
 
-export function Dashboard() {
+export default function WarriorDashboard() {
   const [warrior, setWarrior] = useState<Warrior | null>(null);
   const [macros, setMacros] = useState({
     protein: 0,
@@ -33,7 +36,6 @@ export function Dashboard() {
 
   const router = useRouter();
   const session = useSession();
-
 
   //put this data in the session storage to avoid unnecessary refetching
   useEffect(() => {
@@ -119,7 +121,7 @@ export function Dashboard() {
       labels: ['Protein', 'Carbs', 'Fats'],
       datasets: [
         {
-          data: [macros.protein, macros.carbs, macros.fats],
+          data: [macros.protein * 4, macros.carbs * 4, macros.fats * 4],
           backgroundColor: ['#22c55e', '#6b7280', '#ef4444'],
           borderWidth: 1,
         },

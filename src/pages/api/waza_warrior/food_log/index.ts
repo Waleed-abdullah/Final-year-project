@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { isValidID } from '@/src/utils/validationHelpers';
-import prisma from '@/src/lib/prisma';
+import prisma from '@/src/lib/database/prisma';
 
 export default async function handler(
   req: NextApiRequest,

@@ -1,6 +1,6 @@
 // pages/api/getMeals.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/src/lib/prisma';
+import prisma from '@/src/lib/database/prisma';
 import { isValidID } from '@/src/utils/validationHelpers';
 import { sendErrorResponse } from '@/src/utils/errorHandler';
 import { Meal, MealsByType } from '@/src/types/page/waza_warrior/food_log';
