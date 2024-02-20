@@ -1,3 +1,4 @@
+import { ScreenWidthProvider } from './ScreenWidthProvider';
 import './global.css';
 
 export const metadata = {
@@ -12,14 +13,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body
-        style={{
-          height: '100%',
-          margin: 0,
-          padding: 0,
-        }}
-      >
-        {children}
+      <body>
+        <ScreenWidthProvider>{children}</ScreenWidthProvider>
       </body>
     </html>
   );

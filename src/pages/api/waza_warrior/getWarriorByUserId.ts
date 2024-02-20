@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/prisma';
+import prisma from '../../../lib/database/prisma';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import { isValidID } from '@/src/utils/validationHelpers';
+import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
 
 export default async function getWarriorByUserId(
   req: NextApiRequest,
@@ -16,19 +17,29 @@ export default async function getWarriorByUserId(
     }
 
     // Check for existing Trainer
-    const existingWarrior = await prisma.waza_warriors.findUnique({
-      where: { user_id: user_id },
-      select: {
-        warrior_id: true,
-        user_id: true,
-      },
-    });
-
+    const existingWarrior: Warrior | null =
+      await prisma.waza_warriors.findUnique({
+        where: { user_id: user_id },
+        select: {
+          warrior_id: true,
+          caloric_goal: true,
+          users: {
+            select: {
+              email: true,
+              name: true,
+              profile_pic: true,
+              username: true,
+              age: true,
+              gender: true,
+            },
+          },
+        },
+      });
     if (!existingWarrior) {
       return sendErrorResponse(res, 404, 'Warrior not found');
     }
 
-    // Return the existing Trainer
+    // Return the existing Warrior
     return res.status(200).json(existingWarrior);
   } catch (e: unknown) {
     console.error('Error in getTrainer:', e);

@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/prisma';
+import prisma from '../../../lib/database/prisma';
 import bcrypt from 'bcrypt';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import {
   isValidEmail,
   isValidPassword,
 } from '../../../utils/validationHelpers';
-import { User, UserType } from '@/src/types/auth/user';
+import { GenderType, User, UserType } from '@/src/types/page/auth/user';
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10'); // Using environment variable for salt rounds
 
@@ -23,6 +23,9 @@ export default async function createUser(
   const date = new Date();
   const {
     username,
+    name,
+    age,
+    gender,
     email,
     password,
     user_type,
@@ -50,6 +53,9 @@ export default async function createUser(
       'Invalid user_type. User type must be Waza Warrior or Waza Trainer',
     );
   }
+  // if (!(Object.values(GenderType) as string[]).includes(gender)) {
+  //   return sendErrorResponse(res, 400, 'Invalid Gender must be Male or Female');
+  // }
 
   if (!provider) {
     return sendErrorResponse(
@@ -81,14 +87,14 @@ export default async function createUser(
     return sendErrorResponse(
       res,
       400,
-      'Invalid password format. Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character',
+      'Invalid password format. Password must be at least 8 characters long', //and include at least one uppercase letter, one lowercase letter, one digit, and one special character
     );
   }
   if (password && !isValidPassword(password)) {
     return sendErrorResponse(
       res,
       400,
-      'Invalid password format. Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character',
+      'Invalid password format. Password must be at least 8 characters long', // and include at least one uppercase letter, one lowercase letter, one digit, and one special character',
     );
   }
 
@@ -118,6 +124,9 @@ export default async function createUser(
         password: hashedPassword,
         user_type,
         provider,
+        name,
+        age,
+        gender,
         is_verified,
         profile_pic,
         date_joined,
