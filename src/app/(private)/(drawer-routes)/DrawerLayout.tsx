@@ -12,15 +12,15 @@ import { useScreenWidth } from '../../ScreenWidthProvider';
 import Link from 'next/link';
 
 export function DrawerLayout({ children }: { children: React.ReactNode }) {
-  const { screenWidth } = useScreenWidth();
-  const isLargeScreen = screenWidth >= 1024;
-  const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(isLargeScreen);
-  const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(isLargeScreen);
+  // const { screenWidth } = useScreenWidth();
+  // const isLargeScreen = screenWidth >= 1024;
+  // const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState(isLargeScreen);
+  // const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(isLargeScreen);
 
-  useEffect(() => {
-    setIsLeftDrawerOpen(isLargeScreen);
-    setIsRightDrawerOpen(isLargeScreen);
-  }, [isLargeScreen]);
+  // useEffect(() => {
+  //   setIsLeftDrawerOpen(isLargeScreen);
+  //   setIsRightDrawerOpen(isLargeScreen);
+  // }, [isLargeScreen]);
   const path = usePathname();
   const isActive = (href: string) => path === href;
 
@@ -28,13 +28,11 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
     <div className='flex'>
       {/* Left Drawer */}
       <div
-        className={`fixed inset-y-0 left-0 z-30 w-64 bg-black p-4 transition-transform duration-300 ease-in-out ${
-          isLeftDrawerOpen ? 'translate-x-0' : '-translate-x-full'
-        } `}
+        className={`fixed inset-y-0 left-0 z-30 w-64 bg-black p-4 transition-transform duration-300 ease-in-out translate-x-0`} //  ${ isLeftDrawerOpen ? 'translate-x-0' : '-translate-x-full' }
       >
-        <button onClick={() => setIsLeftDrawerOpen(!isLeftDrawerOpen)}>
+        {/* <button onClick={() => setIsLeftDrawerOpen(!isLeftDrawerOpen)}>
           Toggle Left Drawer
-        </button>
+        </button> */}
         {/* Logo */}
         <div className='mb-8'>
           <Image src={Logo} alt='Waza Logo' />
@@ -101,33 +99,32 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
 
       {/* Center Content */}
       <div
-        className={`flex-1 bg-gray-200 transition-all duration-300 ease-in-out  min-h-screen ${
+        className={`flex-1 bg-gray-200 transition-all duration-300 ease-in-out  min-h-screen ml-64 mr-64 `} /* 
+        ${
           isLeftDrawerOpen ? 'lg:ml-64' : 'lg:ml-0'
-        } ${isRightDrawerOpen ? 'lg:mr-64' : 'lg:mr-0'}`}
+        } ${isRightDrawerOpen ? 'lg:mr-64' : 'lg:mr-0'} */
       >
         {/* Your main content goes here */}
 
-        <>
+        {/* <>
           <button onClick={() => setIsLeftDrawerOpen(!isLeftDrawerOpen)}>
             Toggle Left Drawer
           </button>
           <button onClick={() => setIsRightDrawerOpen(!isRightDrawerOpen)}>
             Toggle Right Drawer
           </button>
-        </>
+        </> */}
 
         {children}
       </div>
 
       {/* Right Drawer */}
       <div
-        className={`fixed inset-y-0 right-0 z-30 w-64 bg-white p-4 transition-transform duration-300 ease-in-out ${
-          isRightDrawerOpen ? 'translate-x-0' : 'translate-x-full'
-        } lg:block`}
+        className={`fixed inset-y-0 right-0 z-30 w-64 bg-white p-4 transition-transform duration-300 ease-in-out lg:block translate-x-0`} //${isRightDrawerOpen ? 'translate-x-0' : 'translate-x-full' }
       >
-        <button onClick={() => setIsRightDrawerOpen(!isRightDrawerOpen)}>
+        {/* <button onClick={() => setIsRightDrawerOpen(!isRightDrawerOpen)}>
           Toggle Right Drawer
-        </button>
+        </button> */}
 
         {/* Drawer content */}
       </div>

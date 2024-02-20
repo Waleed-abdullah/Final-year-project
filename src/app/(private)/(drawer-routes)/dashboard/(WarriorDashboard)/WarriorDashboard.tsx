@@ -23,6 +23,7 @@ import {
   fetchSavedMeals,
 } from '@/src/lib/nutritionService/meals_services';
 import { NutritionixNutrientsEndpoint } from '@/src/types/app/(private)/(drawer-routes)/diet';
+import './WarriorDashboard.css';
 
 export default function WarriorDashboard() {
   const [warrior, setWarrior] = useState<Warrior | null>(null);
@@ -137,8 +138,8 @@ export default function WarriorDashboard() {
     <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>Dashboard</p>
-        <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
-          <Image src={Calender} width={24} height={24} alt='calendar' />
+        <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center '>
+          {/* <Image src={Calender} width={24} height={24} alt='calendar' /> */}
           <input
             type='date'
             name='date'
@@ -207,7 +208,10 @@ export default function WarriorDashboard() {
           </div>
 
           <div className='flex flex-col gap-2 justify-between flex-1 min-w-fit'>
-            <div className='bg-black  p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1'>
+            <div
+              className='bg-black  p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1
+            cursor-pointer'
+            >
               <Image src={Barbell} width={50} height={50} alt='calender' />
               <p className='text-xl text-white font-semibold'>Log Workout</p>
             </div>
@@ -224,7 +228,9 @@ export default function WarriorDashboard() {
               aria-label='Workout of the day'
               className='bg-white px-10 py-20 rounded-lg gap-2 shadow flex justify-center items-center min-w-fit flex-1'
             >
-              <p className='text-xl  font-semibold'>Placeholder</p>
+              <p className='text-xl  font-semibold cursor-default'>
+                Placeholder
+              </p>
             </div>
             <div
               aria-label='Market place'
