@@ -4,6 +4,7 @@ import { SessionProvider } from './SessionProvider';
 import type { ReactNode } from 'react';
 import { authOptions } from '@/src/pages/api/auth/[...nextauth]';
 import { redirect } from 'next/navigation';
+import { WarriorAndDateProvider } from './WarriorAndDateProvider';
 
 export default async function PrivateLayout({
   children,
@@ -16,5 +17,9 @@ export default async function PrivateLayout({
     redirect('signin');
   }
 
-  return <SessionProvider session={session}>{children}</SessionProvider>;
+  return (
+    <SessionProvider session={session}>
+      <WarriorAndDateProvider>{children}</WarriorAndDateProvider>
+    </SessionProvider>
+  );
 }
