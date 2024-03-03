@@ -1,3 +1,4 @@
+import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
 
 export const CreateWorkout = ({
@@ -107,12 +108,12 @@ export const CreateWorkout = ({
           placeholder='Reps'
         />
       </div>
-      <button
+      <DialogClose
         type='submit'
         className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center justify-center cursor-pointer'
       >
         Add Exercise
-      </button>
+      </DialogClose>
     </form>
   );
 };

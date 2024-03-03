@@ -31,7 +31,7 @@ export default async function updateSessionFromTemplate(
     }
 
     // Start a Prisma transaction to ensure atomicity
-    await prisma.$transaction([
+    const session = await prisma.$transaction([
       // Delete existing exercises for the session
       prisma.exercise.deleteMany({
         where: { session_id: { equals: session_id } },
@@ -50,10 +50,17 @@ export default async function updateSessionFromTemplate(
         }),
       ),
     ]);
-
-    res
-      .status(200)
-      .json({ message: 'Session updated from template successfully' });
+    const updatedSession = await prisma.session.findUnique({
+      where: { session_id },
+      include: {
+        exercise: {
+          include: {
+            exercise_log: true,
+          },
+        },
+      },
+    });
+    res.status(200).json(updatedSession);
   } catch (error) {
     console.error('Error updating session from template:', error);
     return sendErrorResponse(res, 500, 'Internal server error', error);

@@ -23,3 +23,9 @@ export interface Session {
   scheduled_date: Date;
   exercise: Exercise[]; // Array of Exercises
 }
+
+export interface Template {
+  template_id: string;
+  warrior_id: string;
+  title: string;
+}
