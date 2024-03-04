@@ -3,10 +3,15 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Logo from '@/assets/Dashboard/waza_logo.svg';
 import Home from '@/assets/Dashboard/home.svg';
-import Barbel from '@/assets/Dashboard/barbell.svg';
+import HomeYellow from '@/assets/Dashboard/home_yellow.svg';
+import Barbell from '@/assets/Dashboard/barbell.svg';
+import BarbellYellow from '@/assets/Dashboard/barbell_yellow.svg';
 import Apple from '@/assets/Dashboard/apple.svg';
+import AppleYellow from '@/assets/Dashboard/apple_yellow.svg';
 import Bicep from '@/assets/Dashboard/bicep.svg';
+import BicepYellow from '@/assets/Dashboard/bicep_yellow.svg';
 import World from '@/assets/Dashboard/world.svg';
+import WorldYellow from '@/assets/Dashboard/world_yellow.svg';
 import Image from 'next/image';
 import { useScreenWidth } from '../../ScreenWidthProvider';
 import Link from 'next/link';
@@ -46,7 +51,16 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
                 isActive('/dashboard') ? 'text-yellow-500' : 'text-white'
               }`}
             >
-              <Image src={Home} alt='Dashboard Icon' width={20} height={20} />
+              {!isActive('/dashboard') ? (
+                <Image src={Home} alt='Diet Icon' width={20} height={20} />
+              ) : (
+                <Image
+                  src={HomeYellow}
+                  alt='Diet Icon'
+                  width={20}
+                  height={20}
+                />
+              )}
               <Link href={'dashboard'} className={`ml-2 `}>
                 Dashboard
               </Link>
@@ -56,7 +70,16 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
                 isActive('/workouts') ? 'text-yellow-500' : 'text-white'
               }`}
             >
-              <Image src={Barbel} alt='Workouts Icon' width={20} height={20} />
+              {!isActive('/workouts') ? (
+                <Image src={Barbell} alt='Diet Icon' width={20} height={20} />
+              ) : (
+                <Image
+                  src={BarbellYellow}
+                  alt='Diet Icon'
+                  width={20}
+                  height={20}
+                />
+              )}
               <Link href={'workouts'} className={`ml-2 `}>
                 My Workouts
               </Link>
@@ -66,7 +89,16 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
                 isActive('/diet') ? 'text-yellow-500' : 'text-white'
               }`}
             >
-              <Image src={Apple} alt='Diet Icon' width={20} height={20} />
+              {!isActive('/diet') ? (
+                <Image src={Apple} alt='Diet Icon' width={20} height={20} />
+              ) : (
+                <Image
+                  src={AppleYellow}
+                  alt='Diet Icon'
+                  width={20}
+                  height={20}
+                />
+              )}
               <Link href={'diet'} className={`ml-2 `}>
                 My Diet
               </Link>
@@ -76,7 +108,16 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
                 isActive('/training') ? 'text-yellow-500' : 'text-white'
               }`}
             >
-              <Image src={Bicep} alt='Diet Icon' width={20} height={20} />
+              {!isActive('/training') ? (
+                <Image src={Bicep} alt='Diet Icon' width={20} height={20} />
+              ) : (
+                <Image
+                  src={BicepYellow}
+                  alt='Diet Icon'
+                  width={20}
+                  height={20}
+                />
+              )}
               <Link href={'training'} className={`ml-2 `}>
                 Training
               </Link>
@@ -88,7 +129,16 @@ export function DrawerLayout({ children }: { children: React.ReactNode }) {
                   : 'text-white'
               }`}
             >
-              <Image src={World} alt='Diet Icon' width={20} height={20} />
+              {!isActive('/community') ? (
+                <Image src={World} alt='Diet Icon' width={20} height={20} />
+              ) : (
+                <Image
+                  src={WorldYellow}
+                  alt='Diet Icon'
+                  width={20}
+                  height={20}
+                />
+              )}
               <Link href={'community'} className={`ml-2 `}>
                 Community
               </Link>
