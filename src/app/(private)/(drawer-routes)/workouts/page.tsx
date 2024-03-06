@@ -46,7 +46,7 @@ export default function WorkoutPage() {
     if (warriorID) {
       fetchTemplates();
     }
-  }, [warriorID]);
+  }, [warriorID, fetchTemplates]);
 
   useEffect(() => {
     const fetchSession = async (warrior_id: string, date: string) => {
