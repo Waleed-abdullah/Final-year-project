@@ -1,9 +1,8 @@
 'use client';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import Calender from '@/assets//Dashboard/calender.svg';
 import DoughnutChart from '@/components/DoughnutChart/DoughnutChart';
 import Fire from '@/assets/Dashboard/fire.svg';
 import Minus from '@/assets/Dashboard/minus.svg';
@@ -13,11 +12,7 @@ import Barbell from '@/assets/Dashboard/Union.svg';
 import Plate from '@/assets/Dashboard/plate.svg';
 import Link from 'next/link';
 import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
-import {
-  FoodItem,
-  Meal,
-  MealsByType,
-} from '@/src/types/page/waza_warrior/food_log';
+import { FoodItem, MealsByType } from '@/src/types/page/waza_warrior/food_log';
 import {
   fetchNutrients,
   fetchSavedMeals,
