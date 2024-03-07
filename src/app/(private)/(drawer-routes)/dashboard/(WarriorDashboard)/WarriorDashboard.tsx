@@ -9,7 +9,7 @@ import Fire from '@/assets/Dashboard/fire.svg';
 import Minus from '@/assets/Dashboard/minus.svg';
 import Tick from '@/assets/Dashboard/tick.svg';
 import Cross from '@/assets/Dashboard/cross.svg';
-import Barbell from '@/assets/Dashboard/barbell.svg';
+import Barbell from '@/assets/Dashboard/Union.svg';
 import Plate from '@/assets/Dashboard/plate.svg';
 import Link from 'next/link';
 import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
@@ -212,14 +212,26 @@ export default function WarriorDashboard() {
               className='bg-black  p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1
             cursor-pointer'
             >
-              <Image src={Barbell} width={50} height={50} alt='calender' />
+              <Image
+                src={Barbell}
+                style={{ marginRight: '30px' }}
+                width={100}
+                height={42.48}
+                alt='calender'
+              />
               <p className='text-xl text-white font-semibold'>Log Workout</p>
             </div>
             <Link
               href={'diet'}
-              className='bg-white  p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1'
+              className='bg-white p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1'
             >
-              <Image src={Plate} width={50} height={50} alt='calender' />
+              <Image
+                src={Plate}
+                style={{ marginRight: '32px' }}
+                width={100}
+                height={56}
+                alt='calender'
+              />
               <p className='text-xl  font-semibold'>Log Diet</p>
             </Link>
           </div>
