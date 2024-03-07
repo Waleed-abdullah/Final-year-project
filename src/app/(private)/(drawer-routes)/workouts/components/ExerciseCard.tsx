@@ -47,48 +47,49 @@ export const ExerciseCard = ({
   }, [exercise_id, exerciseLog]);
 
   return (
-    <div className='bg-white rounded-md p-4 flex flex-col gap-4 '>
+    <div className='bg-white rounded-md px-12 py-3 flex flex-col gap-4'>
       <div className='flex flex-col gap-2'>
-        <label className=' py-1 px-4 focus:outline-none border-2 border-black/[.15] rounded-md text-center'>
-          {title}
-        </label>
+        <p className=' font-bold text-center'>{title}</p>
 
-        <label className=' py-1 px-4 focus:outline-none border-2 border-black/[.15] rounded-3xl text-center'>
+        <p className=' py-1 px-4 bg-black text-yellow-500 text-medium rounded-3xl text-center'>
           {muscle_group}
-        </label>
+        </p>
       </div>
 
-      <div className='flex flex-col  gap-2'>
+      <div className='flex flex-col  gap-2 mt-6'>
         <div className='flex flex-row  justify-between '>
-          <h1>Weights</h1>
-          <label className=' py-1 px-4 w-1/4 focus:outline-none border-2 border-black/[.15] rounded-md text-center'>
-            {weight}kg
-          </label>
+          <h1>Weight</h1>
+          <div className=' text-center w-16 border-2 border-black/[.15] rounded-md '>
+            {`${weight} kg`}
+          </div>
         </div>
         <div className='flex flex-row   justify-between '>
           <h1>Sets</h1>
-          <label className=' py-1 px-4 w-1/4 focus:outline-none border-2 border-black/[.15] rounded-md text-center '>
+          <p className=' text-center w-16 border-2 border-black/[.15] rounded-md  '>
             {sets}
-          </label>
+          </p>
         </div>
         <div className='flex flex-row justify-between '>
           <h1>Reps</h1>
-          <label className=' py-1 px-4 w-1/4 focus:outline-none border-2 border-black/[.15] rounded-md text-center'>
+          <p className=' text-center w-16 border-2 border-black/[.15] rounded-md '>
             {reps}
-          </label>
+          </p>
         </div>
       </div>
       <div>
-        Log Card
         {exerciseLog &&
-          exerciseLog.map((log) => (
-            <LogCard
-              key={log.log_id}
-              log_id={log.log_id}
-              exercise_id={log.exercise_id}
-              weight={log.weight}
-              achieved_reps={log.achieved_reps}
-            />
+          exerciseLog.map((log, idx) => (
+            <div key={log.log_id}>
+              <p className=' text-center bg-yellow-500  rounded-3xl'>{`Set ${
+                idx + 1
+              }`}</p>
+              <LogCard
+                log_id={log.log_id}
+                exercise_id={log.exercise_id}
+                weight={log.weight}
+                achieved_reps={log.achieved_reps}
+              />
+            </div>
           ))}
       </div>
       <button

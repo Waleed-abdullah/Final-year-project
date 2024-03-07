@@ -28,25 +28,24 @@ export default function WorkoutPage() {
   const [session, setSession] = useState<Session | null>(null);
   const [templates, setTemplates] = useState<Template[]>([]);
 
-  const fetchTemplates = async () => {
-    try {
-      const res = await fetch(
-        `http://localhost:3000/api/waza_warrior/template?warrior_id=${warriorID}`,
-      );
-      const data = await res.json();
-      console.log('===========data===========');
-      console.log(data);
-      setTemplates(data);
-    } catch (error) {
-      console.error('Error fetching templates:', error);
-    }
-  };
-
   useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/waza_warrior/template?warrior_id=${warriorID}`,
+        );
+        const data = await res.json();
+        console.log('===========data===========');
+        console.log(data);
+        setTemplates(data);
+      } catch (error) {
+        console.error('Error fetching templates:', error);
+      }
+    };
     if (warriorID) {
       fetchTemplates();
     }
-  }, [warriorID, fetchTemplates]);
+  }, [warriorID]);
 
   useEffect(() => {
     const fetchSession = async (warrior_id: string, date: string) => {
@@ -106,7 +105,6 @@ export default function WorkoutPage() {
         <p className='text-xl font-semibold text-gray-400'>My Workouts</p>
         <div className='flex flex-row gap-2'>
           <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
-            <Image src={Calender} width={24} height={24} alt='calendar' />
             <input
               type='date'
               name='date'
@@ -117,18 +115,17 @@ export default function WorkoutPage() {
             />
           </label>
           <label className='border-2 rounded-3xl py-1 px-4 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
-            <Image src={ArrowDown} width={24} height={24} alt='arrow-down' />
             <p>{name}</p>
-            <Image src={Calender} width={24} height={24} alt='calendar' />
+            <Image src={ArrowDown} width={24} height={24} alt='arrow-down' />
           </label>
         </div>
       </header>
       <main className='mt-10'>
         <div className='flex flex-row gap-4'>
-          <h1 className='text-xl font-bold '>Log Workout</h1>
+          <h1 className='text-2xl font-bold '>Log Workout</h1>
           <Dialog>
-            <DialogTrigger className='border-2 rounded-3xl py-1 px-4 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
-              <p>Select Template</p>
+            <DialogTrigger className='border-2 rounded-3xl py-2 px-6 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
+              <p className='font-medium'>Select Template</p>
               <Image src={ArrowDown} width={24} height={24} alt='arrow-down' />
             </DialogTrigger>
             <DialogContent>
@@ -153,7 +150,7 @@ export default function WorkoutPage() {
             </DialogContent>
           </Dialog>
           <Dialog>
-            <DialogTrigger className=' py-1 px-4 bg-yellow-500 flex flex-row gap-2 items-center cursor-pointer'>
+            <DialogTrigger className=' py-2 px-6 bg-yellow-500 rounded-3xl flex flex-row gap-2 items-center cursor-pointer'>
               <p>Create Template</p>
               <Image src={ArrowDown} width={24} height={24} alt='arrow-down' />
             </DialogTrigger>
@@ -165,7 +162,7 @@ export default function WorkoutPage() {
             </DialogContent>
           </Dialog>
           <Dialog>
-            <DialogTrigger className=' py-1 px-4 bg-yellow-500 flex flex-row gap-2 items-center cursor-pointer'>
+            <DialogTrigger className=' py-2 px-6 bg-yellow-500 rounded-3xl flex flex-row gap-2 items-center cursor-pointer'>
               <p>Create Exercise</p>
               <Image src={ArrowDown} width={24} height={24} alt='arrow-down' />
             </DialogTrigger>
@@ -183,7 +180,7 @@ export default function WorkoutPage() {
           </Dialog>
         </div>
 
-        <div className='flex flex-row'>
+        <div className='flex flex-row justify-around mt-6 flex-wrap '>
           {session &&
             session.exercise.map((exercise) => (
               <ExerciseCard
