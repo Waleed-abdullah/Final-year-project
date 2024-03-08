@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Calender from '@/assets/Dashboard/calender.svg';
 import ArrowDown from '@/assets/arrow-down.svg';
 import Plus from '@/assets/plus.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useWarriorAndDate } from '../../WarriorAndDateProvider';
 import {
   Exercise,
@@ -28,7 +28,7 @@ export default function WorkoutPage() {
   const [session, setSession] = useState<Session | null>(null);
   const [templates, setTemplates] = useState<Template[]>([]);
 
-  const fetchTemplates = async () => {
+  const fetchTemplates = useCallback(async () => {
     try {
       const res = await fetch(
         `http://localhost:3000/api/waza_warrior/template?warrior_id=${warriorID}`,
@@ -40,13 +40,13 @@ export default function WorkoutPage() {
     } catch (error) {
       console.error('Error fetching templates:', error);
     }
-  };
+  }, [warriorID]);
 
   useEffect(() => {
     if (warriorID) {
       fetchTemplates();
     }
-  }, [warriorID]);
+  }, [warriorID, fetchTemplates]);
 
   useEffect(() => {
     const fetchSession = async (warrior_id: string, date: string) => {
