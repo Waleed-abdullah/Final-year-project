@@ -127,7 +127,7 @@ const SignIn = () => {
           <Image
             src={trainingImage}
             alt='trainingImage'
-            className='w-full h-full object-cover'
+            className='w-full h-full bg-no-repeat'
           />
         </div>
       </div>
