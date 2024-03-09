@@ -61,13 +61,13 @@ export const LogCard = ({
   }, [formData, updateExerciseLog, log_id]);
 
   return (
-    <div className='bg-white rounded-md p-4 flex flex-col gap-4 '>
+    <div className='bg-white rounded-md flex flex-col gap-4 mt-4'>
       <div className='flex flex-col  gap-2'>
-        <div className='flex flex-row  justify-between '>
+        <div className='flex flex-row  justify-between'>
           <h1>Weights</h1>
           <input
             name='weight'
-            className=' py-1 px-4 w-1/4 focus:outline-none border-2 border-black/[.15] rounded-md text-center'
+            className=' text-center w-16 border-2 border-black/[.15] rounded-md focus:outline-none '
             value={`${formData.weight}`}
             onChange={handleInputChange}
             type='number'
@@ -77,7 +77,7 @@ export const LogCard = ({
           <h1>Sets</h1>
           <input
             name='achieved_reps'
-            className=' py-1 px-4 w-1/4 focus:outline-none border-2 border-black/[.15] rounded-md text-center '
+            className=' text-center w-16 border-2 border-black/[.15] rounded-md focus:outline-none  '
             value={`${formData.achieved_reps}`}
             onChange={handleInputChange}
             type='number'
