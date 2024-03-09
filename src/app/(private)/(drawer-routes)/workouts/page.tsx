@@ -21,6 +21,7 @@ import { ExerciseCard } from './components/ExerciseCard';
 import { CreateWorkout } from './components/CreateWorkout';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { CreateTemplate } from './components/CreateTemplate';
+import CalendarInput from '@/components/CalenderInput';
 
 export default function WorkoutPage() {
   const { warriorID, date, setDate, name } = useWarriorAndDate();
@@ -99,25 +100,16 @@ export default function WorkoutPage() {
     setSession(updatedSession);
   };
 
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(event.target.value);
+  };
+
   return (
     <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>My Workouts</p>
         <div className='flex flex-row gap-2'>
-          <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
-            <input
-              type='date'
-              name='date'
-              id='date'
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className='text-sm font-medium bg-transparent focus:outline-none'
-            />
-          </label>
-          <label className='border-2 rounded-3xl py-1 px-4 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
-            <p>{name}</p>
-            <Image src={ArrowDown} width={24} height={24} alt='arrow-down' />
-          </label>
+          <CalendarInput date={date} handleDateChange={handleDateChange} />
         </div>
       </header>
       <main className='mt-10'>

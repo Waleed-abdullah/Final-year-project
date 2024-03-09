@@ -15,8 +15,6 @@ import {
   fetchSuggestions,
 } from '../../../../lib/nutritionService/meals_services';
 
-import Calender from '@/assets/Dashboard/calender.svg';
-import Dropdown from '@/assets/Diet/dropdown.svg';
 import Delete from '@/assets/Diet/delete.svg';
 import Search from '@/assets/Diet/search.svg';
 import Add from '@/assets/Diet/add.svg';
@@ -25,7 +23,9 @@ import Minus from '@/assets/Dashboard/minus.svg';
 import Tick from '@/assets/Dashboard/tick.svg';
 import Cross from '@/assets/Dashboard/cross.svg';
 
+import CalendarInput from '@/components/CalenderInput';
 import DoughnutChart from '@/components/DoughnutChart/DoughnutChart';
+
 import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
@@ -239,26 +239,10 @@ export default function DietPage() {
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>My Diet</p>
         <div className='flex flex-row gap-4 '>
-          <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
-            <Image src={Calender} width={24} height={24} alt='calendar' />
-            <input
-              type='date'
-              name='mealDate'
-              value={mealDate}
-              onChange={handleMealDateChange}
-              className='text-sm font-medium bg-transparent focus:outline-none'
-            />
-          </label>
-          <div className='border-2 rounded-3xl py-1 px-3 border-black/10 flex flex-row gap-2 items-center'>
-            <Image src={Dropdown} width={20} height={20} alt='profile-pic' />
-            <p className='text-sm font-medium'>{warrior?.users?.username}</p>
-            <Image
-              src={'https://robohash.org/asdasd'}
-              width={40}
-              height={40}
-              alt='profile-pic'
-            />
-          </div>
+          <CalendarInput
+            date={mealDate}
+            handleDateChange={handleMealDateChange}
+          />
         </div>
       </header>
       <main>
@@ -273,7 +257,10 @@ export default function DietPage() {
                     {macros.calories.toFixed(0)}{' '}
                   </p>
                   <p className='bg-yellow-400 py-1 px-5 rounded-3xl  text-md'>
-                    <span className='font-bold'>/ 1500</span> kcal
+                    <span className='font-bold'>
+                      / {warrior?.caloric_goal ?? 1500}
+                    </span>{' '}
+                    kcal
                   </p>
                 </div>
               </div>

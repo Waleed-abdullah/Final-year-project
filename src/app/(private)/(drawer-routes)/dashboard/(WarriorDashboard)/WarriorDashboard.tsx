@@ -19,6 +19,7 @@ import {
 } from '@/src/lib/nutritionService/meals_services';
 import { NutritionixNutrientsEndpoint } from '@/src/types/app/(private)/(drawer-routes)/diet';
 import './WarriorDashboard.css';
+import CalendarInput from '@/components/CalenderInput';
 
 export default function WarriorDashboard() {
   const [warrior, setWarrior] = useState<Warrior | null>(null);
@@ -133,16 +134,7 @@ export default function WarriorDashboard() {
     <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>Dashboard</p>
-        <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center '>
-          {/* <Image src={Calender} width={24} height={24} alt='calendar' /> */}
-          <input
-            type='date'
-            name='date'
-            value={date}
-            onChange={handleDateChange}
-            className='text-sm font-medium bg-transparent focus:outline-none'
-          />
-        </label>
+        <CalendarInput date={date} handleDateChange={handleDateChange} />
       </header>
 
       <main>
