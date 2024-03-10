@@ -54,7 +54,7 @@ export const LogCard = ({
       500,
     ),
     [],
-  ); // 500ms debounce time
+  );
 
   useEffect(() => {
     updateExerciseLog(log_id, formData);

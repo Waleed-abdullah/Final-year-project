@@ -25,7 +25,7 @@ const TrainerList: React.FC = () => {
         setHasMore(false);
       })
       .finally(() => setIsLoading(false));
-  }, [page, filters]); // Add filters as a dependency
+  }, [page, filters]);
 
   const handlePrevPage = () => {
     setPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -36,8 +36,11 @@ const TrainerList: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+    <div className='flex p-4 grow'>
+      {filters.specialization && filters.specialization.length && (
+        <p className='font-bold text-lg'>{`${trainers.length} results for "${filters.specialization}"`}</p>
+      )}
+      <div className='mt-2 flex flex-col grow'>
         {trainers.map((trainer) => (
           <TrainerCard
             key={trainer.trainer_id}
@@ -50,15 +53,15 @@ const TrainerList: React.FC = () => {
             trainer_specializations={trainer.trainer_specializations}
           />
         ))}
-      </div>
-      {isLoading && <p>Loading...</p>}
-      <div className='flex justify-center space-x-4 mt-4'>
-        <button onClick={handlePrevPage} disabled={page === 1}>
-          Previous
-        </button>
-        <button onClick={handleNextPage} disabled={!hasMore}>
-          Next
-        </button>
+        {isLoading && <p>Loading...</p>}
+        <div className='flex justify-center space-x-4 mt-4'>
+          <button onClick={handlePrevPage} disabled={page === 1}>
+            Previous
+          </button>
+          <button onClick={handleNextPage} disabled={!hasMore}>
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
