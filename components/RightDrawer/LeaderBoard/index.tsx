@@ -15,14 +15,14 @@ const LeaderBoard = () => {
     .substring(0, 3);
 
   return (
-    <div className='flex flex-col items-center justify-center overflow-y-auto'>
+    <div className='flex flex-col items-center justify-center'>
       <div className='flex justify-between items-center gap-8 mb-2'>
         <div>Leaderboard</div>
         <div className='bg-black hover:bg-yellow-400 text-yellow-400 text-center hover:text-white font-bold py-2 px-4 rounded-full'>
           {currentMonth}
         </div>
       </div>
-      <div className='flex flex-col items-center justify-center overflow-y-auto'>
+      <div className='flex flex-col items-center justify-center'>
         {leaderBoardArray.map((user, index) => (
           <UserCard
             key={index}
