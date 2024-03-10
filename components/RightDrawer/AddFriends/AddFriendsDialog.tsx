@@ -11,8 +11,8 @@ const AddFriendsDialog: React.FC = () => {
     const query = event.target.value;
     // Perform search logic here and update searchResults state
     setSearchQuery(query);
-    // Example: Mock search results
-    setSearchResults(['John Doe', 'Jane Smith', 'Alice Johnson']);
+
+    setSearchResults(['Moez', 'Muhammad Waleed', 'Muhammad talha']);
   };
 
   return (
