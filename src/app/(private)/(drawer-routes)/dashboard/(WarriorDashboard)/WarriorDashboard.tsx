@@ -195,7 +195,8 @@ export default function WarriorDashboard() {
           </div>
 
           <div className='flex flex-col gap-2 justify-between flex-1 min-w-fit'>
-            <div
+            <Link
+              href={'workouts'}
               className='bg-black  p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1
             cursor-pointer'
             >
@@ -207,7 +208,7 @@ export default function WarriorDashboard() {
                 alt='calender'
               />
               <p className='text-xl text-white font-semibold'>Log Workout</p>
-            </div>
+            </Link>
             <Link
               href={'diet'}
               className='bg-white p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1'

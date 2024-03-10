@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { Card, CardContent } from '@/components/ui/card';
 const AddFriendsDialog: React.FC = () => {
@@ -35,10 +35,8 @@ const AddFriendsDialog: React.FC = () => {
             <CardContent className='text-center py-1 px-1 my-1 ml-2 mr-4 overflow-hidden'>
               <p className='font-medium'>{result}</p>
             </CardContent>
-            <CardContent className='py-1 px-0'>
-              <button className='border-2 hover:bg-yellow-400 hover:text-white border-gray-300  hover:border-transparent rounded-3xl py-1 px-10 border-black/10 flex mr-2 tems-center justify-center cursor-pointer'>
-                Add
-              </button>
+            <CardContent className='border-2 hover:bg-yellow-400 hover:text-white border-gray-300  hover:border-transparent rounded-3xl py-1 px-10 border-black/10 flex mr-2 tems-center justify-center cursor-pointer'>
+              Add
             </CardContent>
           </Card>
         ))}

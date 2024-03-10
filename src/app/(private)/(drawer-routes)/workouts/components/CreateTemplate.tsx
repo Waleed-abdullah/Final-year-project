@@ -1,3 +1,4 @@
+'use client';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
 

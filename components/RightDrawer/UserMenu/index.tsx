@@ -1,3 +1,4 @@
+'use client';
 import Settings from '@/assets/UserMenu/settings.svg';
 import Bell from '@/assets/UserMenu/bell.svg';
 

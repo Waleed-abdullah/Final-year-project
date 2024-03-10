@@ -1,14 +1,6 @@
+'use client';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 export const CreateWorkout = ({
   session_id,
