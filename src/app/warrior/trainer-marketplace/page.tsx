@@ -1,6 +1,6 @@
 // src/app/warrior/trainer-marketplace/page.tsx
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import Filter from './components/Filter';
 import TrainerList from './components/TrainerList';
 import Image from 'next/image';

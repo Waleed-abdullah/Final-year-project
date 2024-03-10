@@ -80,7 +80,7 @@ export const ExerciseCard = ({
         {exerciseLog &&
           exerciseLog.map((log, idx) => (
             <div key={log.log_id}>
-              <p className=' text-center bg-yellow-500  rounded-3xl'>{`Set ${
+              <p className=' text-center bg-yellow-500 mt-2 rounded-3xl'>{`Set ${
                 idx + 1
               }`}</p>
               <LogCard

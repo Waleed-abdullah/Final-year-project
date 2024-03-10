@@ -68,7 +68,7 @@ export const LogCard = ({
           />
         </div>
         <div className='flex flex-row   justify-between '>
-          <h1>Sets</h1>
+          <h1>Reps</h1>
           <input
             name='achieved_reps'
             className=' text-center w-16 border-2 border-black/[.15] rounded-md focus:outline-none  '
