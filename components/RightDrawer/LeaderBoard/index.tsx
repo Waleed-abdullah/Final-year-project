@@ -1,4 +1,13 @@
 import UserCard from './userCard';
+import { leadingBackgroundColors, normalBackgroundColor } from './constants';
+
+const leaderBoardArray = [
+  { username: 'Waleed', points: 50 },
+  { username: 'Ali', points: 20 },
+  { username: 'Usman', points: 10 },
+  { username: 'Ahmed', points: 5 },
+  { username: 'Talha', points: 2 },
+];
 
 const LeaderBoard = () => {
   const currentMonth = new Date()
@@ -13,7 +22,18 @@ const LeaderBoard = () => {
           {currentMonth}
         </div>
       </div>
-      <UserCard username='something' friendPoints={[]} />
+      <div className='flex flex-col items-center justify-center overflow-y-auto'>
+        {leaderBoardArray.map((user, index) => (
+          <UserCard
+            key={index}
+            username={user.username}
+            points={user.points}
+            background={
+              index < 3 ? leadingBackgroundColors[index] : normalBackgroundColor
+            }
+          />
+        ))}
+      </div>
     </div>
   );
 };
