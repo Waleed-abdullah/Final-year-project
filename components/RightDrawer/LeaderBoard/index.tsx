@@ -7,6 +7,7 @@ const leaderBoardArray = [
   { username: 'Usman', points: 10 },
   { username: 'Ahmed', points: 5 },
   { username: 'Talha', points: 2 },
+  { username: 'Talha', points: 2 },
 ];
 
 const LeaderBoard = () => {
