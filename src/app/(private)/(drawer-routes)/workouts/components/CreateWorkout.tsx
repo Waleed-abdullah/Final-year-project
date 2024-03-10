@@ -1,14 +1,6 @@
+'use client';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 export const CreateWorkout = ({
   session_id,
@@ -103,15 +95,8 @@ export const CreateWorkout = ({
           value={formData.title}
           onChange={handleChange}
           className=' py-1 px-4 focus:outline-none border-2 border-black/[.15] rounded-md text-center'
-          placeholder='Workout Name'
+          placeholder='Exercise Name'
         />
-        {/* <input
-          name='muscle_group'
-          value={formData.muscle_group}
-          onChange={handleChange}
-          className=' py-1 px-4 focus:outline-none border-2 border-black/[.15] rounded-3xl text-center'
-          placeholder='Category'
-        /> */}
         <select
           value={formData.muscle_group}
           onChange={handleChange}

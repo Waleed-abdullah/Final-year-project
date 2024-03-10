@@ -1,6 +1,6 @@
 // src/app/warrior/trainer-marketplace/page.tsx
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import Filter from './components/Filter';
 import TrainerList from './components/TrainerList';
 import Image from 'next/image';
@@ -14,16 +14,13 @@ const TrainerMarketplace: React.FC = () => {
   const [specialization, setSpecialization] = useState('');
   const { setFilters } = useTrainerFilter();
 
-  const debouncedSpecialization = useCallback(
-    debounce(
-      (e) =>
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          specialization: e,
-        })),
-      500,
-    ),
-    [],
+  const debouncedSpecialization = debounce(
+    (e) =>
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        specialization: e,
+      })),
+    500,
   );
   return (
     <>

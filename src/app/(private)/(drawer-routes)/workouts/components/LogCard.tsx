@@ -23,38 +23,32 @@ export const LogCard = ({
   };
 
   // Debounced API call function
-  const updateExerciseLog = useCallback(
-    debounce(
-      async (
-        logId: string,
-        data: { weight: number; achieved_reps: number },
-      ) => {
-        try {
-          const response = await fetch(
-            `http://localhost:3000/api/waza_warrior/exercise_log?log_id=${logId}`,
-            {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(data),
+  const updateExerciseLog = debounce(
+    async (logId: string, data: { weight: number; achieved_reps: number }) => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/waza_warrior/exercise_log?log_id=${logId}`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
+            body: JSON.stringify(data),
+          },
+        );
 
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-
-          // Optionally, handle the response data
-          console.log('Exercise log updated successfully');
-        } catch (error) {
-          console.error('Failed to update exercise log:', error);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
-      },
-      500,
-    ),
-    [],
-  );
+
+        // Optionally, handle the response data
+        console.log('Exercise log updated successfully');
+      } catch (error) {
+        console.error('Failed to update exercise log:', error);
+      }
+    },
+    500,
+  ); // 500ms debounce time
 
   useEffect(() => {
     updateExerciseLog(log_id, formData);
@@ -74,7 +68,7 @@ export const LogCard = ({
           />
         </div>
         <div className='flex flex-row   justify-between '>
-          <h1>Sets</h1>
+          <h1>Reps</h1>
           <input
             name='achieved_reps'
             className=' text-center w-16 border-2 border-black/[.15] rounded-md focus:outline-none  '

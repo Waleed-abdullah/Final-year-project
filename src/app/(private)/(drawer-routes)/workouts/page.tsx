@@ -1,9 +1,7 @@
 'use client';
 import Image from 'next/image';
-import Calender from '@/assets/Dashboard/calender.svg';
 import ArrowDown from '@/assets/workouts/arrow-down.svg';
-import Plus from '@/assets/workouts/plus.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useWarriorAndDate } from '../../WarriorAndDateProvider';
 import {
   Exercise,
@@ -19,33 +17,34 @@ import {
 } from '@/components/ui/dialog';
 import { ExerciseCard } from './components/ExerciseCard';
 import { CreateWorkout } from './components/CreateWorkout';
-import { set, template } from 'lodash';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { CreateTemplate } from './components/CreateTemplate';
+import CalendarInput from '@/components/CalenderInput';
 
 export default function WorkoutPage() {
   const { warriorID, date, setDate, name } = useWarriorAndDate();
   const [session, setSession] = useState<Session | null>(null);
   const [templates, setTemplates] = useState<Template[]>([]);
 
+  const fetchTemplates = useCallback(async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/waza_warrior/template?warrior_id=${warriorID}`,
+      );
+      const data = await res.json();
+      console.log('===========data===========');
+      console.log(data);
+      setTemplates(data);
+    } catch (error) {
+      console.error('Error fetching templates:', error);
+    }
+  }, [warriorID]);
+
   useEffect(() => {
-    const fetchTemplates = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:3000/api/waza_warrior/template?warrior_id=${warriorID}`,
-        );
-        const data = await res.json();
-        console.log('===========data===========');
-        console.log(data);
-        setTemplates(data);
-      } catch (error) {
-        console.error('Error fetching templates:', error);
-      }
-    };
     if (warriorID) {
       fetchTemplates();
     }
-  }, [warriorID]);
+  }, [warriorID, fetchTemplates]);
 
   useEffect(() => {
     const fetchSession = async (warrior_id: string, date: string) => {
@@ -99,25 +98,16 @@ export default function WorkoutPage() {
     setSession(updatedSession);
   };
 
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(event.target.value);
+  };
+
   return (
     <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>My Workouts</p>
         <div className='flex flex-row gap-2'>
-          <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
-            <input
-              type='date'
-              name='date'
-              id='date'
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className='text-sm font-medium bg-transparent focus:outline-none'
-            />
-          </label>
-          <label className='border-2 rounded-3xl py-1 px-4 border-black/10 flex flex-row gap-2 items-center cursor-pointer'>
-            <p>{name}</p>
-            <Image src={ArrowDown} width={24} height={24} alt='arrow-down' />
-          </label>
+          <CalendarInput date={date} handleDateChange={handleDateChange} />
         </div>
       </header>
       <main className='mt-10'>

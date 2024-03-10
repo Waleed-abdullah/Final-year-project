@@ -1,5 +1,6 @@
 import { ScreenWidthProvider } from './ScreenWidthProvider';
 import './global.css';
+import Providers from '@/components/ProgressBarProvider';
 
 export const metadata = {
   title: 'Waza Fitness',
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <ScreenWidthProvider>{children}</ScreenWidthProvider>
+        <Providers>
+          <ScreenWidthProvider>{children}</ScreenWidthProvider>
+        </Providers>
       </body>
     </html>
   );

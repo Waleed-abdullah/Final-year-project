@@ -6,7 +6,8 @@ export const isValidEmail = (email: string): boolean => {
 export const isValidPassword = (password: string): boolean => {
   // const passwordRegex =
   //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  const passwordRegex = /^.{8}$/;
+  // regex for password that must be at least 8 characters long
+  const passwordRegex = /^.{8,}$/;
   return passwordRegex.test(password);
 };
 
