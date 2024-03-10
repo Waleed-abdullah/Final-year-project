@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import ArrowDown from '@/assets/arrow-down.svg';
+import ArrowDown from '@/assets/workouts/arrow-down.svg';
 import { useEffect, useState, useCallback } from 'react';
 import { useWarriorAndDate } from '../../WarriorAndDateProvider';
 import {
@@ -170,7 +170,7 @@ export default function WorkoutPage() {
           </Dialog>
         </div>
 
-        <div className='flex flex-row justify-around mt-6 flex-wrap '>
+        <div className='flex flex-row flex-start gap-2 mt-6 flex-wrap '>
           {session &&
             session.exercise.map((exercise) => (
               <ExerciseCard
