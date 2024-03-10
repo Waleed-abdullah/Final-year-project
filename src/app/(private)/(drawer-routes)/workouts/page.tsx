@@ -1,8 +1,8 @@
 'use client';
 import Image from 'next/image';
 import Calender from '@/assets/Dashboard/calender.svg';
-import ArrowDown from '@/assets/arrow-down.svg';
-import Plus from '@/assets/plus.svg';
+import ArrowDown from '@/assets/workouts/arrow-down.svg';
+import Plus from '@/assets/workouts/plus.svg';
 import { useEffect, useState } from 'react';
 import { useWarriorAndDate } from '../../WarriorAndDateProvider';
 import {
