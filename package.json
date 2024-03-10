@@ -13,6 +13,7 @@
   "dependencies": {
     "@next-auth/prisma-adapter": "^0.4.4-canary.81",
     "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-select": "^2.0.0",
     "@types/lodash": "^4.14.202",
     "@types/node": "20.6.2",
     "@types/react": "18.2.21",
