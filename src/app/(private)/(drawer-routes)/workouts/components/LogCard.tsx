@@ -40,7 +40,6 @@ export const LogCard = ({
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-<<<<<<< HEAD
 
         // Optionally, handle the response data
         console.log('Exercise log updated successfully');
@@ -50,13 +49,6 @@ export const LogCard = ({
     },
     500,
   ); // 500ms debounce time
-=======
-      },
-      500,
-    ),
-    [],
-  );
->>>>>>> d7e227283409cd817bdc9f2922531243d0bf6f10
 
   useEffect(() => {
     updateExerciseLog(log_id, formData);

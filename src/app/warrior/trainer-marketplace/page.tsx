@@ -14,16 +14,13 @@ const TrainerMarketplace: React.FC = () => {
   const [specialization, setSpecialization] = useState('');
   const { setFilters } = useTrainerFilter();
 
-  const debouncedSpecialization = useCallback(
-    debounce(
-      (e) =>
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          specialization: e,
-        })),
-      500,
-    ),
-    [],
+  const debouncedSpecialization = debounce(
+    (e) =>
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        specialization: e,
+      })),
+    500,
   );
   return (
     <>
