@@ -3,10 +3,13 @@
 import React, { useState } from 'react';
 import { useTrainerFilter } from '../context/TrainerFilterContext';
 
-const Filter: React.FC = () => {
+interface FilterProps {
+  specialization: string;
+}
+
+const Filter: React.FC<FilterProps> = ({ specialization }) => {
   const { setFilters } = useTrainerFilter();
 
-  const [specialization, setSpecialization] = useState('');
   const [location, setLocation] = useState('');
   const [gender, setGender] = useState('');
   const [hourlyRateMin, setHourlyRateMin] = useState('');
@@ -31,7 +34,6 @@ const Filter: React.FC = () => {
   };
 
   const handleClearFilters = () => {
-    setSpecialization('');
     setLocation('');
     setGender('');
     setHourlyRateMin('');
@@ -44,9 +46,8 @@ const Filter: React.FC = () => {
   };
 
   return (
-    <div className='p-4'>
+    <div className='p-4 flex flex-col flex-start gap-5'>
       <div className='flex flex-row justify-between'>
-        <p className='text-lg font-bold tracking-wide'>Filter</p>
         <p
           className='text-lg text-red-500 tracking-wide cursor-pointer'
           onClick={handleClearFilters}
@@ -60,10 +61,9 @@ const Filter: React.FC = () => {
           Apply
         </p>
       </div>
-      <div className='m-5' />
-      <div className='flex flex-row justify-start gap-2 flex-wrap'>
+      <div className='flex flex-col justify-start gap-2 flex-wrap'>
         {/* Years as Trainer */}
-        <div className='flex flex-col w-full md:w-1/3 lg:w-1/4'>
+        <div>
           <label className='text-sm font-semibold tracking-wide'>
             Years as Trainer
           </label>
@@ -100,7 +100,7 @@ const Filter: React.FC = () => {
           </div>
         </div>
         {/* Age */}
-        <div className='flex flex-col w-full md:w-1/3 lg:w-1/4'>
+        <div>
           <label className='text-sm font-semibold tracking-wide'>Age</label>
           <div className='flex flex-row gap-1 items-center'>
             <select
@@ -136,7 +136,7 @@ const Filter: React.FC = () => {
         </div>
 
         {/* Gender*/}
-        <div className='flex flex-col w-full md:w-1/3 lg:w-1/4'>
+        <div>
           <label className='text-sm font-semibold tracking-wide'>Gender</label>
           <div className='flex flex-row gap-1 items-center'>
             <select
@@ -157,7 +157,7 @@ const Filter: React.FC = () => {
           </div>
         </div>
         {/* Location*/}
-        <div className='flex flex-col w-full md:w-1/3 lg:w-1/4'>
+        <div>
           <label className='text-sm font-semibold tracking-wide'>
             Location
           </label>
@@ -172,7 +172,7 @@ const Filter: React.FC = () => {
           </div>
         </div>
         {/* Skills*/}
-        <div className='flex flex-col w-full md:w-1/3 lg:w-1/4'>
+        {/* <div>
           <label className='text-sm font-semibold tracking-wide'>Skills</label>
           <div className='flex flex-row gap-1 items-center'>
             <input
@@ -183,7 +183,7 @@ const Filter: React.FC = () => {
               value={specialization}
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
