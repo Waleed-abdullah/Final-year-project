@@ -36,7 +36,7 @@ const AddFriendsDialog: React.FC = () => {
               <p className='font-medium'>{result}</p>
             </CardContent>
             <CardContent className='py-1 px-0'>
-              <button className='border-2 hover:bg-yellow-400 hover:text-white border border-gray-300  hover:border-transparent rounded-3xl py-1 px-10 border-black/10 flex mr-2 tems-center justify-center cursor-pointer'>
+              <button className='border-2 hover:bg-yellow-400 hover:text-white border-gray-300  hover:border-transparent rounded-3xl py-1 px-10 border-black/10 flex mr-2 tems-center justify-center cursor-pointer'>
                 Add
               </button>
             </CardContent>
