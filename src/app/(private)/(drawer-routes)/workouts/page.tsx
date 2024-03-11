@@ -147,7 +147,12 @@ export default function WorkoutPage() {
               <DialogHeader>
                 <DialogTitle>Create Template</DialogTitle>
               </DialogHeader>
-              {session && <CreateTemplate session_id={session.session_id} />}
+              {session && (
+                <CreateTemplate
+                  setTemplates={setTemplates}
+                  session_id={session.session_id}
+                />
+              )}
             </DialogContent>
           </Dialog>
           <Dialog>
