@@ -1,29 +1,25 @@
 'use client';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import Calender from '@/assets//Dashboard/calender.svg';
 import DoughnutChart from '@/components/DoughnutChart/DoughnutChart';
 import Fire from '@/assets/Dashboard/fire.svg';
 import Minus from '@/assets/Dashboard/minus.svg';
 import Tick from '@/assets/Dashboard/tick.svg';
 import Cross from '@/assets/Dashboard/cross.svg';
-import Barbell from '@/assets/Dashboard/barbell.svg';
+import Barbell from '@/assets/Dashboard/Union.svg';
 import Plate from '@/assets/Dashboard/plate.svg';
 import Link from 'next/link';
 import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
-import {
-  FoodItem,
-  Meal,
-  MealsByType,
-} from '@/src/types/page/waza_warrior/food_log';
+import { FoodItem, MealsByType } from '@/src/types/page/waza_warrior/food_log';
 import {
   fetchNutrients,
   fetchSavedMeals,
 } from '@/src/lib/nutritionService/meals_services';
 import { NutritionixNutrientsEndpoint } from '@/src/types/app/(private)/(drawer-routes)/diet';
 import './WarriorDashboard.css';
+import CalendarInput from '@/components/CalenderInput';
 
 export default function WarriorDashboard() {
   const [warrior, setWarrior] = useState<Warrior | null>(null);
@@ -138,16 +134,7 @@ export default function WarriorDashboard() {
     <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
         <p className='text-xl font-semibold text-gray-400'>Dashboard</p>
-        <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center '>
-          {/* <Image src={Calender} width={24} height={24} alt='calendar' /> */}
-          <input
-            type='date'
-            name='date'
-            value={date}
-            onChange={handleDateChange}
-            className='text-sm font-medium bg-transparent focus:outline-none'
-          />
-        </label>
+        <CalendarInput date={date} handleDateChange={handleDateChange} />
       </header>
 
       <main>
@@ -208,18 +195,31 @@ export default function WarriorDashboard() {
           </div>
 
           <div className='flex flex-col gap-2 justify-between flex-1 min-w-fit'>
-            <div
+            <Link
+              href={'workouts'}
               className='bg-black  p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1
             cursor-pointer'
             >
-              <Image src={Barbell} width={50} height={50} alt='calender' />
+              <Image
+                src={Barbell}
+                style={{ marginRight: '30px' }}
+                width={100}
+                height={42.48}
+                alt='calender'
+              />
               <p className='text-xl text-white font-semibold'>Log Workout</p>
-            </div>
+            </Link>
             <Link
               href={'diet'}
-              className='bg-white  p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1'
+              className='bg-white p-10 rounded-lg gap-2 shadow flex justify-center items-center flex-1'
             >
-              <Image src={Plate} width={50} height={50} alt='calender' />
+              <Image
+                src={Plate}
+                style={{ marginRight: '32px' }}
+                width={100}
+                height={56}
+                alt='calender'
+              />
               <p className='text-xl  font-semibold'>Log Diet</p>
             </Link>
           </div>

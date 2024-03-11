@@ -1,3 +1,4 @@
+'use client';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
 
@@ -17,6 +18,23 @@ export const CreateWorkout = ({
     reps: 0,
     session_id: session_id,
   });
+  const VALID_MUSCLE_GROUPS = [
+    'Hamstrings',
+    'Chest',
+    'Shoulders',
+    'Quadriceps',
+    'Back',
+    'Triceps',
+    'Biceps',
+    'Glutes',
+    'Calves',
+    'ABS',
+    'Legs',
+    'The back and biceps',
+    'Forearms',
+    'Upper back',
+    'Arm',
+  ];
 
   // Handle input change
   const handleChange = (e: any) => {
@@ -39,7 +57,8 @@ export const CreateWorkout = ({
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            ...formData,
+            title: formData.title,
+            muscle_group: formData.muscle_group,
             weight: Number(formData.weight),
             sets: Number(formData.sets),
             reps: Number(formData.reps),
@@ -47,12 +66,18 @@ export const CreateWorkout = ({
           }),
         },
       );
-      if (!response.ok) {
-        throw new Error('Failed to create exercise');
-      }
       const newExercise = await response.json();
-      console.log('================newExercise============');
-      console.log(newExercise);
+      if (!response.ok) {
+        throw new Error(newExercise.message);
+      }
+      setFormData({
+        title: '',
+        muscle_group: '',
+        weight: 0,
+        sets: 0,
+        reps: 0,
+        session_id: session_id,
+      });
       onExerciseCreated(newExercise);
     } catch (error) {
       console.error('Error creating exercise:', error);
@@ -70,15 +95,20 @@ export const CreateWorkout = ({
           value={formData.title}
           onChange={handleChange}
           className=' py-1 px-4 focus:outline-none border-2 border-black/[.15] rounded-md text-center'
-          placeholder='Workout Name'
+          placeholder='Exercise Name'
         />
-        <input
-          name='muscle_group'
+        <select
           value={formData.muscle_group}
           onChange={handleChange}
-          className=' py-1 px-4 focus:outline-none border-2 border-black/[.15] rounded-3xl text-center'
-          placeholder='Category'
-        />
+          name='muscle_group'
+          placeholder='Muscle Group'
+        >
+          {VALID_MUSCLE_GROUPS.map((group) => (
+            <option key={group} value={group}>
+              {group}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className='flex flex-col  gap-2'>
@@ -86,7 +116,7 @@ export const CreateWorkout = ({
         <input
           name='weight'
           type='number'
-          value={formData.weight}
+          value={formData.weight === 0 ? '' : formData.weight}
           onChange={handleChange}
           className=' py-1 px-4 focus:outline-none border-2 border-black/[.15] rounded-md text-center'
           placeholder='Weight'
@@ -94,7 +124,7 @@ export const CreateWorkout = ({
         <input
           name='sets'
           type='number'
-          value={formData.sets}
+          value={formData.sets === 0 ? '' : formData.sets}
           onChange={handleChange}
           className=' py-1 px-4 focus:outline-none border-2 border-black/[.15] rounded-md text-center'
           placeholder='Sets'
@@ -102,7 +132,7 @@ export const CreateWorkout = ({
         <input
           name='reps'
           type='number'
-          value={formData.reps}
+          value={formData.reps === 0 ? '' : formData.reps}
           onChange={handleChange}
           className=' py-1 px-4 focus:outline-none border-2 border-black/[.15] rounded-md text-center'
           placeholder='Reps'
