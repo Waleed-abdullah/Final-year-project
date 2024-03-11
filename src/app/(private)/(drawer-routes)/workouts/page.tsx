@@ -26,25 +26,24 @@ export default function WorkoutPage() {
   const [session, setSession] = useState<Session | null>(null);
   const [templates, setTemplates] = useState<Template[]>([]);
 
-  const fetchTemplates = useCallback(async () => {
-    try {
-      const res = await fetch(
-        `http://localhost:3000/api/waza_warrior/template?warrior_id=${warriorID}`,
-      );
-      const data = await res.json();
-      console.log('===========data===========');
-      console.log(data);
-      setTemplates(data);
-    } catch (error) {
-      console.error('Error fetching templates:', error);
-    }
-  }, [warriorID]);
-
   useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/waza_warrior/template?warrior_id=${warriorID}`,
+        );
+        const data = await res.json();
+        console.log('===========data===========');
+        console.log(data);
+        setTemplates(data);
+      } catch (error) {
+        console.error('Error fetching templates:', error);
+      }
+    };
     if (warriorID) {
       fetchTemplates();
     }
-  }, [warriorID, fetchTemplates]);
+  }, [warriorID]);
 
   useEffect(() => {
     const fetchSession = async (warrior_id: string, date: string) => {
@@ -148,7 +147,12 @@ export default function WorkoutPage() {
               <DialogHeader>
                 <DialogTitle>Create Template</DialogTitle>
               </DialogHeader>
-              {session && <CreateTemplate session_id={session.session_id} />}
+              {session && (
+                <CreateTemplate
+                  setTemplates={setTemplates}
+                  session_id={session.session_id}
+                />
+              )}
             </DialogContent>
           </Dialog>
           <Dialog>
