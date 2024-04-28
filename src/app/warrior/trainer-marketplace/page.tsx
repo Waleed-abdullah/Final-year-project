@@ -1,4 +1,3 @@
-// src/app/warrior/trainer-marketplace/page.tsx
 'use client';
 import React, { useState } from 'react';
 import Filter from './components/Filter';
