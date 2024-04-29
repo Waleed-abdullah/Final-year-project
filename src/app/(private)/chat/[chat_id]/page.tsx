@@ -3,6 +3,8 @@ import prisma from '@/src/lib/database/prisma';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import { FC } from 'react';
+import Messages from '../components/Messages';
+import ChatInput from '../components/ChatInput';
 
 interface PageProps {
   params: {
@@ -38,6 +40,8 @@ const page: FC<PageProps> = async ({ params }) => {
       },
     });
 
+    if (!chatPartner) notFound();
+
     const initialMessages = await prisma.chat.findMany({
       where: {
         OR: [
@@ -55,16 +59,19 @@ const page: FC<PageProps> = async ({ params }) => {
         timestamp: 'desc',
       },
     });
+    return (
+      <div>
+        <Messages
+          initialMessages={initialMessages}
+          session_id={session.user.user_id}
+        />
+        <ChatInput chatPartner={chatPartner} chat_id={chat_id} />
+      </div>
+    );
   } catch (error) {
     console.error('An error occurred while fetching chat partner: ', error);
     notFound();
   }
-
-  return (
-    <div>
-      <h1>{session.user.user_id}</h1>
-    </div>
-  );
 };
 
 export default page;
