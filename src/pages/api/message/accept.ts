@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import { isValidID } from '@/src/utils/validationHelpers';
 import prisma from '@/src/lib/database/prisma';
-import { fetchRedis } from '@/src/utils/redis';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
 import { messages } from '@/src/lib/messages/messages';
@@ -33,33 +32,39 @@ export default async function Accept(
       return sendErrorResponse(res, 404, 'User not found');
     }
 
-    const isInChatList = (await fetchRedis(
-      'sismember',
-      `user:${session.user.user_id}:chat_list`,
-      sender_id,
-    )) as 0 | 1;
+    const isInChatList = await prisma.chat_list.findFirst({
+      where: {
+        OR: [
+          { user_id_1: session.user.user_id, user_id_2: sender_id },
+          { user_id_1: sender_id, user_id_2: session.user.user_id },
+        ],
+      },
+    });
 
-    if (isInChatList) {
-      return sendErrorResponse(res, 400, 'Already in chat list');
-    }
-
-    const hasMessageRequest = await fetchRedis(
-      'sismember',
-      `user:${session.user.user_id}:incoming_message_requests`,
-      sender_id,
-    );
-    if (!hasMessageRequest) {
+    if (!isInChatList) {
       return sendErrorResponse(res, 400, 'Request not found');
     }
+
+    if (isInChatList.status === 'accepted') {
+      return sendErrorResponse(res, 400, 'Request already accepted');
+    }
+    if (isInChatList.status === 'rejected') {
+      return sendErrorResponse(res, 400, 'Request already rejected');
+    }
+
     // Valid request
 
-    await messages.sadd(`user:${session.user.user_id}:chat_list`, sender_id);
-    await messages.sadd(`user:${sender_id}:chat_list`, session.user.user_id);
-    await messages.srem(
-      `user:${session.user.user_id}:incoming_message_requests`,
-      sender_id,
-    );
-
+    await prisma.chat_list.update({
+      where: {
+        user_id_1_user_id_2: {
+          user_id_1: sender_id,
+          user_id_2: session.user.user_id,
+        },
+      },
+      data: {
+        status: 'accepted',
+      },
+    });
     return res.status(200).json({
       message: `Added to chat list`,
     });

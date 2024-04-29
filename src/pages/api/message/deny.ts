@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import { isValidID } from '@/src/utils/validationHelpers';
 import prisma from '@/src/lib/database/prisma';
-import { fetchRedis } from '@/src/utils/redis';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
 import { messages } from '@/src/lib/messages/messages';
@@ -27,10 +26,17 @@ export default async function Accept(
 
     // Valid request
 
-    await messages.srem(
-      `user:${session.user.user_id}:incoming_message_requests`,
-      sender_id,
-    );
+    await prisma.chat_list.update({
+      where: {
+        user_id_1_user_id_2: {
+          user_id_1: sender_id,
+          user_id_2: session.user.user_id,
+        },
+      },
+      data: {
+        status: 'rejected',
+      },
+    });
 
     return res.status(200).json({
       message: `Removed message request`,
