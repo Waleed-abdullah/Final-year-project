@@ -2,8 +2,8 @@
 
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/database/prisma';
-import { sendErrorResponse } from '@/src/utils/errorHandler';
-import { ExerciseRequestBody } from '@/src/types/page/waza_warrior/exercise';
+import { sendErrorResponse } from '@/utils/errorHandler';
+import { ExerciseRequestBody } from '@/types/page/waza_warrior/exercise';
 const VALID_MUSCLE_GROUPS = [
   'Hamstrings',
   'Chest',

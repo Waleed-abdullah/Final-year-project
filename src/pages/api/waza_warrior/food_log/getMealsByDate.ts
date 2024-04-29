@@ -1,9 +1,9 @@
 // pages/api/getMeals.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/src/lib/database/prisma';
-import { isValidID } from '@/src/utils/validationHelpers';
-import { sendErrorResponse } from '@/src/utils/errorHandler';
-import { Meal, MealsByType } from '@/src/types/page/waza_warrior/food_log';
+import prisma from '@/lib/database/prisma';
+import { isValidID } from '@/utils/validationHelpers';
+import { sendErrorResponse } from '@/utils/errorHandler';
+import { Meal, MealsByType } from '@/types/page/waza_warrior/food_log';
 
 export default async function handler(
   req: NextApiRequest,

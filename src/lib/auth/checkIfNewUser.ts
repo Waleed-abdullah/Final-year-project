@@ -1,4 +1,4 @@
-import { UserType } from '@/src/types/page/auth/user';
+import { UserType } from '@/types/page/auth/user';
 import prisma from '../database/prisma';
 
 async function checkIfNewUser(user: any) {

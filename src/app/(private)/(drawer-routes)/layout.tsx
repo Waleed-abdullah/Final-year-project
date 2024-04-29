@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import { DrawerLayout } from './DrawerLayout';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { UserType } from '@/src/types/page/auth/user';
-import { authOptions } from '@/src/pages/api/auth/[...nextauth]';
+import { UserType } from '@/types/page/auth/user';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 export default async function PrivateLayout({
   children,

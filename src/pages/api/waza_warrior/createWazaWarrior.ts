@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/database/prisma';
-import { sendErrorResponse } from '@/src/utils/errorHandler';
+import { sendErrorResponse } from '@/utils/errorHandler';
 
 type CreateWazaWarriorRequestBody = {
   user_id: string;

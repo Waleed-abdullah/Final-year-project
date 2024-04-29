@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/database/prisma';
 import { sendErrorResponse } from '../../../utils/errorHandler';
-import { isValidID } from '@/src/utils/validationHelpers';
+import { isValidID } from '@/utils/validationHelpers';
 
 export default async function getTrainer(
   req: NextApiRequest,
