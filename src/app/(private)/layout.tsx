@@ -2,7 +2,7 @@
 import { getServerSession } from 'next-auth';
 import { SessionProvider } from './SessionProvider';
 import type { ReactNode } from 'react';
-import { authOptions } from '@/src/pages/api/auth/[...nextauth]';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { redirect } from 'next/navigation';
 import { WarriorAndDateProvider } from './WarriorAndDateProvider';
 

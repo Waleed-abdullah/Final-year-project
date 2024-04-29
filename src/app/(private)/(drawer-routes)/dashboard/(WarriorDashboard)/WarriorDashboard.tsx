@@ -11,13 +11,13 @@ import Cross from '@/assets/Dashboard/cross.svg';
 import Barbell from '@/assets/Dashboard/Union.svg';
 import Plate from '@/assets/Dashboard/plate.svg';
 import Link from 'next/link';
-import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
-import { FoodItem, MealsByType } from '@/src/types/page/waza_warrior/food_log';
+import { Warrior } from '@/types/app/(private)/(drawer-routes)/dashboard';
+import { FoodItem, MealsByType } from '@/types/page/waza_warrior/food_log';
 import {
   fetchNutrients,
   fetchSavedMeals,
-} from '@/src/lib/nutritionService/meals_services';
-import { NutritionixNutrientsEndpoint } from '@/src/types/app/(private)/(drawer-routes)/diet';
+} from '@/lib/nutritionService/meals_services';
+import { NutritionixNutrientsEndpoint } from '@/types/app/(private)/(drawer-routes)/diet';
 import './WarriorDashboard.css';
 import CalendarInput from '@/components/CalenderInput';
 

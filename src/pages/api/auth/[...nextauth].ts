@@ -1,9 +1,9 @@
-import prisma from '@/src/lib/database/prisma';
+import prisma from '@/lib/database/prisma';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
-import checkIfNewUser from '@/src/lib/auth/checkIfNewUser';
+import checkIfNewUser from '@/lib/auth/checkIfNewUser';
 
 export const authOptions: NextAuthOptions = {
   session: {

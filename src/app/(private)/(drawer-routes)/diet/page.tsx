@@ -7,7 +7,7 @@ import {
   NutritionixInstantEndpoint,
   NutritionixNutrientsEndpoint,
 } from '../../../../types/app/(private)/(drawer-routes)/diet';
-import { FoodItem, MealsByType } from '@/src/types/page/waza_warrior/food_log';
+import { FoodItem, MealsByType } from '@/types/page/waza_warrior/food_log';
 import {
   createMeal,
   fetchNutrients,
@@ -26,7 +26,7 @@ import Cross from '@/assets/Dashboard/cross.svg';
 import CalendarInput from '@/components/CalenderInput';
 import DoughnutChart from '@/components/DoughnutChart/DoughnutChart';
 
-import { Warrior } from '@/src/types/app/(private)/(drawer-routes)/dashboard';
+import { Warrior } from '@/types/app/(private)/(drawer-routes)/dashboard';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 

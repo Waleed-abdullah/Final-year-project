@@ -1,8 +1,8 @@
 import {
   BrandedFoodItem,
   CommonFoodItem,
-} from '@/src/types/app/(private)/(drawer-routes)/diet';
-import { MealsByType } from '@/src/types/page/waza_warrior/food_log';
+} from '@/types/app/(private)/(drawer-routes)/diet';
+import { MealsByType } from '@/types/page/waza_warrior/food_log';
 
 export const fetchSavedMeals = async (warrior_id: string, date: Date) => {
   console.log('Called fetchSavedMeals');
