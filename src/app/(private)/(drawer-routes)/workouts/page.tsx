@@ -7,7 +7,7 @@ import {
   Exercise,
   Session,
   Template,
-} from '@/src/types/app/(private)/(drawer-routes)/workout';
+} from '@/types/app/(private)/(drawer-routes)/workout';
 import {
   Dialog,
   DialogContent,
@@ -148,7 +148,12 @@ export default function WorkoutPage() {
               <DialogHeader>
                 <DialogTitle>Create Template</DialogTitle>
               </DialogHeader>
-              {session && <CreateTemplate session_id={session.session_id} />}
+              {session && (
+                <CreateTemplate
+                  setTemplates={setTemplates}
+                  session_id={session.session_id}
+                />
+              )}
             </DialogContent>
           </Dialog>
           <Dialog>

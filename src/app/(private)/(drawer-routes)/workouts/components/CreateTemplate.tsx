@@ -1,8 +1,15 @@
 'use client';
+import { Template } from '@/types/app/(private)/(drawer-routes)/workout';
 import { DialogClose } from '@radix-ui/react-dialog';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
-export const CreateTemplate = ({ session_id }: { session_id: string }) => {
+export const CreateTemplate = ({
+  session_id,
+  setTemplates,
+}: {
+  session_id: string;
+  setTemplates: Dispatch<SetStateAction<Template[]>>;
+}) => {
   // State to manage input values
   const [formData, setFormData] = useState({
     title: '',
@@ -39,6 +46,7 @@ export const CreateTemplate = ({ session_id }: { session_id: string }) => {
       const newTemplate = await response.json();
       console.log('================newTemplate============');
       console.log(newTemplate);
+      setTemplates((prevState) => [...prevState, newTemplate]);
     } catch (error) {
       console.error('Error creating template:', error);
     }
