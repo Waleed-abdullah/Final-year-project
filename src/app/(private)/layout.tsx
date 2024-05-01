@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { redirect } from 'next/navigation';
 import { WarriorAndDateProvider } from './WarriorAndDateProvider';
+import { LeaderBoardProvider } from '@/stores/leaderboard-store';
 
 export default async function PrivateLayout({
   children,
@@ -19,7 +20,9 @@ export default async function PrivateLayout({
 
   return (
     <SessionProvider session={session}>
-      <WarriorAndDateProvider>{children}</WarriorAndDateProvider>
+      <LeaderBoardProvider>
+        <WarriorAndDateProvider>{children}</WarriorAndDateProvider>
+      </LeaderBoardProvider>
     </SessionProvider>
   );
 }
