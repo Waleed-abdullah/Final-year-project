@@ -1,6 +1,6 @@
 'use client';
-import { signIn, useSession } from 'next-auth/react';
-import { redirect, useParams, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { redirect, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ageIcon from '@/assets/formIcons/age.svg';
 import calGoalIcon from '@/assets/formIcons/calories.svg';

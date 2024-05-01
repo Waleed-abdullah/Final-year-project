@@ -22,7 +22,7 @@ import { CreateTemplate } from './components/CreateTemplate';
 import CalendarInput from '@/components/CalenderInput';
 
 export default function WorkoutPage() {
-  const { warriorID, date, setDate, name } = useWarriorAndDate();
+  const { warriorID, date, setDate } = useWarriorAndDate();
   const [session, setSession] = useState<Session | null>(null);
   const [templates, setTemplates] = useState<Template[]>([]);
 
