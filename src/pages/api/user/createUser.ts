@@ -6,7 +6,7 @@ import {
   isValidEmail,
   isValidPassword,
 } from '../../../utils/validationHelpers';
-import { GenderType, User, UserType } from '@/src/types/page/auth/user';
+import { GenderType, User, UserType } from '@/types/page/auth/user';
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10'); // Using environment variable for salt rounds
 

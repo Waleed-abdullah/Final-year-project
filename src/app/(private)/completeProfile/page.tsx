@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import userIcon from '@/assets/formIcons/user.svg';
-import { UserType } from '@/src/types/page/auth/user';
+import { UserType } from '@/types/page/auth/user';
 import wazaLogoBlack from '@/assets/wazaLogos/Wazalogo_Black.svg';
 import Image from 'next/image';
 

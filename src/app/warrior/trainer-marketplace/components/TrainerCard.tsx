@@ -2,7 +2,7 @@
 import {
   TrainerSpecialization,
   Trainer,
-} from '@/src/app/warrior/trainer-marketplace/types';
+} from '@/app/warrior/trainer-marketplace/types';
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';

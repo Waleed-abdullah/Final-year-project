@@ -1,8 +1,8 @@
 import WarriorDashboard from './(WarriorDashboard)/WarriorDashboard';
 import TrainerDashboard from './(TrainerDashboard)/TrainerDashboard';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/src/pages/api/auth/[...nextauth]';
-import { UserType } from '@/src/types/page/auth/user';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { UserType } from '@/types/page/auth/user';
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);

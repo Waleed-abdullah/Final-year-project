@@ -1,8 +1,8 @@
 // pages/api/addMeal.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient, Prisma } from '@prisma/client';
-import { isValidID } from '@/src/utils/validationHelpers';
-import prisma from '@/src/lib/database/prisma';
+import { isValidID } from '@/utils/validationHelpers';
+import prisma from '@/lib/database/prisma';
 
 export default async function handler(
   req: NextApiRequest,

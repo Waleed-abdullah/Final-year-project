@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import {
   Exercise,
   ExerciseLog,
-} from '@/src/types/app/(private)/(drawer-routes)/workout';
+} from '@/types/app/(private)/(drawer-routes)/workout';
 import { LogCard } from './LogCard';
 
 export const ExerciseCard = ({

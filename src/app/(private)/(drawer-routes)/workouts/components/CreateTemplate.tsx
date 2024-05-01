@@ -1,5 +1,5 @@
 'use client';
-import { Template } from '@/src/types/app/(private)/(drawer-routes)/workout';
+import { Template } from '@/types/app/(private)/(drawer-routes)/workout';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { Dispatch, SetStateAction, useState } from 'react';
 
