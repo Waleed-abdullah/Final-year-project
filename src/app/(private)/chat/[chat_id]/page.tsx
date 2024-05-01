@@ -17,16 +17,19 @@ const page: FC<PageProps> = async ({ params }) => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
 
-  const [user_id_1, user_id_2] = chat_id.split('--');
-
-  if (
-    user_id_1 !== session.user.user_id &&
-    user_id_2 !== session.user.user_id
-  ) {
-    notFound();
-  }
+  const chat = await prisma.chat_list.findUnique({
+    where: {
+      chat_list_id: chat_id,
+    },
+    select: {
+      user_id_1: true,
+      user_id_2: true,
+      status: true,
+    },
+  });
+  if (!chat) notFound();
   const chatPartnerId =
-    user_id_1 === session.user.user_id ? user_id_2 : user_id_1;
+    chat.user_id_1 === session.user.user_id ? chat.user_id_2 : chat.user_id_1;
   try {
     const chatPartner = await prisma.users.findUnique({
       where: {
@@ -56,7 +59,7 @@ const page: FC<PageProps> = async ({ params }) => {
         ],
       },
       orderBy: {
-        timestamp: 'desc',
+        timestamp: 'asc',
       },
     });
     return (
@@ -64,6 +67,8 @@ const page: FC<PageProps> = async ({ params }) => {
         <Messages
           initialMessages={initialMessages}
           session_id={session.user.user_id}
+          chatPartner={chatPartner}
+          chat_id={chat_id}
         />
         <ChatInput chatPartner={chatPartner} chat_id={chat_id} />
       </div>

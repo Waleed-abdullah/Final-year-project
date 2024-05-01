@@ -4,6 +4,7 @@ import { isValidID } from '@/src/utils/validationHelpers';
 import prisma from '@/src/lib/database/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
+import { pusherServer } from '@/src/lib/messages/pusher';
 
 export default async function Accept(
   req: NextApiRequest,
@@ -19,8 +20,22 @@ export default async function Accept(
       return sendErrorResponse(res, 401, 'Unauthorized');
     }
     const { text, chat_id } = req.body;
-
-    const [user_id_1, user_id_2] = chat_id.split('--');
+    if (!isValidID(chat_id)) {
+      return sendErrorResponse(res, 400, 'Invalid chat ID');
+    }
+    const chat_list = await prisma.chat_list.findFirst({
+      where: {
+        chat_list_id: chat_id,
+        OR: [
+          { user_id_1: session.user.user_id },
+          { user_id_2: session.user.user_id },
+        ],
+      },
+    });
+    if (!chat_list) {
+      return sendErrorResponse(res, 400, 'Request not found');
+    }
+    const { user_id_1, user_id_2 } = chat_list;
     if (
       user_id_1 !== session.user.user_id &&
       user_id_2 !== session.user.user_id
@@ -65,6 +80,9 @@ export default async function Accept(
         read_status: false,
       },
     });
+
+    await pusherServer.trigger(`${chat_id}`, 'new_message', chat);
+    res.send({ message: 'Message sent successfully', chat });
   } catch (error: unknown) {
     console.error('An error occurred while sending message request: ', error);
     return sendErrorResponse(res, 500, 'Internal server error', error);

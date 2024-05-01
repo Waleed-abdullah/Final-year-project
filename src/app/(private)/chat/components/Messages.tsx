@@ -1,22 +1,46 @@
 'use client';
 
 import { Message } from '@/src/app/warrior/trainer-marketplace/types/pusher';
-import { FC } from 'react';
+import { pusherClient } from '@/src/lib/messages/pusher';
+import { ChatPartner } from '@/src/types/app/(private)/chat';
+import { FC, useEffect, useState } from 'react';
 
 interface MessagesProps {
   initialMessages: Message[];
   session_id: string;
+  chatPartner: ChatPartner;
+  chat_id: string;
 }
 
-const Messages: FC<MessagesProps> = ({ initialMessages, session_id }) => {
+const Messages: FC<MessagesProps> = ({
+  initialMessages,
+  session_id,
+  chatPartner,
+  chat_id,
+}) => {
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
+
+  useEffect(() => {
+    pusherClient
+      .subscribe(`${chat_id}`)
+      .bind('new_message', (message: Message) => {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      });
+
+    return () => {
+      pusherClient.unsubscribe(`${chat_id}`);
+      pusherClient.unbind('new_message', (message: Message) => {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      });
+    };
+  }, [chat_id]);
   return (
     <div>
-      {initialMessages.map((message, index) => {
+      {messages.map((message, index) => {
         const isCurrentUser = message.sender_id === session_id;
 
         const hasNextMessageFromSameUser =
-          initialMessages[index - 1]?.sender_id ===
-          initialMessages[index].sender_id;
+          messages[index - 1]?.sender_id === messages[index].sender_id;
 
         return (
           <div
@@ -28,7 +52,7 @@ const Messages: FC<MessagesProps> = ({ initialMessages, session_id }) => {
                 <span>
                   {message.message_content}{' '}
                   <span className='ml-2 text-xs text-gray-400'>
-                    {message.timestamp.toISOString()}
+                    {message.timestamp.toString()}
                   </span>
                 </span>
               </div>

@@ -4,7 +4,7 @@ import { isValidID } from '@/src/utils/validationHelpers';
 import prisma from '@/src/lib/database/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
-import { messages } from '@/src/lib/messages/messages';
+import { pusherServer } from '@/src/lib/messages/pusher';
 export default async function Request(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -45,7 +45,20 @@ export default async function Request(
       return sendErrorResponse(res, 400, 'Request already sent');
     }
 
-    // Valid request
+    const sender = await prisma.users.findUnique({
+      where: {
+        user_id: session.user.user_id,
+      },
+      select: {
+        user_id: true,
+        username: true,
+        profile_pic: true,
+        name: true,
+      },
+    });
+    if (!sender) {
+      return sendErrorResponse(res, 404, 'Sender not found');
+    }
 
     await prisma.chat_list.create({
       data: {
@@ -54,6 +67,8 @@ export default async function Request(
         status: 'pending',
       },
     });
+
+    await pusherServer.trigger(reciever_id, 'msg-request', sender);
 
     return res.status(200).json({
       message: 'Request sent',

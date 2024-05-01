@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import { IncomingMessageRequest } from '../../../warrior/trainer-marketplace/types/pusher';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { pusherClient } from '@/src/lib/messages/pusher';
 
 interface MessageRequestsProps {
   incomingMessageRequests: IncomingMessageRequest[];
@@ -17,6 +18,22 @@ const MessageRequests: FC<MessageRequestsProps> = ({
   const [messageRequests, setMessageRequests] = useState<
     IncomingMessageRequest[]
   >(incomingMessageRequests);
+
+  useEffect(() => {
+    const channel = pusherClient.subscribe(session_id);
+
+    channel.bind('msg-request', (data: IncomingMessageRequest) => {
+      setMessageRequests((prev) => [...prev, data]);
+    });
+
+    return () => {
+      pusherClient.unsubscribe(session_id);
+      pusherClient.unbind('msg-request', (data: IncomingMessageRequest) => {
+        setMessageRequests((prev) => [...prev, data]);
+      });
+    };
+  }, [session_id]);
+
   const acceptMessageRequest = async (sender_id: string) => {
     await axios.post('/api/message/accept', { sender_id });
     setMessageRequests((prev) =>
