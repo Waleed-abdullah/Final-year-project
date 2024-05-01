@@ -4,7 +4,6 @@ import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
 import checkIfNewUser from '@/lib/auth/checkIfNewUser';
-
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',

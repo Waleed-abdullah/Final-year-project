@@ -1,5 +1,5 @@
-import { authOptions } from '@/src/pages/api/auth/[...nextauth]';
-import prisma from '@/src/lib/database/prisma';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import prisma from '@/lib/database/prisma';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import { FC } from 'react';

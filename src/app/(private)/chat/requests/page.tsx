@@ -1,8 +1,8 @@
-import MessageRequests from '@/src/app/(private)/chat/components/MessageRequests';
-import { authOptions } from '@/src/pages/api/auth/[...nextauth]';
+import MessageRequests from '@/app/(private)/chat/components/MessageRequests';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
-import prisma from '@/src/lib/database/prisma';
+import prisma from '@/lib/database/prisma';
 
 const page = async () => {
   const session = await getServerSession(authOptions);

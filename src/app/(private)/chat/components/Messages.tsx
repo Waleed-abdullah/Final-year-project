@@ -1,8 +1,8 @@
 'use client';
 
-import { Message } from '@/src/app/warrior/trainer-marketplace/types/pusher';
-import { pusherClient } from '@/src/lib/messages/pusher';
-import { ChatPartner } from '@/src/types/app/(private)/chat';
+import { Message } from '@/app/warrior/trainer-marketplace/types/pusher';
+import { pusherClient } from '@/lib/messages/pusher';
+import { ChatPartner } from '@/types/app/(private)/chat';
 import { FC, useEffect, useState } from 'react';
 
 interface MessagesProps {

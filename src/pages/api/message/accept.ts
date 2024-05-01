@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { sendErrorResponse } from '../../../utils/errorHandler';
-import { isValidID } from '@/src/utils/validationHelpers';
-import prisma from '@/src/lib/database/prisma';
+import { isValidID } from '@/utils/validationHelpers';
+import prisma from '@/lib/database/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
 export default async function Accept(

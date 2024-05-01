@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import { IncomingMessageRequest } from '../../../warrior/trainer-marketplace/types/pusher';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { pusherClient } from '@/src/lib/messages/pusher';
+import { pusherClient } from '@/lib/messages/pusher';
 
 interface MessageRequestsProps {
   incomingMessageRequests: IncomingMessageRequest[];
