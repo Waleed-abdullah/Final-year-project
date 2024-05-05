@@ -29,14 +29,16 @@ model certifications {
 }
 
 model chat {
-  chat_id                       String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  sender_id                     String   @db.Uuid
-  receiver_id                   String   @db.Uuid
+  chat_id                       String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  chat_list_id                  String    @db.Uuid
+  sender_id                     String    @db.Uuid
+  receiver_id                   String    @db.Uuid
   message_content               String
-  timestamp                     DateTime @default(now()) @db.Timestamp(6)
-  read_status                   Boolean
-  users_chat_receiver_idTousers users    @relation("chat_receiver_idTousers", fields: [receiver_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-  users_chat_sender_idTousers   users    @relation("chat_sender_idTousers", fields: [sender_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  timestamp                     DateTime  @default(now()) @db.Timestamptz(6)
+  read_status                   Boolean   @default(false)
+  chat_list                     chat_list @relation(fields: [chat_list_id], references: [chat_list_id], onDelete: NoAction, onUpdate: NoAction)
+  users_chat_receiver_idTousers users     @relation("chat_receiver_idTousers", fields: [receiver_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  users_chat_sender_idTousers   users     @relation("chat_sender_idTousers", fields: [sender_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([read_status], map: "idx_chat_read_status")
 }
@@ -271,10 +273,11 @@ model template_exercise {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model chat_list {
+  chat_list_id                     String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   user_id_1                        String @db.Uuid
   user_id_2                        String @db.Uuid
   status                           String @default("pending") @db.VarChar(50)
-  chat_list_id                     String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  chat                             chat[]
   users_chat_list_user_id_1Tousers users  @relation("chat_list_user_id_1Tousers", fields: [user_id_1], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
   users_chat_list_user_id_2Tousers users  @relation("chat_list_user_id_2Tousers", fields: [user_id_2], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 

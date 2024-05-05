@@ -1,8 +1,9 @@
 'use client';
 
 import axios from 'axios';
+import Image from 'next/image';
 import { FC, useRef, useState } from 'react';
-
+import Send from '@/assets/chats/send.svg';
 interface ChatInputProps {
   chatPartner: {
     user_id: string;
@@ -63,9 +64,7 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chat_id }) => {
 
         <div className='absolute right-0 bottom-0 flex justify-between py-2 pl-3 pr-2'>
           <div className='flex-shrin-0'>
-            <button type='submit' onClick={sendMessage}>
-              Post
-            </button>
+            <Image onClick={sendMessage} src={Send} alt='Send' />
           </div>
         </div>
       </div>

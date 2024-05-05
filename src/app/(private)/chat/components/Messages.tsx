@@ -4,6 +4,7 @@ import { Message } from '@/app/warrior/trainer-marketplace/types/pusher';
 import { pusherClient } from '@/lib/messages/pusher';
 import { ChatPartner } from '@/types/app/(private)/chat';
 import { FC, useEffect, useState } from 'react';
+import { format } from 'date-fns';
 
 interface MessagesProps {
   initialMessages: Message[];
@@ -19,6 +20,9 @@ const Messages: FC<MessagesProps> = ({
   chat_id,
 }) => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const formatTimestamp = (timestamp: Date) => {
+    return format(timestamp, 'HH:mm');
+  };
 
   useEffect(() => {
     pusherClient
@@ -35,27 +39,23 @@ const Messages: FC<MessagesProps> = ({
     };
   }, [chat_id]);
   return (
-    <div>
+    <div className='flex flex-col'>
       {messages.map((message, index) => {
-        const isCurrentUser = message.sender_id === session_id;
-
-        const hasNextMessageFromSameUser =
-          messages[index - 1]?.sender_id === messages[index].sender_id;
-
         return (
-          <div
-            className='chat-message'
-            key={`${message.chat_id}-${message.timestamp}`}
-          >
+          <div className='chat-message' key={`${message.chat_id}`}>
             <div>
-              <div>
-                <span>
-                  {message.message_content}{' '}
-                  <span className='ml-2 text-xs text-gray-400'>
-                    {message.timestamp.toString()}
-                  </span>
-                </span>
+              <div
+                className={`${
+                  message.sender_id === session_id
+                    ? 'bg-white ml-auto text-right'
+                    : 'bg-yellow-500 mr-auto'
+                } w-1/2 rounded-lg p-2 mt-4`}
+              >
+                <p>{message.message_content}</p>
+                <p>{formatTimestamp(message.timestamp)}</p>
               </div>
+
+              <div></div>
             </div>
           </div>
         );

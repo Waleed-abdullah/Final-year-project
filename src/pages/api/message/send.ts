@@ -78,6 +78,7 @@ export default async function Accept(
         message_content: text,
         timestamp: new Date(),
         read_status: false,
+        chat_list_id: chat_id,
       },
     });
 

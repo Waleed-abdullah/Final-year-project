@@ -70,7 +70,9 @@ const page: FC<PageProps> = async ({ params }) => {
           chatPartner={chatPartner}
           chat_id={chat_id}
         />
-        <ChatInput chatPartner={chatPartner} chat_id={chat_id} />
+        <div className='mt-auto'>
+          <ChatInput chatPartner={chatPartner} chat_id={chat_id} />
+        </div>
       </div>
     );
   } catch (error) {
