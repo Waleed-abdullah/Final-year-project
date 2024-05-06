@@ -22,7 +22,7 @@ export const UserCardContainer: React.FC<UserCardContainerProps> = ({
 
   return (
     <div className='flex flex-col items-center justify-center'>
-      {leaderBoard?.map((user, index) => (
+      {leaderBoard?.map((user: LeaderBoardItem, index) => (
         <UserCard
           key={index}
           username={user.username}

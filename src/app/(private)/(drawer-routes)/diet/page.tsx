@@ -6,14 +6,14 @@ import {
   CommonFoodItem,
   NutritionixInstantEndpoint,
   NutritionixNutrientsEndpoint,
-} from '../../../../types/app/(private)/(drawer-routes)/diet';
+} from '@/types/app/(private)/(drawer-routes)/diet';
 import { FoodItem, MealsByType } from '@/types/page/waza_warrior/food_log';
 import {
   createMeal,
   fetchNutrients,
   fetchSavedMeals,
   fetchSuggestions,
-} from '../../../../lib/nutritionService/meals_services';
+} from '@/lib/nutritionService/meals_services';
 
 import Delete from '@/assets/Diet/delete.svg';
 import Search from '@/assets/Diet/search.svg';
@@ -26,37 +26,19 @@ import Cross from '@/assets/Dashboard/cross.svg';
 import CalendarInput from '@/components/CalenderInput';
 import DoughnutChart from '@/components/DoughnutChart/DoughnutChart';
 
-import { Warrior } from '@/types/app/(private)/(drawer-routes)/dashboard';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { useLeaderBoard } from '@/stores/leaderboard-store';
+import { updateUserPoints } from '@/lib/leaderboard';
+import { useWarriorAndDate } from '../../WarriorAndDateProvider';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');
-  const [warrior, setWarrior] = useState<Warrior | null>(null);
-  const router = useRouter();
-  const session = useSession();
-  useEffect(() => {
-    if (!session.data) return;
+  const { warriorID, caloricGoal } = useWarriorAndDate();
+  const { leaderBoard, setLeaderBoard } = useLeaderBoard()((state) => state);
 
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:3000/api/waza_warrior/?user_id=${session.data.user.user_id}`,
-          {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-          },
-        );
-        const fetchedData: Warrior = await res.json();
-        setWarrior(fetchedData);
-        console.log(fetchedData);
-      } catch (error) {
-        console.error('Error fetching warrior data:', error);
-      }
-    };
-
-    fetchData();
-  }, [session, router]);
+  // TODO: replace this bad solution with a better one
+  const [rerender, setRerender] = useState(false);
 
   const [macros, setMacros] = useState({
     protein: 0,
@@ -173,9 +155,9 @@ export default function DietPage() {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        if (!warrior) return;
+        if (!warriorID) return;
         const meals: MealsByType = await fetchSavedMeals(
-          warrior.warrior_id,
+          warriorID,
           new Date(mealDate),
         );
 
@@ -188,7 +170,7 @@ export default function DietPage() {
       }
     };
     fetchMeals();
-  }, [warrior, mealDate, processMeals]);
+  }, [warriorID, mealDate, processMeals]);
 
   // put in utility functions
   const debounceSearch = useCallback((query: string) => {
@@ -228,6 +210,14 @@ export default function DietPage() {
   const handleMealDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMealDate(event.target.value);
   };
+
+  const handleAddFood = async () => {
+    if (!warriorID) return;
+    await createMeal(warriorID, mealType, mealDate, selectedFoods);
+    updateUserPoints(warriorID, leaderBoard!, setLeaderBoard, 5);
+    setRerender((prev) => !prev);
+  };
+
   const mealTypeColors = {
     Breakfast: 'bg-sky-400',
     Lunch: 'bg-yellow-400',
@@ -257,9 +247,7 @@ export default function DietPage() {
                     {macros.calories.toFixed(0)}{' '}
                   </p>
                   <p className='bg-yellow-400 py-1 px-5 rounded-3xl  text-md'>
-                    <span className='font-bold'>
-                      / {warrior?.caloric_goal ?? 1500}
-                    </span>{' '}
+                    <span className='font-bold'>/ {caloricGoal ?? 1500}</span>{' '}
                     kcal
                   </p>
                 </div>
@@ -302,19 +290,19 @@ export default function DietPage() {
                 </div>
               </div>
             </div>
-            <div className='bg-white grow   p-4 rounded-lg shadow flex flex-col items-start flex-wrap flex-1 mt-4'>
+            <div className='bg-white max-w-[500px] w-full   p-4 rounded-lg shadow flex flex-col items-start flex-wrap flex-1 mt-4'>
               <div className='border p-4 rounded-lg flex flex-row border-black/10 w-full'>
                 <Image src={Search} width={24} height={24} alt='calender' />
                 <input
                   type='text'
                   placeholder='Search for food items'
-                  className='flex-grow ml-2 focus:outline-none'
+                  className='flex-grow w-full ml-2 focus:outline-none'
                   value={query}
                   onChange={handleQueryChange}
                 />
               </div>
               {suggestions && suggestions.branded && (
-                <div className='p-4 rounded-2xl bg-black w-full mt-4 max-h-72 overflow-y-scroll  scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-100'>
+                <div className='p-4 rounded-2xl bg-black wfull cursor-pointer mt-4 max-h-72 overflow-y-scroll  scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-100'>
                   {suggestions.branded.map((suggestion, idx) => (
                     <div
                       key={idx}
@@ -410,15 +398,7 @@ export default function DietPage() {
               </div>
               <div
                 className='py-3 px-4 rounded-3xl bg-yellow-400 flex flex-row mt-4 gap-2 cursor-pointer'
-                onClick={async () => {
-                  if (!warrior) return;
-                  await createMeal(
-                    warrior.warrior_id,
-                    mealType,
-                    mealDate,
-                    selectedFoods,
-                  );
-                }}
+                onClick={handleAddFood}
               >
                 <Image src={Add} width={24} height={24} alt='calender' />
                 <p className='text-white font-semibold'>Add Food</p>

@@ -1,17 +1,12 @@
 'use client';
 import { useSession } from 'next-auth/react';
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 interface WarriorAndDateContextType {
   warriorID: string;
   name: string;
   date: string;
+  caloricGoal: number;
   setDate: (date: string) => void;
 }
 
@@ -35,6 +30,7 @@ export const WarriorAndDateProvider: React.FC<{
 
   const [warriorID, setWarriorID] = useState<string>('');
   const [date, setDate] = useState<string>(dateString.toString());
+  const [caloricGoal, setCaloricGoal] = useState<number>(1500);
   const [name, setName] = useState<string>('');
 
   const session = useSession();
@@ -52,7 +48,9 @@ export const WarriorAndDateProvider: React.FC<{
         return;
       }
       const data = await response.json();
+      console.log('Warrior data:', data);
       setWarriorID(data.warrior_id);
+      setCaloricGoal(data.caloric_goal);
       setName(data.users.name);
     };
 
@@ -60,7 +58,9 @@ export const WarriorAndDateProvider: React.FC<{
   }, [session]);
 
   return (
-    <WarriorAndDateContext.Provider value={{ warriorID, date, setDate, name }}>
+    <WarriorAndDateContext.Provider
+      value={{ warriorID, date, caloricGoal, setDate, name }}
+    >
       {children}
     </WarriorAndDateContext.Provider>
   );
