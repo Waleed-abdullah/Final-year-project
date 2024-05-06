@@ -4,23 +4,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../lib/database/prisma';
 import { sendErrorResponse } from '@/utils/errorHandler';
 import { ExerciseRequestBody } from '@/types/page/waza_warrior/exercise';
-const VALID_MUSCLE_GROUPS = [
-  'Hamstrings',
-  'Chest',
-  'Shoulders',
-  'Quadriceps',
-  'Back',
-  'Triceps',
-  'Biceps',
-  'Glutes',
-  'Calves',
-  'ABS',
-  'Legs',
-  'The back and biceps',
-  'Forearms',
-  'Upper back',
-  'Arm',
-];
+import { VALID_MUSCLE_GROUPS } from '@/constants/exercises';
+
 export default async function createExercise(
   req: NextApiRequest,
   res: NextApiResponse,

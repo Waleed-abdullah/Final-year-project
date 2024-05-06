@@ -1,6 +1,7 @@
 'use client';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
+import { VALID_MUSCLE_GROUPS } from '@/constants/exercises';
 
 export const CreateWorkout = ({
   session_id,
@@ -12,29 +13,12 @@ export const CreateWorkout = ({
   // State to manage input values
   const [formData, setFormData] = useState({
     title: '',
-    muscle_group: '',
+    muscle_group: VALID_MUSCLE_GROUPS[0],
     weight: 0,
     sets: 0,
     reps: 0,
     session_id: session_id,
   });
-  const VALID_MUSCLE_GROUPS = [
-    'Hamstrings',
-    'Chest',
-    'Shoulders',
-    'Quadriceps',
-    'Back',
-    'Triceps',
-    'Biceps',
-    'Glutes',
-    'Calves',
-    'ABS',
-    'Legs',
-    'The back and biceps',
-    'Forearms',
-    'Upper back',
-    'Arm',
-  ];
 
   // Handle input change
   const handleChange = (e: any) => {
@@ -49,6 +33,7 @@ export const CreateWorkout = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
+      console.log('formData', formData);
       const response = await fetch(
         'http://localhost:3000/api/waza_warrior/exercise',
         {
@@ -58,7 +43,7 @@ export const CreateWorkout = ({
           },
           body: JSON.stringify({
             title: formData.title,
-            muscle_group: formData.muscle_group,
+            muscle_group: formData.muscle_group || VALID_MUSCLE_GROUPS[0],
             weight: Number(formData.weight),
             sets: Number(formData.sets),
             reps: Number(formData.reps),
@@ -72,7 +57,7 @@ export const CreateWorkout = ({
       }
       setFormData({
         title: '',
-        muscle_group: '',
+        muscle_group: VALID_MUSCLE_GROUPS[0],
         weight: 0,
         sets: 0,
         reps: 0,

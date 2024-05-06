@@ -4,6 +4,9 @@ import {
   ExerciseLog,
 } from '@/types/app/(private)/(drawer-routes)/workout';
 import { LogCard } from './LogCard';
+import { useLeaderBoard } from '@/stores/leaderboard-store';
+import { updateUserPoints } from '@/lib/leaderboard';
+import { useWarriorAndDate } from '@/app/(private)/WarriorAndDateProvider';
 
 export const ExerciseCard = ({
   title,
@@ -16,6 +19,8 @@ export const ExerciseCard = ({
 }: Exercise) => {
   const [exerciseLog, setExerciseLog] =
     useState<ExerciseLog[]>(initialExerciseLog);
+  const { leaderBoard, setLeaderBoard } = useLeaderBoard()((state) => state);
+  const { warriorID } = useWarriorAndDate();
 
   const addExerciseLog = useCallback(async () => {
     try {
@@ -41,10 +46,11 @@ export const ExerciseCard = ({
 
       const newLog = await response.json();
       setExerciseLog([...exerciseLog, newLog]);
+      updateUserPoints(warriorID, leaderBoard!, setLeaderBoard, 8);
     } catch (error) {
       console.error('Failed to add exercise log:', error);
     }
-  }, [exercise_id, exerciseLog]);
+  }, [exercise_id, exerciseLog, leaderBoard, setLeaderBoard, warriorID]);
 
   return (
     <div className='bg-white rounded-md px-12 py-3 flex flex-col gap-4'>
