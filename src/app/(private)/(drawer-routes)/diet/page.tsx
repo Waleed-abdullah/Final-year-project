@@ -30,7 +30,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useLeaderBoard } from '@/stores/leaderboard-store';
 import { updateUserPoints } from '@/lib/leaderboard';
-import { useWarriorAndDate } from '../../WarriorAndDateProvider';
+import { useWarriorAndDate } from '../../../../stores/warrior-store/WarriorAndDateProvider';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');

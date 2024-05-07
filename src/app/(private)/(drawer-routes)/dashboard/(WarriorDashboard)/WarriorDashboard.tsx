@@ -20,7 +20,7 @@ import {
 import { NutritionixNutrientsEndpoint } from '@/types/app/(private)/(drawer-routes)/diet';
 import './WarriorDashboard.css';
 import CalendarInput from '@/components/CalenderInput';
-import { useWarriorAndDate } from '@/app/(private)/WarriorAndDateProvider';
+import { useWarriorAndDate } from '@/stores/warrior-store/WarriorAndDateProvider';
 
 export default function WarriorDashboard() {
   const { warriorID, caloricGoal } = useWarriorAndDate();

@@ -7,6 +7,11 @@ interface WarriorAndDateContextType {
   name: string;
   date: string;
   caloricGoal: number;
+  weightGoal: number;
+  warriorProfilePic: string;
+  setWarriorProfilePic: (profilePic: string) => void;
+  setWeightGoal: (weightGoal: number) => void;
+  setCaloricGoal: (caloricGoal: number) => void;
   setDate: (date: string) => void;
 }
 
@@ -31,6 +36,8 @@ export const WarriorAndDateProvider: React.FC<{
   const [warriorID, setWarriorID] = useState<string>('');
   const [date, setDate] = useState<string>(dateString.toString());
   const [caloricGoal, setCaloricGoal] = useState<number>(1500);
+  const [weightGoal, setWeightGoal] = useState<number>(0);
+  const [warriorProfilePic, setWarriorProfilePic] = useState<string>('');
   const [name, setName] = useState<string>('');
 
   const session = useSession();
@@ -52,6 +59,8 @@ export const WarriorAndDateProvider: React.FC<{
       setWarriorID(data.warrior_id);
       setCaloricGoal(data.caloric_goal);
       setName(data.users.name);
+      setWeightGoal(data.weight_goal);
+      setWarriorProfilePic(data.users.profile_pic);
     };
 
     fetchWarrior();
@@ -59,7 +68,18 @@ export const WarriorAndDateProvider: React.FC<{
 
   return (
     <WarriorAndDateContext.Provider
-      value={{ warriorID, date, caloricGoal, setDate, name }}
+      value={{
+        warriorID,
+        date,
+        caloricGoal,
+        setCaloricGoal,
+        setDate,
+        name,
+        weightGoal,
+        setWeightGoal,
+        warriorProfilePic,
+        setWarriorProfilePic,
+      }}
     >
       {children}
     </WarriorAndDateContext.Provider>

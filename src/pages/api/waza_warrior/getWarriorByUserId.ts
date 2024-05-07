@@ -23,6 +23,7 @@ export default async function getWarriorByUserId(
         select: {
           warrior_id: true,
           caloric_goal: true,
+          weight_goal: true,
           users: {
             select: {
               email: true,

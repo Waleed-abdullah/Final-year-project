@@ -6,7 +6,7 @@ import {
 import { LogCard } from './LogCard';
 import { useLeaderBoard } from '@/stores/leaderboard-store';
 import { updateUserPoints } from '@/lib/leaderboard';
-import { useWarriorAndDate } from '@/app/(private)/WarriorAndDateProvider';
+import { useWarriorAndDate } from '@/stores/warrior-store/WarriorAndDateProvider';
 
 export const ExerciseCard = ({
   title,
