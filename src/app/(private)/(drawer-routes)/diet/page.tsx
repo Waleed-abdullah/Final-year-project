@@ -170,7 +170,7 @@ export default function DietPage() {
       }
     };
     fetchMeals();
-  }, [warriorID, mealDate, processMeals]);
+  }, [warriorID, mealDate, processMeals, rerender]);
 
   // put in utility functions
   const debounceSearch = useCallback((query: string) => {
