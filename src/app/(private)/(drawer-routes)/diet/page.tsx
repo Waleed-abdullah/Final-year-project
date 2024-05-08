@@ -406,7 +406,7 @@ export default function DietPage() {
             </div>
           </div>
           <div className='basis-5/12 grow min-w-max max-h-[900px]  overflow-y-scroll  scrollbar-thumb-gray-500 scrollbar-thin scrollbar-track-gray-100'>
-            <div className='bg-white  p-4 rounded-lg shadow flex flex-col flex-wrap flex-1'>
+            <div className='bg-white  p-4 rounded-lg shadow flex flex-col flex-wrap max-w-[483px] flex-1'>
               <p className='text-lg font-semibold text-gray-400'>
                 {`Today's Log`}
               </p>
@@ -423,9 +423,11 @@ export default function DietPage() {
                           ] || 'bg-gray-200'
                         }`}
                       >
-                        <p className='text-white font-semibold'>{mealType}</p>
+                        <p className='text-white text-ellipsis  font-semibold'>
+                          {mealType}
+                        </p>
                       </div>
-                      <p className='sm:text-sm font-bold text-lg'>
+                      <p className='sm:text-sm text-ellipsis font-bold text-lg'>
                         {
                           totalMealTypeCalories[
                             mealType as keyof typeof totalMealTypeCalories
@@ -452,7 +454,7 @@ export default function DietPage() {
                                 alt='calender'
                               />
                             )}
-                            <p className='sm:text-sm font-bold   text-lg'>
+                            <p className='sm:text-sm font-bold max-w-[200px] text-ellipsis   text-lg'>
                               {item.food_item_identifier}
                             </p>
                           </div>
