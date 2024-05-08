@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/database/prisma';
-import { error } from 'console';
 
 export const PATCH = async (request: Request) => {
   // get data from req.body

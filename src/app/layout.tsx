@@ -18,7 +18,9 @@ export default function RootLayout({
     <html lang='en'>
       <body>
         <ProgressBarProvider>
-          <ScreenWidthProvider>{children}= </ScreenWidthProvider>
+          <ScreenWidthProvider>
+            <div className='h-screen w-full place-items-center'>{children}</div>{' '}
+          </ScreenWidthProvider>
         </ProgressBarProvider>
         <ToastContainer />
       </body>

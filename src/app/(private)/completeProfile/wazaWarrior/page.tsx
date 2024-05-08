@@ -23,15 +23,12 @@ export default function CompleteWarriorProfile() {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(
-        `http://localhost:3000/api/waza_warrior?user_id=${user_id}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      const res = await fetch(`/api/waza_warrior?user_id=${user_id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+      });
       if (res.ok) {
         const data = await res.json();
         console.log('Warrior found:', data);
@@ -55,7 +52,7 @@ export default function CompleteWarriorProfile() {
     setError('');
 
     try {
-      const response = await fetch(`http://localhost:3000/api/waza_warrior`, {
+      const response = await fetch(`/api/waza_warrior`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

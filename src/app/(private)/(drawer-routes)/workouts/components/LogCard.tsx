@@ -27,7 +27,7 @@ export const LogCard = ({
     async (logId: string, data: { weight: number; achieved_reps: number }) => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/waza_warrior/exercise_log?log_id=${logId}`,
+          `/api/waza_warrior/exercise_log?log_id=${logId}`,
           {
             method: 'PATCH',
             headers: {

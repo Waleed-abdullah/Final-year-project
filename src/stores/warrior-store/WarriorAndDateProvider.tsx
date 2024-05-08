@@ -4,9 +4,14 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 interface WarriorAndDateContextType {
   warriorID: string;
-  name: string;
+  userName: string;
   date: string;
   caloricGoal: number;
+  weightGoal: number;
+  warriorProfilePic: string;
+  setWarriorProfilePic: (profilePic: string) => void;
+  setWeightGoal: (weightGoal: number) => void;
+  setCaloricGoal: (caloricGoal: number) => void;
   setDate: (date: string) => void;
 }
 
@@ -31,7 +36,9 @@ export const WarriorAndDateProvider: React.FC<{
   const [warriorID, setWarriorID] = useState<string>('');
   const [date, setDate] = useState<string>(dateString.toString());
   const [caloricGoal, setCaloricGoal] = useState<number>(1500);
-  const [name, setName] = useState<string>('');
+  const [weightGoal, setWeightGoal] = useState<number>(0);
+  const [warriorProfilePic, setWarriorProfilePic] = useState<string>('');
+  const [userName, setuserName] = useState<string>('');
 
   const session = useSession();
 
@@ -40,7 +47,7 @@ export const WarriorAndDateProvider: React.FC<{
 
     const fetchWarrior = async () => {
       const response = await fetch(
-        `http://localhost:3000/api/waza_warrior/?user_id=${session.data.user.user_id}`,
+        `/api/waza_warrior/?user_id=${session.data.user.user_id}`,
       );
       if (!response.ok) {
         // Handle error
@@ -51,7 +58,9 @@ export const WarriorAndDateProvider: React.FC<{
       console.log('Warrior data:', data);
       setWarriorID(data.warrior_id);
       setCaloricGoal(data.caloric_goal);
-      setName(data.users.name);
+      setuserName(data.users.username);
+      setWeightGoal(data.weight_goal);
+      setWarriorProfilePic(data.users.profile_pic);
     };
 
     fetchWarrior();
@@ -59,7 +68,18 @@ export const WarriorAndDateProvider: React.FC<{
 
   return (
     <WarriorAndDateContext.Provider
-      value={{ warriorID, date, caloricGoal, setDate, name }}
+      value={{
+        warriorID,
+        date,
+        caloricGoal,
+        setCaloricGoal,
+        setDate,
+        userName,
+        weightGoal,
+        setWeightGoal,
+        warriorProfilePic,
+        setWarriorProfilePic,
+      }}
     >
       {children}
     </WarriorAndDateContext.Provider>

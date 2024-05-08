@@ -4,9 +4,9 @@ import prisma from '@/lib/database/prisma';
 import { Settings } from './settings';
 import { Notification } from './notifications/notification';
 
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { friendRequest } from '@/types/friend';
 import { FriendRequestsProvider } from '@/stores/friend-request-store';
+import { UserAvatar } from './user-avatar';
 
 const UserMenu: React.FC = async () => {
   const session = await getServerSession(authOptions);
@@ -76,12 +76,7 @@ const UserMenu: React.FC = async () => {
         {displayName}
       </div>
       <div>
-        <Avatar>
-          <AvatarImage src='something' />
-          <AvatarFallback>
-            {displayName && displayName[0].toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar displayName={displayName || 'U'} />
       </div>
     </div>
   );

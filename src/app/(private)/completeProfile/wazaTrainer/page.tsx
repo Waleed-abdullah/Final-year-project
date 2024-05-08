@@ -29,15 +29,12 @@ export default function CompleteTrainerProfile() {
   }
   useEffect(() => {
     (async () => {
-      const res = await fetch(
-        `http://localhost:3000/api/waza_trainer?user_id=${user_id}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      const res = await fetch(`/api/waza_trainer?user_id=${user_id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+      });
       if (res.ok) {
         const data = await res.json();
         console.log('Trainer found:', data);
@@ -72,7 +69,7 @@ export default function CompleteTrainerProfile() {
       };
 
       console.log('Trainer details:', detailsToSend);
-      const response = await fetch(`http://localhost:3000/api/waza_trainer`, {
+      const response = await fetch(`/api/waza_trainer`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

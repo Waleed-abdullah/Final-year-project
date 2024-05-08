@@ -276,6 +276,7 @@ model waza_warriors {
   user_id                                     String?                   @unique(map: "unique_user_id") @db.Uuid
   age                                         Int?
   caloric_goal                                Float?
+  weight_goal                                 Float?
   friends_friends_accepter_idTowaza_warriors  friends[]                 @relation("friends_accepter_idTowaza_warriors")
   friends_friends_requester_idTowaza_warriors friends[]                 @relation("friends_requester_idTowaza_warriors")
   leaderboard                                 leaderboard?

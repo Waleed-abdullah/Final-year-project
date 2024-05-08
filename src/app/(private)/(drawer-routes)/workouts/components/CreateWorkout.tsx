@@ -34,23 +34,20 @@ export const CreateWorkout = ({
     e.preventDefault();
     try {
       console.log('formData', formData);
-      const response = await fetch(
-        'http://localhost:3000/api/waza_warrior/exercise',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            title: formData.title,
-            muscle_group: formData.muscle_group || VALID_MUSCLE_GROUPS[0],
-            weight: Number(formData.weight),
-            sets: Number(formData.sets),
-            reps: Number(formData.reps),
-            session_id: session_id,
-          }),
+      const response = await fetch('/api/waza_warrior/exercise', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify({
+          title: formData.title,
+          muscle_group: formData.muscle_group || VALID_MUSCLE_GROUPS[0],
+          weight: Number(formData.weight),
+          sets: Number(formData.sets),
+          reps: Number(formData.reps),
+          session_id: session_id,
+        }),
+      });
       const newExercise = await response.json();
       if (!response.ok) {
         throw new Error(newExercise.message);
