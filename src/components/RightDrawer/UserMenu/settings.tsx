@@ -14,6 +14,9 @@ import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useWarriorAndDate } from '@/stores/warrior-store/WarriorAndDateProvider';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { toast } from 'react-toastify';
+import { useLeaderBoard } from '@/stores/leaderboard-store';
 
 export const Settings = () => {
   const {
@@ -25,12 +28,15 @@ export const Settings = () => {
     setCaloricGoal,
     setWeightGoal,
   } = useWarriorAndDate();
+  const { data: session } = useSession();
 
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
   const [imageSource, setImageSource] = useState<string>(
     warriorProfilePic || '',
   );
+
+  const { leaderBoard, setLeaderBoard } = useLeaderBoard()((state) => state);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,6 +56,18 @@ export const Settings = () => {
     //TODOL: Update warrior profile on the backend
     if (profilePic) {
       setWarriorProfilePic(profilePic);
+
+      // find the current user in the leaderboard and update the pic
+      const updatedLeaderBoard = leaderBoard.map((user) => {
+        if (user.warrior_id === warriorID) {
+          return {
+            ...user,
+            profile_pic: profilePic,
+          };
+        }
+        return user;
+      });
+      setLeaderBoard(updatedLeaderBoard);
     }
     if (weightGoal) {
       setWeightGoal(parseFloat(weightGoal));
@@ -57,9 +75,26 @@ export const Settings = () => {
     if (caloricGoal) {
       setCaloricGoal(parseInt(caloricGoal));
     }
-    console.log('Profile Pic:', profilePic);
-    console.log('Weight Goal:', weightGoal);
-    console.log('Caloric Goal:', caloricGoal);
+
+    console.log(profilePic);
+    try {
+      await fetch('/api/warrior/update-info', {
+        method: 'PATCH',
+        body: JSON.stringify({
+          profilePic,
+          weightGoal,
+          caloricGoal,
+          warriorId: warriorID,
+          userId: session?.user?.user_id,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      toast.success('Profile updated successfully', { autoClose: 3000 });
+    } catch (e) {
+      toast.error('Failed to update profile', { autoClose: 3000 });
+    }
   };
   return (
     <Dialog>

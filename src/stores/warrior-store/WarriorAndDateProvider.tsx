@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 interface WarriorAndDateContextType {
   warriorID: string;
-  name: string;
+  userName: string;
   date: string;
   caloricGoal: number;
   weightGoal: number;
@@ -38,7 +38,7 @@ export const WarriorAndDateProvider: React.FC<{
   const [caloricGoal, setCaloricGoal] = useState<number>(1500);
   const [weightGoal, setWeightGoal] = useState<number>(0);
   const [warriorProfilePic, setWarriorProfilePic] = useState<string>('');
-  const [name, setName] = useState<string>('');
+  const [userName, setuserName] = useState<string>('');
 
   const session = useSession();
 
@@ -58,7 +58,7 @@ export const WarriorAndDateProvider: React.FC<{
       console.log('Warrior data:', data);
       setWarriorID(data.warrior_id);
       setCaloricGoal(data.caloric_goal);
-      setName(data.users.name);
+      setuserName(data.users.username);
       setWeightGoal(data.weight_goal);
       setWarriorProfilePic(data.users.profile_pic);
     };
@@ -74,7 +74,7 @@ export const WarriorAndDateProvider: React.FC<{
         caloricGoal,
         setCaloricGoal,
         setDate,
-        name,
+        userName,
         weightGoal,
         setWeightGoal,
         warriorProfilePic,

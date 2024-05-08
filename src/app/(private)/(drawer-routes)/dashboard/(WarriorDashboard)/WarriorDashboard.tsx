@@ -23,7 +23,7 @@ import CalendarInput from '@/components/CalenderInput';
 import { useWarriorAndDate } from '@/stores/warrior-store/WarriorAndDateProvider';
 
 export default function WarriorDashboard() {
-  const { warriorID, caloricGoal } = useWarriorAndDate();
+  const { warriorID, caloricGoal, userName } = useWarriorAndDate();
 
   const [macros, setMacros] = useState({
     protein: 0,
@@ -117,7 +117,7 @@ export default function WarriorDashboard() {
       </header>
 
       <main>
-        <h2 className='text-lg font-semibold mb-4'>Welcome Back Waleed!</h2>
+        <h2 className='text-lg font-semibold mb-4'>Welcome Back {userName}!</h2>
         <div className='flex flex-row gap-3 justify-between flex-wrap'>
           <div className='bg-white  p-4 rounded-lg shadow flex justify-center items-center flex-wrap flex-1 '>
             <div className='w-64 relative'>
