@@ -24,20 +24,17 @@ export const ExerciseCard = ({
 
   const addExerciseLog = useCallback(async () => {
     try {
-      const response = await fetch(
-        'http://localhost:3000/api/waza_warrior/exercise_log',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            exercise_id,
-            weight: 1, // default value
-            achieved_reps: 1, // default value
-          }),
+      const response = await fetch('/api/waza_warrior/exercise_log', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify({
+          exercise_id,
+          weight: 1, // default value
+          achieved_reps: 1, // default value
+        }),
+      });
 
       if (!response.ok) {
         console.log(response);

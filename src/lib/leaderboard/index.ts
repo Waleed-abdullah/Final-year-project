@@ -18,7 +18,7 @@ export const updateUserPoints = async (
 
   setLeaderBoard(updatedLeaderBoard);
 
-  await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/leaderboard/add-points`, {
+  await fetch(`/api/leaderboard/add-points`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

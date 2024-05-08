@@ -34,7 +34,7 @@ export default function WorkoutPage() {
   const fetchTemplates = useCallback(async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/waza_warrior/template?warrior_id=${warriorID}`,
+        `/api/waza_warrior/template?warrior_id=${warriorID}`,
       );
       const data = await res.json();
       console.log('===========data===========');
@@ -53,19 +53,16 @@ export default function WorkoutPage() {
 
   useEffect(() => {
     const fetchSession = async (warrior_id: string, date: string) => {
-      const res = await fetch(
-        'http://localhost:3000/api/waza_warrior/session',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            warrior_id,
-            date,
-          }),
+      const res = await fetch('/api/waza_warrior/session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify({
+          warrior_id,
+          date,
+        }),
+      });
       const session = await res.json();
       setSession(session);
       console.log(session);
@@ -88,7 +85,7 @@ export default function WorkoutPage() {
 
   const updateSession = async (sessionID: string, templateID: string) => {
     const res = await fetch(
-      `http://localhost:3000/api/waza_warrior/session?session_id=${sessionID}`,
+      `/api/waza_warrior/session?session_id=${sessionID}`,
       {
         method: 'PATCH',
         headers: {

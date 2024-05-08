@@ -30,16 +30,13 @@ export const CreateTemplate = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        'http://localhost:3000/api/waza_warrior/template',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
+      const response = await fetch('/api/waza_warrior/template', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify(formData),
+      });
       if (!response.ok) {
         throw new Error('Failed to create template');
       }

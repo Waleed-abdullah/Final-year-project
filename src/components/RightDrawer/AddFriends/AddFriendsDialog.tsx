@@ -31,19 +31,16 @@ const AddFriendsDialog: React.FC = () => {
   const handleFriendAdd = async (potentialFriend: Friend, idx: number) => {
     // add friend logic
     try {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/friends/add`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userId: session?.user?.user_id,
-            friendId: potentialFriend.warrior_id,
-          }),
+      const result = await fetch(`/api/friends/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify({
+          userId: session?.user?.user_id,
+          friendId: potentialFriend.warrior_id,
+        }),
+      });
       const data = await result.json();
       if (data.error) {
         toast.error(data.error, {
@@ -98,7 +95,7 @@ const AddFriendsDialog: React.FC = () => {
       if (searchQuery.length === 0) return;
       try {
         const result = await fetch(
-          `${process.env.NEXT_PUBLIC_APP_URL}/api/friends/search?query=${searchQuery}&userId=${session?.user?.user_id}`,
+          `/api/friends/search?query=${searchQuery}&userId=${session?.user?.user_id}`,
         );
         const data = await result.json();
         console.log(data);

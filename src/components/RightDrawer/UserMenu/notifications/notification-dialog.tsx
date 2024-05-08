@@ -23,19 +23,16 @@ export const NotificationDialog: React.FC = () => {
   ) => {
     // handle friend request logic
     try {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/friends/handle-request`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            requestId: friendData.id,
-            action,
-          }),
+      const result = await fetch(`/api/friends/handle-request`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify({
+          requestId: friendData.id,
+          action,
+        }),
+      });
       const data = await result.json();
       if (data.error) {
         toast.error(data.error);

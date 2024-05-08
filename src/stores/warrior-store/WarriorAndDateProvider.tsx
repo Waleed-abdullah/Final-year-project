@@ -47,7 +47,7 @@ export const WarriorAndDateProvider: React.FC<{
 
     const fetchWarrior = async () => {
       const response = await fetch(
-        `http://localhost:3000/api/waza_warrior/?user_id=${session.data.user.user_id}`,
+        `/api/waza_warrior/?user_id=${session.data.user.user_id}`,
       );
       if (!response.ok) {
         // Handle error
