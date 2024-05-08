@@ -20,9 +20,14 @@ import { CreateWorkout } from './components/CreateWorkout';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { CreateTemplate } from './components/CreateTemplate';
 import CalendarInput from '@/components/CalenderInput';
+import { useLeaderBoard } from '@/stores/leaderboard-store';
+import { updateUserPoints } from '@/lib/leaderboard';
 
 export default function WorkoutPage() {
-  const { warriorID, date, setDate, name } = useWarriorAndDate();
+  const { warriorID, date, setDate } = useWarriorAndDate();
+
+  const { leaderBoard, setLeaderBoard } = useLeaderBoard()((state) => state);
+
   const [session, setSession] = useState<Session | null>(null);
   const [templates, setTemplates] = useState<Template[]>([]);
 
@@ -78,6 +83,7 @@ export default function WorkoutPage() {
       console.log(updatedSession);
       setSession(updatedSession);
     }
+    updateUserPoints(warriorID, leaderBoard!, setLeaderBoard, 10);
   };
 
   const updateSession = async (sessionID: string, templateID: string) => {

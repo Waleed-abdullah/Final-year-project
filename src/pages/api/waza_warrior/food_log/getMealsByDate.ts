@@ -30,7 +30,7 @@ export default async function handler(
           meal_types: true,
         },
       });
-      const mealsByType: MealsByType = meals.reduce((acc, meal) => {
+      const mealsByType: MealsByType = meals.reduce((acc: any, meal: any) => {
         const mealTypeName = meal.meal_types.name;
         acc[mealTypeName as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'] = meal;
         return acc;

@@ -1,6 +1,8 @@
 import { ScreenWidthProvider } from './ScreenWidthProvider';
 import './global.css';
 import ProgressBarProvider from '@/components/ProgressBarProvider';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 export const metadata = {
   title: 'Waza Fitness',
@@ -16,8 +18,9 @@ export default function RootLayout({
     <html lang='en'>
       <body>
         <ProgressBarProvider>
-          <ScreenWidthProvider>{children}</ScreenWidthProvider>
+          <ScreenWidthProvider>{children}= </ScreenWidthProvider>
         </ProgressBarProvider>
+        <ToastContainer />
       </body>
     </html>
   );

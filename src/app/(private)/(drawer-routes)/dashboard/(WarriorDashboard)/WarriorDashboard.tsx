@@ -20,9 +20,11 @@ import {
 import { NutritionixNutrientsEndpoint } from '@/types/app/(private)/(drawer-routes)/diet';
 import './WarriorDashboard.css';
 import CalendarInput from '@/components/CalenderInput';
+import { useWarriorAndDate } from '@/app/(private)/WarriorAndDateProvider';
 
 export default function WarriorDashboard() {
-  const [warrior, setWarrior] = useState<Warrior | null>(null);
+  const { warriorID, caloricGoal } = useWarriorAndDate();
+
   const [macros, setMacros] = useState({
     protein: 0,
     carbs: 0,
@@ -34,36 +36,12 @@ export default function WarriorDashboard() {
   const router = useRouter();
   const session = useSession();
 
-  //put this data in the session storage to avoid unnecessary refetching
-  useEffect(() => {
-    if (!session.data) return; // remove this and use non-null operator
-
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:3000/api/waza_warrior/?user_id=${session.data.user.user_id}`,
-          {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-          },
-        );
-        const fetchedData: Warrior = await res.json();
-        setWarrior(fetchedData);
-        console.log(fetchedData);
-      } catch (error) {
-        console.error('Error fetching warrior data:', error);
-      }
-    };
-
-    fetchData();
-  }, [session, router]);
-
   useEffect(() => {
     const fetchMacros = async () => {
       try {
-        if (!warrior) return;
+        if (!warriorID) return;
         const fetchedData: MealsByType = await fetchSavedMeals(
-          warrior.warrior_id!,
+          warriorID!,
           new Date(date),
         );
         const allFoodItems = [];
@@ -81,6 +59,7 @@ export default function WarriorDashboard() {
         const nutrients: NutritionixNutrientsEndpoint =
           await fetchNutrients(query);
 
+        //TODO: Move this to a separate libarary function to refactor the code
         const totals = nutrients.foods.reduce(
           (
             acc: {
@@ -112,7 +91,7 @@ export default function WarriorDashboard() {
     };
 
     fetchMacros();
-  }, [warrior, date]);
+  }, [warriorID, date]);
   const chartData = useMemo(
     () => ({
       labels: ['Protein', 'Carbs', 'Fats'],
@@ -148,9 +127,7 @@ export default function WarriorDashboard() {
                   {macros.calories.toFixed(0)}{' '}
                 </p>
                 <p className='bg-yellow-400 py-1 px-5 rounded-3xl  text-md'>
-                  <span className='font-bold'>
-                    / {warrior?.caloric_goal ?? 1500}
-                  </span>{' '}
+                  <span className='font-bold'>/ {caloricGoal ?? 1500}</span>{' '}
                   kcal
                 </p>
               </div>

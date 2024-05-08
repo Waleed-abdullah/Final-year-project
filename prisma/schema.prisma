@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -43,6 +44,7 @@ model chat {
   @@index([read_status], map: "idx_chat_read_status")
 }
 
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model exercise {
   exercise_id     String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   title           String            @db.VarChar(255)
@@ -61,10 +63,68 @@ model exercise {
   warriorexercise warriorexercise[]
 }
 
+model exercise_log {
+  log_id        String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  exercise_id   String   @db.Uuid
+  weight        Int?
+  achieved_reps Int?
+  exercise      exercise @relation(fields: [exercise_id], references: [exercise_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_exercise")
+}
+
+model friends {
+  id                                                Int                @id @default(autoincrement())
+  requester_id                                      String?            @db.Uuid
+  accepter_id                                       String?            @db.Uuid
+  status                                            friendship_status?
+  date_connected                                    DateTime?          @db.Date
+  waza_warriors_friends_accepter_idTowaza_warriors  waza_warriors?     @relation("friends_accepter_idTowaza_warriors", fields: [accepter_id], references: [warrior_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_accepter")
+  waza_warriors_friends_requester_idTowaza_warriors waza_warriors?     @relation("friends_requester_idTowaza_warriors", fields: [requester_id], references: [warrior_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_requester")
+}
+
 model goals {
   goal_id      String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   goal_name    String         @db.VarChar(255)
   warriorgoals warriorgoals[]
+}
+
+model leaderboard {
+  warrior_id    String        @id @db.Uuid
+  points        Int           @default(0)
+  waza_warriors waza_warriors @relation(fields: [warrior_id], references: [warrior_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_warrior_id")
+}
+
+model meal_food_items {
+  meal_id              String   @db.Uuid
+  food_item_identifier String   @db.VarChar(255)
+  quantity             Decimal  @db.Decimal
+  created_at           DateTime @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime @default(now()) @db.Timestamptz(6)
+  unit                 String   @db.VarChar(50)
+  meals                meals    @relation(fields: [meal_id], references: [meal_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([meal_id, food_item_identifier])
+}
+
+model meal_types {
+  meal_type_id String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name         String   @unique @db.VarChar(255)
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime @default(now()) @db.Timestamptz(6)
+  meals        meals[]
+}
+
+model meals {
+  meal_id         String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  warrior_id      String            @db.Uuid
+  meal_type_id    String            @db.Uuid
+  meal_date       DateTime          @db.Date
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime          @default(now()) @db.Timestamptz(6)
+  meal_food_items meal_food_items[]
+  meal_types      meal_types        @relation(fields: [meal_type_id], references: [meal_type_id], onDelete: NoAction, onUpdate: NoAction)
+  waza_warriors   waza_warriors     @relation(fields: [warrior_id], references: [warrior_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([warrior_id, meal_type_id, meal_date])
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -104,6 +164,46 @@ model specializations {
   warrior_specializations warrior_specializations[]
 }
 
+model template {
+  template_id       String              @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  warrior_id        String?             @db.Uuid
+  title             String              @unique @db.VarChar(255)
+  description       String
+  created_at        DateTime?           @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime?           @db.Timestamptz(6)
+  waza_warriors     waza_warriors?      @relation(fields: [warrior_id], references: [warrior_id], onDelete: Cascade, onUpdate: NoAction)
+  template_exercise template_exercise[]
+}
+
+model template_exercise {
+  template_exercise_id String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  template_id          String?   @db.Uuid
+  title                String    @db.VarChar(255)
+  muscle_group         String    @db.VarChar(255)
+  weight               Int
+  sets                 Int
+  reps                 Int
+  template             template? @relation(fields: [template_id], references: [template_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_template")
+}
+
+model trainer_certifications {
+  trainer_id       String         @db.Uuid
+  certification_id String         @db.Uuid
+  certifications   certifications @relation(fields: [certification_id], references: [certification_id], onDelete: NoAction, onUpdate: NoAction)
+  waza_trainers    waza_trainers  @relation(fields: [trainer_id], references: [trainer_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([trainer_id, certification_id])
+}
+
+model trainer_specializations {
+  trainer_id        String          @db.Uuid
+  specialization_id String          @db.Uuid
+  specializations   specializations @relation(fields: [specialization_id], references: [specialization_id], onDelete: NoAction, onUpdate: NoAction)
+  waza_trainers     waza_trainers   @relation(fields: [trainer_id], references: [trainer_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([trainer_id, specialization_id])
+}
+
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model users {
   user_id                              String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
@@ -131,6 +231,15 @@ model users {
   @@index([email], map: "idx_users_email")
 }
 
+model warrior_specializations {
+  warrior_id        String          @db.Uuid
+  specialization_id String          @db.Uuid
+  specializations   specializations @relation(fields: [specialization_id], references: [specialization_id], onDelete: Cascade, onUpdate: NoAction)
+  waza_warriors     waza_warriors   @relation(fields: [warrior_id], references: [warrior_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([warrior_id, specialization_id])
+}
+
 model warriorexercise {
   warrior_id    String        @db.Uuid
   exercise_id   String        @db.Uuid
@@ -149,30 +258,7 @@ model warriorgoals {
   @@id([warrior_id, goal_id])
 }
 
-model waza_warriors {
-  warrior_id              String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user_id                 String?                   @unique(map: "unique_user_id") @db.Uuid
-  age                     Int?
-  caloric_goal            Float?
-  meals                   meals[]
-  reviews                 reviews[]
-  session                 session[]
-  template                template[]
-  warrior_specializations warrior_specializations[]
-  warriorexercise         warriorexercise[]
-  warriorgoals            warriorgoals[]
-  users                   users?                    @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-model warrior_specializations {
-  warrior_id        String          @db.Uuid
-  specialization_id String          @db.Uuid
-  specializations   specializations @relation(fields: [specialization_id], references: [specialization_id], onDelete: Cascade, onUpdate: NoAction)
-  waza_warriors     waza_warriors   @relation(fields: [warrior_id], references: [warrior_id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@id([warrior_id, specialization_id])
-}
-
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model waza_trainers {
   trainer_id              String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   user_id                 String                    @unique(map: "unique_trainer_user_id") @db.Uuid
@@ -186,89 +272,31 @@ model waza_trainers {
   session                 session[]
   trainer_certifications  trainer_certifications[]
   trainer_specializations trainer_specializations[]
-  users                   users                     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "waza_trainers_user_id_fkey")
+  users                   users                     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model trainer_certifications {
-  trainer_id       String         @db.Uuid
-  certification_id String         @db.Uuid
-  certifications   certifications @relation(fields: [certification_id], references: [certification_id], onDelete: NoAction, onUpdate: NoAction)
-  waza_trainers    waza_trainers  @relation(fields: [trainer_id], references: [trainer_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([trainer_id, certification_id])
+model waza_warriors {
+  warrior_id                                  String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id                                     String?                   @unique(map: "unique_user_id") @db.Uuid
+  age                                         Int?
+  caloric_goal                                Float?
+  friends_friends_accepter_idTowaza_warriors  friends[]                 @relation("friends_accepter_idTowaza_warriors")
+  friends_friends_requester_idTowaza_warriors friends[]                 @relation("friends_requester_idTowaza_warriors")
+  leaderboard                                 leaderboard?
+  meals                                       meals[]
+  reviews                                     reviews[]
+  session                                     session[]
+  template                                    template[]
+  warrior_specializations                     warrior_specializations[]
+  warriorexercise                             warriorexercise[]
+  warriorgoals                                warriorgoals[]
+  users                                       users?                    @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model trainer_specializations {
-  trainer_id        String          @db.Uuid
-  specialization_id String          @db.Uuid
-  specializations   specializations @relation(fields: [specialization_id], references: [specialization_id], onDelete: NoAction, onUpdate: NoAction)
-  waza_trainers     waza_trainers   @relation(fields: [trainer_id], references: [trainer_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([trainer_id, specialization_id])
-}
-
-model meal_food_items {
-  meal_id              String   @db.Uuid
-  food_item_identifier String   @db.VarChar(255)
-  quantity             Decimal  @db.Decimal
-  created_at           DateTime @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime @default(now()) @db.Timestamptz(6)
-  unit                 String   @db.VarChar(50)
-  meals                meals    @relation(fields: [meal_id], references: [meal_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([meal_id, food_item_identifier])
-}
-
-model meal_types {
-  meal_type_id String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name         String   @unique @db.VarChar(255)
-  created_at   DateTime @default(now()) @db.Timestamptz(6)
-  updated_at   DateTime @default(now()) @db.Timestamptz(6)
-  meals        meals[]
-}
-
-model meals {
-  meal_id         String            @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  warrior_id      String            @db.Uuid
-  meal_type_id    String            @db.Uuid
-  meal_date       DateTime          @db.Date
-  created_at      DateTime          @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime          @default(now()) @db.Timestamptz(6)
-  meal_food_items meal_food_items[]
-  meal_types      meal_types        @relation(fields: [meal_type_id], references: [meal_type_id], onDelete: NoAction, onUpdate: NoAction)
-  waza_warriors   waza_warriors     @relation(fields: [warrior_id], references: [warrior_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@unique([warrior_id, meal_type_id, meal_date])
-}
-
-model exercise_log {
-  log_id        String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  exercise_id   String   @db.Uuid
-  weight        Int?
-  achieved_reps Int?
-  exercise      exercise @relation(fields: [exercise_id], references: [exercise_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_exercise")
-}
-
-model template {
-  template_id       String              @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  warrior_id        String?             @db.Uuid
-  title             String              @unique @db.VarChar(255)
-  description       String
-  created_at        DateTime?           @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime?           @db.Timestamptz(6)
-  waza_warriors     waza_warriors?      @relation(fields: [warrior_id], references: [warrior_id], onDelete: Cascade, onUpdate: NoAction)
-  template_exercise template_exercise[]
-}
-
-model template_exercise {
-  template_exercise_id String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  template_id          String?   @db.Uuid
-  title                String    @db.VarChar(255)
-  muscle_group         String    @db.VarChar(255)
-  weight               Int
-  sets                 Int
-  reps                 Int
-  template             template? @relation(fields: [template_id], references: [template_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_template")
+enum friendship_status {
+  pending
+  accepted
+  rejected
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
