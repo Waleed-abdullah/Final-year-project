@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import ArrowDown from '@/assets/workouts/arrow-down.svg';
 import { useEffect, useState, useCallback } from 'react';
-import { useWarriorAndDate } from '../../../../stores/warrior-store/WarriorAndDateProvider';
+import { useWarriorAndDate } from '@/stores/warrior-store/WarriorAndDateProvider';
 import {
   Exercise,
   Session,

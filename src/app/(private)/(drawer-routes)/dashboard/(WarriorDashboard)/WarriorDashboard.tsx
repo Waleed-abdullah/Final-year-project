@@ -11,7 +11,6 @@ import Cross from '@/assets/Dashboard/cross.svg';
 import Barbell from '@/assets/Dashboard/Union.svg';
 import Plate from '@/assets/Dashboard/plate.svg';
 import Link from 'next/link';
-import { Warrior } from '@/types/app/(private)/(drawer-routes)/dashboard';
 import { FoodItem, MealsByType } from '@/types/page/waza_warrior/food_log';
 import {
   fetchNutrients,
@@ -32,9 +31,6 @@ export default function WarriorDashboard() {
     calories: 0,
   });
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-
-  const router = useRouter();
-  const session = useSession();
 
   useEffect(() => {
     const fetchMacros = async () => {
