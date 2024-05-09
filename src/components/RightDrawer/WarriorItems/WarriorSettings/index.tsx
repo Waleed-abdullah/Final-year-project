@@ -18,7 +18,7 @@ import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import { useLeaderBoard } from '@/stores/leaderboard-store';
 
-export const Settings = () => {
+export const WarriorSettings = () => {
   const {
     warriorID,
     warriorProfilePic,
@@ -124,7 +124,10 @@ export const Settings = () => {
                 <AvatarImage src={imageSource || warriorProfilePic || ''} />
                 <AvatarFallback>PW</AvatarFallback>
               </Avatar>
-              <Label htmlFor='name' className='text-right whitespace-normal'>
+              <Label
+                htmlFor='profilePic'
+                className='text-right whitespace-normal'
+              >
                 Profile Pic
               </Label>
               <Input
@@ -137,7 +140,7 @@ export const Settings = () => {
             </div>
             <div className='grid grid-cols-4 items-center gap-4'>
               <Label
-                htmlFor='username'
+                htmlFor='weightGoal'
                 className=' whitespace-nowrap  text-right'
               >
                 Weight Goal (kg)
@@ -154,7 +157,7 @@ export const Settings = () => {
               />
             </div>
             <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='username' className='text-right'>
+              <Label htmlFor='caloricGoal' className='text-right'>
                 Caloric Goal
               </Label>
               <Input
