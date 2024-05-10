@@ -4,7 +4,7 @@ import { SessionProvider } from './SessionProvider';
 import type { ReactNode } from 'react';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { redirect } from 'next/navigation';
-import { WarriorAndDateProvider } from './WarriorAndDateProvider';
+import { WarriorAndDateProvider } from '../../stores/warrior-store/WarriorAndDateProvider';
 import { LeaderBoardProvider } from '@/stores/leaderboard-store';
 
 export default async function PrivateLayout({

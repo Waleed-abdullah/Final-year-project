@@ -8,7 +8,7 @@ export const fetchSavedMeals = async (warrior_id: string, date: Date) => {
   console.log('Called fetchSavedMeals');
   try {
     const response = await fetch(
-      `http://localhost:3000/api/waza_warrior/food_log/getMealsByDate?warrior_id=${warrior_id}`,
+      `/api/waza_warrior/food_log/getMealsByDate?warrior_id=${warrior_id}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -102,16 +102,13 @@ export const createMeal = async (
   };
 
   try {
-    const response = await fetch(
-      'http://localhost:3000/api/waza_warrior/food_log',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
+    const response = await fetch('/api/waza_warrior/food_log', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify(body),
+    });
 
     const result = await response.json();
     console.log(result);

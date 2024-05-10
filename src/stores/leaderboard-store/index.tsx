@@ -6,10 +6,10 @@ import { create } from 'zustand';
 
 const createStore = () =>
   create<{
-    leaderBoard: LeaderBoardItem[] | null;
+    leaderBoard: LeaderBoardItem[];
     setLeaderBoard: (leaderBoard: LeaderBoardItem[]) => void;
   }>((set) => ({
-    leaderBoard: null,
+    leaderBoard: [],
     setLeaderBoard(leaderBoard: LeaderBoardItem[]) {
       leaderBoard.sort((a, b) => b.points - a.points);
       set({ leaderBoard: leaderBoard });
