@@ -1,9 +1,9 @@
 'use client';
 import { FC, useEffect, useState } from 'react';
-import { IncomingMessageRequest } from '../../../warrior/trainer-marketplace/types/pusher';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { pusherClient } from '@/lib/messages/pusher';
+import { IncomingMessageRequest } from '@/app/warrior/trainer-marketplace/types/pusher';
 
 interface MessageRequestsProps {
   incomingMessageRequests: IncomingMessageRequest[];

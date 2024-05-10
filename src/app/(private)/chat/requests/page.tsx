@@ -1,4 +1,4 @@
-import MessageRequests from '@/app/(private)/chat/components/MessageRequests';
+import MessageRequests from '@/components/MessageRequests';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';

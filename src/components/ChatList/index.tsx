@@ -19,7 +19,7 @@ const ChatList: React.FC<ChatListProp> = ({ chatPartners }) => {
   const isActive = (href: string) => path === href;
 
   return (
-    <div className=''>
+    <div className='flex flex-col gap-4'>
       <label className='border-2 rounded-3xl py-1 px-10 border-black/10 flex flex-row gap-2 items-center '>
         <Image src={Search} width={24} height={24} alt='calendar' />
         <input
@@ -30,20 +30,22 @@ const ChatList: React.FC<ChatListProp> = ({ chatPartners }) => {
         />
       </label>
       <nav className='text-black'>
-        <ul>
+        <ul className='flex flex-col gap-4'>
           {chatPartners.map((partner) => (
-            <li className={`flex items-center mb-4 `} key={partner.chat_id}>
-              <Image
-                src={partner.profile_pic || 'https://www.gravatar.com/avatar/'}
-                alt='Profile Pic'
-                width={20}
-                height={20}
-              />
+            <>
+              <li className={`flex items-center `} key={partner.chat_id}>
+                <Image
+                  src={partner.profile_pic || 'https://robohash.org/123'}
+                  alt='Profile Pic'
+                  width={30}
+                  height={30}
+                />
 
-              <Link href={`chat/${partner.chat_id}`} className={`ml-2 `}>
-                {partner.name || partner.username}
-              </Link>
-            </li>
+                <Link href={`chat/${partner.chat_id}`} className={`ml-2 `}>
+                  {partner.name || partner.username}
+                </Link>
+              </li>
+            </>
           ))}
         </ul>
       </nav>

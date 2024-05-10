@@ -3,9 +3,8 @@ import prisma from '@/lib/database/prisma';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import { FC } from 'react';
-import Messages from '../components/Messages';
-import ChatInput from '../components/ChatInput';
-
+import Messages from '../../../../components/Messages';
+import ChatInput from '@/components/ChatInput';
 interface PageProps {
   params: {
     chat_id: string;
@@ -63,7 +62,7 @@ const page: FC<PageProps> = async ({ params }) => {
       },
     });
     return (
-      <div>
+      <div className='p-2 h-full flex flex-col justify-between'>
         <Messages
           initialMessages={initialMessages}
           session_id={session.user.user_id}
