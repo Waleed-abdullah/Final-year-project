@@ -1,6 +1,6 @@
 'use client';
 
-import { Message } from '@/app/warrior/trainer-marketplace/types/pusher';
+import { Message } from '@/types/pusher';
 import { pusherClient } from '@/lib/messages/pusher';
 import { ChatPartner } from '@/types/chat';
 import { FC, useEffect, useState } from 'react';

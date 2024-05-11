@@ -3,7 +3,8 @@ import { FC, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { pusherClient } from '@/lib/messages/pusher';
-import { IncomingMessageRequest } from '@/app/warrior/trainer-marketplace/types/pusher';
+import { IncomingMessageRequest } from '@/types/pusher';
+import Image from 'next/image';
 
 interface MessageRequestsProps {
   incomingMessageRequests: IncomingMessageRequest[];
@@ -57,10 +58,12 @@ const MessageRequests: FC<MessageRequestsProps> = ({
         messageRequests.map((request) => {
           return (
             <div key={request.user_id}>
-              <img
+              <Image
                 src={request.profile_pic || 'https://via.placeholder.com/150'}
                 alt={request.username}
-                className='w-12 h-12 rounded-full'
+                className='rounded-full'
+                width={50}
+                height={50}
               />
               <p>{request.name || 'placeholder'}</p>
               <button
