@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Location from '@/assets/trainer-marketplace/location.svg';
 import Experience from '@/assets/trainer-marketplace/experience.svg';
-import { Trainer } from '../types';
+import { Trainer } from '../../../../types/marketplace';
 
 const TrainerCard: React.FC<Trainer> = ({
   hourly_rate,
@@ -23,12 +23,12 @@ const TrainerCard: React.FC<Trainer> = ({
         router.push(`/warrior/trainer-marketplace/${users.user_id}`)
       }
     >
-      {/* <Image
-        src={users.profile_pic || ''}
+      <Image
+        src={users.profile_pic || 'https://robohash.org/asd'}
         alt={users.name}
         width={200}
         height={200}
-      /> */}
+      />
       <div className='grow flex flex-col flex-start gap-2 ml-6'>
         <p className='font-bold'>{users.name}</p>
         <div className='flex flex-row flex-start gap-2'>

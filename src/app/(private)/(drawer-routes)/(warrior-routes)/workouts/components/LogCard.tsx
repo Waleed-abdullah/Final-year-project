@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ExerciseLog } from '@/types/app/(private)/(drawer-routes)/workout';
+import { ExerciseLog } from '@/types/workout';
 import { debounce } from 'lodash';
 
 export const LogCard = ({

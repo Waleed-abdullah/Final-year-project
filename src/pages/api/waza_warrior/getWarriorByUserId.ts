@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/database/prisma';
 import { sendErrorResponse } from '../../../utils/errorHandler';
 import { isValidID } from '@/utils/validationHelpers';
-import { Warrior } from '@/types/app/(private)/(drawer-routes)/dashboard';
+import { Warrior } from '@/types/dashboard';
 
 export default async function getWarriorByUserId(
   req: NextApiRequest,

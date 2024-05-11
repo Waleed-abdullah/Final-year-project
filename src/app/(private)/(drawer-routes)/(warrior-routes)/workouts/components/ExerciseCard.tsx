@@ -1,8 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import {
-  Exercise,
-  ExerciseLog,
-} from '@/types/app/(private)/(drawer-routes)/workout';
+import { Exercise, ExerciseLog } from '@/types/workout';
 import { LogCard } from './LogCard';
 import { useLeaderBoard } from '@/stores/leaderboard-store';
 import { updateUserPoints } from '@/lib/leaderboard';

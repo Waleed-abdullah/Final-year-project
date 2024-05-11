@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchTrainer } from '../services/trainerService';
 import { useParams } from 'next/navigation';
-import { DetailedTrainer } from '../types/';
+import { DetailedTrainer } from '../../../../types/marketplace';
 import Image from 'next/image';
 import axios, { AxiosError } from 'axios';
 

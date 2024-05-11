@@ -6,7 +6,7 @@ import {
   CommonFoodItem,
   NutritionixInstantEndpoint,
   NutritionixNutrientsEndpoint,
-} from '@/types/app/(private)/(drawer-routes)/diet';
+} from '@/types/diet';
 import { FoodItem, MealsByType } from '@/types/page/waza_warrior/food_log';
 import {
   createMeal,

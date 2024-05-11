@@ -3,7 +3,7 @@ import prisma from '@/lib/database/prisma';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import { FC } from 'react';
-import Messages from '../../../../components/Messages';
+import Messages from '@/components/Messages';
 import ChatInput from '@/components/ChatInput';
 interface PageProps {
   params: {

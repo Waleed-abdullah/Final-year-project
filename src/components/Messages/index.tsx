@@ -2,7 +2,7 @@
 
 import { Message } from '@/app/warrior/trainer-marketplace/types/pusher';
 import { pusherClient } from '@/lib/messages/pusher';
-import { ChatPartner } from '@/types/app/(private)/chat';
+import { ChatPartner } from '@/types/chat';
 import { FC, useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import Image from 'next/image';
