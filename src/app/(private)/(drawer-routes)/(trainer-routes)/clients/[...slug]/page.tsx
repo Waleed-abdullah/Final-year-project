@@ -263,7 +263,10 @@ export default function ClientDetails({
             <div className='flex flex-col gap-2'>
               {session &&
                 session.exercise.map((exercise, idx) => (
-                  <div className='flex border-b-2 border-black-900 py-2 justify-between'>
+                  <div
+                    key={exercise.exercise_id}
+                    className='flex border-b-2 border-black-900 py-2 justify-between'
+                  >
                     <div className='flex '>
                       <p className='bg-yellow-500 rounded-full py-1 px-2 font-bold text-xs '>
                         {idx}
