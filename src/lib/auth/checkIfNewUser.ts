@@ -1,5 +1,5 @@
 import { UserType } from '@/types/page/auth/user';
-import prisma from '../database/prisma';
+import prisma from '@/lib/database/prisma';
 
 async function checkIfNewUser(user: any) {
   if (UserType.WazaWarrior === user.user_type) {

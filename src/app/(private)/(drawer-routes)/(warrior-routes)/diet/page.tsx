@@ -6,7 +6,7 @@ import {
   CommonFoodItem,
   NutritionixInstantEndpoint,
   NutritionixNutrientsEndpoint,
-} from '@/types/app/(private)/(drawer-routes)/diet';
+} from '@/types/diet';
 import { FoodItem, MealsByType } from '@/types/page/waza_warrior/food_log';
 import {
   createMeal,
@@ -30,7 +30,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useLeaderBoard } from '@/stores/leaderboard-store';
 import { updateUserPoints } from '@/lib/leaderboard';
-import { useWarriorAndDate } from '../../../../../stores/warrior-store/WarriorAndDateProvider';
+import { useWarriorAndDate } from '@/stores/warrior-store/WarriorAndDateProvider';
 
 export default function DietPage() {
   const [query, setQuery] = useState('');

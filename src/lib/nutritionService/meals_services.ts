@@ -1,7 +1,4 @@
-import {
-  BrandedFoodItem,
-  CommonFoodItem,
-} from '@/types/app/(private)/(drawer-routes)/diet';
+import { BrandedFoodItem, CommonFoodItem } from '@/types/diet';
 import { MealsByType } from '@/types/page/waza_warrior/food_log';
 
 export const fetchSavedMeals = async (warrior_id: string, date: Date) => {

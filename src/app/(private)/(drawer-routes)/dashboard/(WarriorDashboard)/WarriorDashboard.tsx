@@ -16,7 +16,7 @@ import {
   fetchNutrients,
   fetchSavedMeals,
 } from '@/lib/nutritionService/meals_services';
-import { NutritionixNutrientsEndpoint } from '@/types/app/(private)/(drawer-routes)/diet';
+import { NutritionixNutrientsEndpoint } from '@/types/diet';
 import './WarriorDashboard.css';
 import CalendarInput from '@/components/CalenderInput';
 import { useWarriorAndDate } from '@/stores/warrior-store/WarriorAndDateProvider';

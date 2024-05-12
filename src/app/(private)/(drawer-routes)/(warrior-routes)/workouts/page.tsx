@@ -3,11 +3,7 @@ import Image from 'next/image';
 import ArrowDown from '@/assets/workouts/arrow-down.svg';
 import { useEffect, useState, useCallback } from 'react';
 import { useWarriorAndDate } from '@/stores/warrior-store/WarriorAndDateProvider';
-import {
-  Exercise,
-  Session,
-  Template,
-} from '@/types/app/(private)/(drawer-routes)/workout';
+import { Exercise, Session, Template } from '@/types/workout';
 import {
   Dialog,
   DialogContent,

@@ -30,14 +30,16 @@ model certifications {
 }
 
 model chat {
-  chat_id                       String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  sender_id                     String?  @db.Uuid
-  receiver_id                   String?  @db.Uuid
-  message_content               String?
-  timestamp                     DateTime @default(now()) @db.Timestamp(6)
-  read_status                   Boolean?
-  users_chat_receiver_idTousers users?   @relation("chat_receiver_idTousers", fields: [receiver_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-  users_chat_sender_idTousers   users?   @relation("chat_sender_idTousers", fields: [sender_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  chat_id                       String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  chat_list_id                  String    @db.Uuid
+  sender_id                     String    @db.Uuid
+  receiver_id                   String    @db.Uuid
+  message_content               String
+  timestamp                     DateTime  @default(now()) @db.Timestamptz(6)
+  read_status                   Boolean   @default(false)
+  chat_list                     chat_list @relation(fields: [chat_list_id], references: [chat_list_id], onDelete: NoAction, onUpdate: NoAction)
+  users_chat_receiver_idTousers users     @relation("chat_receiver_idTousers", fields: [receiver_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  users_chat_sender_idTousers   users     @relation("chat_sender_idTousers", fields: [sender_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([read_status], map: "idx_chat_read_status")
 }
@@ -204,25 +206,27 @@ model trainer_specializations {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model users {
-  user_id                      String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  username                     String         @unique(map: "unique_username") @db.VarChar(255)
-  password                     String?        @db.VarChar(255)
-  email                        String         @unique(map: "unique_email") @db.VarChar(255)
-  user_type                    String         @db.VarChar(50)
-  profile_pic                  String?
-  date_joined                  DateTime       @default(now()) @db.Timestamp(6)
-  last_login                   DateTime?      @db.Timestamp(6)
-  created_at                   DateTime       @default(now()) @db.Timestamp(6)
-  updated_at                   DateTime       @default(now()) @db.Timestamp(6)
-  is_verified                  Boolean        @default(false)
-  provider                     String         @db.VarChar(50)
-  age                          Int?
-  name                         String?        @db.VarChar(255)
-  gender                       String?        @db.VarChar(6)
-  chat_chat_receiver_idTousers chat[]         @relation("chat_receiver_idTousers")
-  chat_chat_sender_idTousers   chat[]         @relation("chat_sender_idTousers")
-  waza_trainers                waza_trainers?
-  waza_warriors                waza_warriors?
+  user_id                              String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  username                             String         @unique(map: "unique_username") @db.VarChar(255)
+  password                             String?        @db.VarChar(255)
+  email                                String         @unique(map: "unique_email") @db.VarChar(255)
+  user_type                            String         @db.VarChar(50)
+  profile_pic                          String?
+  date_joined                          DateTime       @default(now()) @db.Timestamp(6)
+  last_login                           DateTime?      @db.Timestamp(6)
+  created_at                           DateTime       @default(now()) @db.Timestamp(6)
+  updated_at                           DateTime       @default(now()) @db.Timestamp(6)
+  is_verified                          Boolean        @default(false)
+  provider                             String         @db.VarChar(50)
+  age                                  Int?
+  name                                 String?        @db.VarChar(255)
+  gender                               String?        @db.VarChar(6)
+  chat_chat_receiver_idTousers         chat[]         @relation("chat_receiver_idTousers")
+  chat_chat_sender_idTousers           chat[]         @relation("chat_sender_idTousers")
+  chat_list_chat_list_user_id_1Tousers chat_list[]    @relation("chat_list_user_id_1Tousers")
+  chat_list_chat_list_user_id_2Tousers chat_list[]    @relation("chat_list_user_id_2Tousers")
+  waza_trainers                        waza_trainers?
+  waza_warriors                        waza_warriors?
 
   @@index([email], map: "idx_users_email")
 }
@@ -294,4 +298,24 @@ enum friendship_status {
   pending
   accepted
   rejected
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model chat_list {
+  chat_list_id                     String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id_1                        String @db.Uuid
+  user_id_2                        String @db.Uuid
+  status                           String @default("pending") @db.VarChar(50)
+  chat                             chat[]
+  users_chat_list_user_id_1Tousers users  @relation("chat_list_user_id_1Tousers", fields: [user_id_1], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+  users_chat_list_user_id_2Tousers users  @relation("chat_list_user_id_2Tousers", fields: [user_id_2], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([user_id_1, user_id_2], map: "chat_list_unique_users")
+}
+
+enum friend_status {
+  pending
+  accepted
+  rejected
+  blocked
 }

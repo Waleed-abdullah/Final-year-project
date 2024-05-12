@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { TrainerFilters } from '../types';
+import { TrainerFilters } from '@/types/marketplace';
 
 const TrainerFilterContext = createContext<{
   filters: TrainerFilters;

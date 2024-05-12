@@ -1,13 +1,11 @@
 // src/app/warrior/trainer-marketplace/components/T
-import {
-  TrainerSpecialization,
-  Trainer,
-} from '@/app/warrior/trainer-marketplace/types';
+
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Location from '@/assets/trainer-marketplace/location.svg';
 import Experience from '@/assets/trainer-marketplace/experience.svg';
+import { Trainer } from '@/types/marketplace';
 
 const TrainerCard: React.FC<Trainer> = ({
   hourly_rate,
@@ -26,7 +24,7 @@ const TrainerCard: React.FC<Trainer> = ({
       }
     >
       <Image
-        src={users.profile_pic || ''}
+        src={users.profile_pic || 'https://robohash.org/asd'}
         alt={users.name}
         width={200}
         height={200}

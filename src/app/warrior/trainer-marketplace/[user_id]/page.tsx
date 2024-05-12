@@ -2,13 +2,24 @@
 import React, { useState, useEffect } from 'react';
 import { fetchTrainer } from '../services/trainerService';
 import { useParams } from 'next/navigation';
-import { DetailedTrainer } from '../types/';
+import { DetailedTrainer } from '@/types/marketplace';
 import Image from 'next/image';
+import axios, { AxiosError } from 'axios';
 
 const TrainerMarketplace: React.FC = () => {
   const [trainer, setTrainer] = useState<DetailedTrainer | null>(null);
   const [error, setError] = useState(null);
   const { user_id } = useParams<{ user_id: string }>() || { user_id: '' };
+
+  const handleSendRequest = async () => {
+    try {
+      const res = await axios.post('/api/message/request', { user_id });
+      const data = res.data;
+      console.log(data);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,6 +79,8 @@ const TrainerMarketplace: React.FC = () => {
       <blockquote className='mt-14 p-4 italic border-l-4 bg-neutral-100 text-neutral-600 border-neutral-500 quote'>
         <p className='mb-2'>{trainer?.bio}</p>
       </blockquote>
+
+      <button onClick={handleSendRequest}>Send Request</button>
     </div>
   );
 };

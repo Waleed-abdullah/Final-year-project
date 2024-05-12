@@ -1,4 +1,4 @@
-import { TrainerFilters } from '@/app/warrior/trainer-marketplace/types';
+import { TrainerFilters } from '@/types/marketplace';
 
 export const fetchTrainer = async (id: string) => {
   try {
