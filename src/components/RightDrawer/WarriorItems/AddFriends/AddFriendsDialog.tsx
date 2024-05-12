@@ -15,18 +15,15 @@ const AddFriendsDialog: React.FC = () => {
   const [searchResults, setSearchResults] = useState<Friend[]>([]);
   const { data: session } = useSession();
 
-  const handleSearch = debounce(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const query = event.target.value;
-      if (query.length === 0) {
-        setSearchResults([]);
-        return;
-      }
-      // Perform search logic here and update searchResults state
-      setSearchQuery(query);
-    },
-    500,
-  );
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    if (query.length === 0) {
+      setSearchResults([]);
+      return;
+    }
+    // Perform search logic here and update searchResults state
+    setSearchQuery(query);
+  };
 
   const handleFriendAdd = async (potentialFriend: Friend, idx: number) => {
     // add friend logic
@@ -98,7 +95,7 @@ const AddFriendsDialog: React.FC = () => {
           `/api/friends/search?query=${searchQuery}&userId=${session?.user?.user_id}`,
         );
         const data = await result.json();
-        console.log(data);
+        console.log('friends Data', data);
         setSearchResults(data);
       } catch (error) {
         toast.error('There was an error getting friends', {
