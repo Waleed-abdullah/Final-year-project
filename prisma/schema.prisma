@@ -277,7 +277,7 @@ model waza_trainers {
 
 model waza_warriors {
   warrior_id                                  String                    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  user_id                                     String?                   @unique(map: "unique_user_id") @db.Uuid
+  user_id                                     String                    @unique(map: "unique_user_id") @db.Uuid
   age                                         Int?
   caloric_goal                                Float?
   weight_goal                                 Float?
@@ -291,13 +291,7 @@ model waza_warriors {
   warrior_specializations                     warrior_specializations[]
   warriorexercise                             warriorexercise[]
   warriorgoals                                warriorgoals[]
-  users                                       users?                    @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-enum friendship_status {
-  pending
-  accepted
-  rejected
+  users                                       users                     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -311,6 +305,12 @@ model chat_list {
   users_chat_list_user_id_2Tousers users  @relation("chat_list_user_id_2Tousers", fields: [user_id_2], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([user_id_1, user_id_2], map: "chat_list_unique_users")
+}
+
+enum friendship_status {
+  pending
+  accepted
+  rejected
 }
 
 enum friend_status {

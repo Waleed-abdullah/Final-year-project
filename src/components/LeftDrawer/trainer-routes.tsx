@@ -20,32 +20,32 @@ export const TrainerRoutes = () => {
           })}
         >
           <HomeIcon className='h-5 w-5' />
-          <Link href={'dashboard'} className={`ml-2 `}>
+          <Link href={'/dashboard'} className={`ml-2 `}>
             Dashboard
           </Link>
         </li>
         <li
           className={cn('flex items-center mb-4', {
-            'text-yellow-400': isActive('/chats'),
-            'text-white': !isActive('/chats'),
+            'text-yellow-400': isActive('/chat'),
+            'text-white': !isActive('/chat'),
           })}
         >
           <MailIcon className={cn('h-5 w-5')} />
-          <Link href={'chats'} className={`ml-2 `}>
+          <Link href={'/chat'} className={`ml-2 `}>
             Messages
           </Link>
         </li>
-        <li
+        {/* <li
           className={cn('flex items-center mb-4', {
             'text-yellow-400': isActive('/clients'),
             'text-white': !isActive('/clients'),
           })}
         >
           <UserIcon className='h-5 w-5' />
-          <Link href={'clients'} className={`ml-2 `}>
+          <Link href={'/clients'} className={`ml-2 `}>
             Clients
           </Link>
-        </li>
+        </li> */}
         <li
           className={cn('flex items-center mb-4', {
             'text-yellow-400': isActive('/training'),
@@ -53,7 +53,7 @@ export const TrainerRoutes = () => {
           })}
         >
           <BookMarkedIcon className='h-5 w-5' />
-          <Link href={'courses'} className={`ml-2 `}>
+          <Link href={'/courses'} className={`ml-2 `}>
             Courses
           </Link>
         </li>
