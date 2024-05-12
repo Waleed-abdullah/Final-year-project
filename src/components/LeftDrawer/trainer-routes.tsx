@@ -26,7 +26,7 @@ export const TrainerRoutes = () => {
         </li>
         <li
           className={cn('flex items-center mb-4', {
-            'text-yellow-400': isActive('/chat'),
+            'text-yellow-400': path?.includes('/chat'),
             'text-white': !isActive('/chat'),
           })}
         >
@@ -35,9 +35,9 @@ export const TrainerRoutes = () => {
             Messages
           </Link>
         </li>
-        {/* <li
+        <li
           className={cn('flex items-center mb-4', {
-            'text-yellow-400': isActive('/clients'),
+            'text-yellow-400': path?.includes('/clients'),
             'text-white': !isActive('/clients'),
           })}
         >
@@ -45,7 +45,7 @@ export const TrainerRoutes = () => {
           <Link href={'/clients'} className={`ml-2 `}>
             Clients
           </Link>
-        </li> */}
+        </li>
         <li
           className={cn('flex items-center mb-4', {
             'text-yellow-400': isActive('/training'),
