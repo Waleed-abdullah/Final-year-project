@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/database/prisma';
+import prisma from '@/lib/database/prisma';
 import bcrypt from 'bcrypt';
-import { sendErrorResponse } from '../../../utils/errorHandler';
+import { sendErrorResponse } from '@/utils/errorHandler';
 import {
   isValidEmail,
   isValidID,
   isValidPassword,
-} from '../../../utils/validationHelpers';
+} from '@/utils/validationHelpers';
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10');
 

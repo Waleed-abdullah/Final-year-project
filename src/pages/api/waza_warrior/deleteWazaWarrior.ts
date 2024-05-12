@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/database/prisma';
+import prisma from '@/lib/database/prisma';
 import { sendErrorResponse } from '@/utils/errorHandler';
 
 export default async function deleteWazaWarrior(

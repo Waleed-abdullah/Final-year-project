@@ -1,8 +1,8 @@
 // pages/api/exercise-log/create.js
 
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../../lib/database/prisma';
-import { sendErrorResponse } from '../../../../utils/errorHandler';
+import prisma from '@/lib/database/prisma';
+import { sendErrorResponse } from '@/utils/errorHandler';
 
 export default async function createExerciseLog(
   req: NextApiRequest,

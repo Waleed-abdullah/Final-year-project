@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Location from '@/assets/trainer-marketplace/location.svg';
 import Experience from '@/assets/trainer-marketplace/experience.svg';
-import { Trainer } from '../../../../types/marketplace';
+import { Trainer } from '@/types/marketplace';
 
 const TrainerCard: React.FC<Trainer> = ({
   hourly_rate,
