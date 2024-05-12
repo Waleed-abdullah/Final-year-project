@@ -57,7 +57,7 @@ export default async function PrivateLayout({
   return (
     <div className='flex'>
       <div
-        className={`fixed inset-y-0 left-0 z-30 w-64 p-4 transition-transform duration-300 ease-in-out translate-x-0`}
+        className={`fixed inset-y-0 left-64 z-30 w-64 p-4 bg-white transition-transform duration-300 ease-in-out translate-x-0`}
       >
         <ChatList chatPartners={chatPartners} />
       </div>

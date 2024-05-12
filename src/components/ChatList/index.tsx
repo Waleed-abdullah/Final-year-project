@@ -41,7 +41,7 @@ const ChatList: React.FC<ChatListProp> = ({ chatPartners }) => {
                   height={30}
                 />
 
-                <Link href={`chat/${partner.chat_id}`} className={`ml-2 `}>
+                <Link href={`/chat/${partner.chat_id}`} className={`ml-2 `}>
                   {partner.name || partner.username}
                 </Link>
               </li>

@@ -6,7 +6,11 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
 const page: FC = async () => {
-  return <div className='text-center'>Click to open a chat</div>;
+  return (
+    <div className='text-center h-full flex items-center justify-center text-lg'>
+      Open a chat
+    </div>
+  );
 };
 
 export default page;

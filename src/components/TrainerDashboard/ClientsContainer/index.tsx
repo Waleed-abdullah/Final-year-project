@@ -4,9 +4,6 @@ import prisma from '@/lib/database/prisma';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { notFound } from 'next/navigation';
 
-const AVATAR_SRC_TEMP =
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFyW5AjczWG9OF6S7l5Rb2b4yJXo6JkAZID5GbM3PtEA&s';
-const USERNAME_TEMP = 'Waleed Abdullah';
 export const ClientsContainer = async () => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();

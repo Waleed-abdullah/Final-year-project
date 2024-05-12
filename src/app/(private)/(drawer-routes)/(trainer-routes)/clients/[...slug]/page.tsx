@@ -198,13 +198,12 @@ export default function ClientDetails({
   return (
     <div className='p-4'>
       <header className='mb-4 flex flex-row justify-between flex-wrap'>
-        <p className='text-xl font-semibold text-gray-400'>My Diet</p>
+        <p className='text-2xl font-semibold mb-4'>Client Details</p>
         <div className='flex flex-row gap-4 '>
           <CalendarInput date={date} handleDateChange={handleMealDateChange} />
         </div>
       </header>
       <main>
-        <p className='text-2xl font-semibold mb-4'>Log Diet</p>
         <div className='flex flex-row gap-3 justify-between flex-wrap '>
           <div className='min-w-max basis-5/12 grow flex flex-col'>
             <div className='bg-white grow py-14 rounded-lg shadow flex justify-center items-center flex-wrap flex-1 '>
