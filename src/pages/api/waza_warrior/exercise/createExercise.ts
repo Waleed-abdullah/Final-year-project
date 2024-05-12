@@ -1,7 +1,7 @@
 // pages/api/exercise/create.ts
 
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../../lib/database/prisma';
+import prisma from '@/lib/database/prisma';
 import { sendErrorResponse } from '@/utils/errorHandler';
 import { ExerciseRequestBody } from '@/types/page/waza_warrior/exercise';
 import { VALID_MUSCLE_GROUPS } from '@/constants/exercises';

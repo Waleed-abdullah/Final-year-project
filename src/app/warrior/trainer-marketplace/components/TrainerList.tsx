@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import TrainerCard from './TrainerCard';
 import { fetchTrainers } from '../services/trainerService';
 import { useTrainerFilter } from '../context/TrainerFilterContext';
-import { Trainer } from '../../../../types/marketplace';
+import { Trainer } from '@/types/marketplace';
 
 const TrainerList: React.FC = () => {
   const [trainers, setTrainers] = useState<Trainer[]>([]);

@@ -1,4 +1,4 @@
-import { TrainerFilters } from '../../../../types/marketplace';
+import { TrainerFilters } from '@/types/marketplace';
 
 export const fetchTrainer = async (id: string) => {
   try {

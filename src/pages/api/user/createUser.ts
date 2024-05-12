@@ -1,11 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/database/prisma';
+import prisma from '@/lib/database/prisma';
 import bcrypt from 'bcrypt';
-import { sendErrorResponse } from '../../../utils/errorHandler';
-import {
-  isValidEmail,
-  isValidPassword,
-} from '../../../utils/validationHelpers';
+import { sendErrorResponse } from '@/utils/errorHandler';
+import { isValidEmail, isValidPassword } from '@/utils/validationHelpers';
 import { GenderType, User, UserType } from '@/types/page/auth/user';
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || '10'); // Using environment variable for salt rounds

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../../lib//database/prisma';
-import { sendErrorResponse } from '../../../../utils/errorHandler';
+import prisma from '@/lib//database/prisma';
+import { sendErrorResponse } from '@/utils/errorHandler';
 
 export default async function updateExerciseLog(
   req: NextApiRequest,
