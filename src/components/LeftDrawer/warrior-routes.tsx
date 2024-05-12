@@ -22,7 +22,7 @@ export const WarriorRoutes = () => {
           })}
         >
           <HomeIcon className='h-5 w-5' />
-          <Link href={'dashboard'} className={`ml-2 `}>
+          <Link href={'/dashboard'} className={`ml-2 `}>
             Dashboard
           </Link>
         </li>
@@ -33,7 +33,7 @@ export const WarriorRoutes = () => {
           })}
         >
           <DumbbellIcon className='h-5 w-5' />
-          <Link href={'workouts'} className={`ml-2 `}>
+          <Link href={'/workouts'} className={`ml-2 `}>
             My Workouts
           </Link>
         </li>
@@ -44,8 +44,19 @@ export const WarriorRoutes = () => {
           })}
         >
           <AppleIcon />
-          <Link href={'diet'} className={`ml-2 `}>
+          <Link href={'/diet'} className={`ml-2 `}>
             My Diet
+          </Link>
+        </li>
+        <li
+          className={cn('flex items-center mb-4', {
+            'text-yellow-400': isActive('/chat'),
+            'text-white': !isActive('/chat'),
+          })}
+        >
+          <EarthIcon className='h-5 w-5' />
+          <Link href={'/chat'} className={`ml-2 `}>
+            Messages
           </Link>
         </li>
         <li
@@ -55,7 +66,7 @@ export const WarriorRoutes = () => {
           })}
         >
           <EarthIcon className='h-5 w-5' />
-          <Link href={'community'} className={`ml-2 `}>
+          <Link href={'/community'} className={`ml-2 `}>
             Community
           </Link>
         </li>
