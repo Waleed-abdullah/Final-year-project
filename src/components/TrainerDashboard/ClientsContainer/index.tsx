@@ -20,6 +20,7 @@ export const ClientsContainer = async () => {
         select: {
           profile_pic: true,
           name: true,
+          username: true,
           waza_warriors: {
             select: {
               warrior_id: true,
@@ -32,6 +33,7 @@ export const ClientsContainer = async () => {
         select: {
           profile_pic: true,
           name: true,
+          username: true,
 
           waza_warriors: {
             select: {
@@ -65,7 +67,7 @@ export const ClientsContainer = async () => {
           <ClientCard
             key={client.chat_id}
             avatar={client.profile_pic || 'https://robohash.org/asd'}
-            name={client.name || 'name'}
+            name={client.username || 'name'}
             chat_id={client.chat_id}
             warrior_id={client.waza_warriors?.warrior_id || 'warrior_id'}
             caloric_goal={client.waza_warriors?.caloric_goal || 1500}
