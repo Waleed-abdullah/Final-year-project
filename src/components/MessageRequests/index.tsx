@@ -69,7 +69,7 @@ const MessageRequests: FC<MessageRequestsProps> = ({
                 height={50}
               />
               <p className='font-bold text-lg'>
-                {request.name || 'placeholder'}
+                {request.username || 'placeholder'}
               </p>
               <div className='flex flex-row justify-between w-3/4'>
                 <button
