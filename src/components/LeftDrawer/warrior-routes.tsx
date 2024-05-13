@@ -7,7 +7,8 @@ import { cn } from '@/utils/cn';
 import { HomeIcon } from '@/icons/home';
 import { DumbbellIcon } from '@/icons/dumbbell';
 import { AppleIcon } from '@/icons/apple';
-import { EarthIcon } from 'lucide-react';
+import { EarthIcon, StoreIcon } from 'lucide-react';
+import { MailIcon } from '@/icons/mail';
 
 export const WarriorRoutes = () => {
   const path = usePathname();
@@ -54,9 +55,20 @@ export const WarriorRoutes = () => {
             'text-white': !isActive('/chat'),
           })}
         >
-          <EarthIcon className='h-5 w-5' />
+          <MailIcon className='h-5 w-5' />
           <Link href={'/chat'} className={`ml-2 `}>
             Messages
+          </Link>
+        </li>
+        <li
+          className={cn('flex items-center mb-4', {
+            'text-yellow-400': isActive('/chat'),
+            'text-white': !isActive('/chat'),
+          })}
+        >
+          <StoreIcon className='h-5 w-5' />
+          <Link href={'/warrior/trainer-marketplace'} className={`ml-2 `}>
+            Marketplace
           </Link>
         </li>
         <li
