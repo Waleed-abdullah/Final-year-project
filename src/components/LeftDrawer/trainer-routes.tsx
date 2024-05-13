@@ -27,7 +27,7 @@ export const TrainerRoutes = () => {
         <li
           className={cn('flex items-center mb-4', {
             'text-yellow-400': path?.includes('/chat'),
-            'text-white': !isActive('/chat'),
+            'text-white': !path?.includes('/chat'),
           })}
         >
           <MailIcon className={cn('h-5 w-5')} />
@@ -38,7 +38,7 @@ export const TrainerRoutes = () => {
         <li
           className={cn('flex items-center mb-4', {
             'text-yellow-400': path?.includes('/clients'),
-            'text-white': !isActive('/clients'),
+            'text-white': !path?.includes('/clients'),
           })}
         >
           <UserIcon className='h-5 w-5' />
